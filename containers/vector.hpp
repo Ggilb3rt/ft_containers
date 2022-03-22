@@ -2,55 +2,107 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <memory>
+#include <iterator>
 
-template <typename T>
+template < class T, class Allocator = std::allocator<T> >
 class	vector {
-
-// T*		array
-// iterator _begin
-// iterator _end
-// iterator _end_reserve
-
-/****************************/
-/*			Coplien			*/
-/****************************/
-	// Default
-	explicit vector(const allocator_type& alloc = allocator_type());
-	//	Fill
-	explicit vector(size_type n, const value_type& val = value_type(),
-					const allocator_type& alloc = allocator_type());
-	// Range
-	template <class InputIterator>
-	vector(InputIterator first, InputIterator last,
-			const allocator_type& alloc = allocator_type());
-	// Copy
-	vector(const vector& x);
-
-/****************************/
-/*			Iterators		*/
-/****************************/
+	public :
+		typedef T								value_type;
+		typedef Allocator						allocator_type;
+		// typedef typename value_type&			reference;
+		// typedef typename value_type& const	const_reference;
+		// typedef typename value_type*			pointer;
+		// typedef typename value_type* const	const_pointer;
+		typedef typename allocator_type::reference				reference;
+		typedef typename allocator_type::const_reference		const_reference;
+		typedef typename allocator_type::pointer				pointer;
+		typedef typename std::random_access_iterator_tag		iterator;	// need to use mine
+		typedef typename std::random_access_iterator_tag		const_iterator;
+		typedef typename std::reverse_iterator<iterator>		reverse_iterator;
+		typedef typename std::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef typename std::ptrdiff_t							difference_type;
+		typedef  size_t									size_type;
 
 
-/****************************/
-/*			Capacity		*/
-/****************************/
+	/****************************/
+	/*			Coplien			*/
+	/****************************/
+		// Default
+		explicit vector(const allocator_type& alloc = allocator_type())
+					: _reserve(0) {
+						(void)alloc;
+						std::cout << "contstructeur par default " << this->_reserve << std::endl;
+					};
+		//	Fill
+		explicit vector(size_type n,
+						const value_type& val = value_type(),
+						const allocator_type& alloc = allocator_type())
+						: _reserve(n) {
+							std::cout << "Constructeur de folie" << val << std::endl;
+							std::cout << "n = " << this->_reserve << std::endl;
+							(void)alloc;
+							_array = alloc.allocate(n + 1); // need to catch (bad_alloc)
+							// _begin = _array;
+							// for (size_type i = 0; i < n; i++) {
+							// 	alloc.construct(_array, j);
+							// 	//_array[i] = val;
+							// }
+							// _array[n] = NULL;
+							// _end = _array[n];
+							// _end_reserve = _end;
+						};
+		// Range
+		// template <class InputIterator>
+		// vector(InputIterator first,
+		// 		InputIterator last,
+		// 		const allocator_type& alloc = allocator_type())
+		// 		{
+		// 			(void)first; (void)last; (void)alloc;
+		// 			std::cout << "Constuctor range" << std::endl;
+		// 		};
+		// Copy
+		vector(const vector& cpy)
+				{
+					(void)cpy;
+					std::cout << "Constructor copy" << std::endl;
+				};
+
+	/****************************/
+	/*			Iterators		*/
+	/****************************/
 
 
-/****************************/
-/*			El access		*/
-/****************************/
+	/****************************/
+	/*			Capacity		*/
+	/****************************/
+		size_type	capacity() const {return this->_reserve;}
+
+	/****************************/
+	/*			El access		*/
+	/****************************/
 
 
-/****************************/
-/*			Modifiers		*/
-/****************************/
+	/****************************/
+	/*			Modifiers		*/
+	/****************************/
 
 
-/****************************/
-/*			Allocator		*/
-/****************************/
+	/****************************/
+	/*			Allocator		*/
+	/****************************/
+
+	/****************************/
+	/*			Non-member		*/
+	/****************************/
 
 
+		T*			_array;
+	private:
+		size_type	_reserve;
+		iterator 	_begin;
+		iterator 	_end;
+		iterator 	_end_reserve;
 };
 
 
