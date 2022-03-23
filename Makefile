@@ -2,14 +2,17 @@
 
 
 NAME = Container
-FLAGS = -Wall -Wextra -Werror
+INC_DIR = containers
+FLAGS = -Wall -Wextra -Werror -I. -g
 STD = -std=c++98
 COMPIL = c++
+
+DEPS = $(INC_DIR)/vector.hpp
 SRC = $(shell find './mains' -name '*.cpp')
 OBJ = $(SRC:.cpp=.o)
 
 
-%.o: %.cpp
+%.o: %.cpp $(DEPS)
 	$(COMPIL) $(FLAGS) $(STD) -o $@ -c $<
 
 all: $(NAME)

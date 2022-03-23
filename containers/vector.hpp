@@ -26,56 +26,77 @@ class	vector {
 
 
 	/****************************/
-	/*			Coplien			*/
+	/*	Constructors/Destructor	*/
 	/****************************/
 		// Default
 		explicit vector(const allocator_type& alloc = allocator_type())
-					: _reserve(0) {
-						(void)alloc;
-						std::cout << "contstructeur par default " << this->_reserve << std::endl;
-					};
+						: _reserve(0)
+		{
+			(void)alloc;
+			_array = 0;
+			std::cout << "contstructeur par default " << this->_reserve << std::endl;
+		};
 		//	Fill
 		explicit vector(size_type n,
 						const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type())
-						: _reserve(n) {
-							std::cout << "Constructeur de folie" << val << std::endl;
-							std::cout << "n = " << this->_reserve << std::endl;
-							(void)alloc;
-							_array = alloc.allocate(n + 1); // need to catch (bad_alloc)
-							// _begin = _array;
-							// for (size_type i = 0; i < n; i++) {
-							// 	alloc.construct(_array, j);
-							// 	//_array[i] = val;
-							// }
-							// _array[n] = NULL;
-							// _end = _array[n];
-							// _end_reserve = _end;
-						};
+						:  _size(n), _reserve(n)
+		{
+			_CpyAlloc = alloc; //! solution temporaire je pense
+			try {_array = _CpyAlloc.allocate(n + 1);}
+			catch(const std::bad_alloc& e) {
+				std::cerr << e.what() << '\n';
+				return ;
+			}
+			for (size_type i = 0; i < n; i++) {
+				_CpyAlloc.construct((_array + i), val);
+			}
+			_array[n] = 0;
+			std::cout << "addr _array : " << _array << std::endl;
+		};
 		// Range
 		// template <class InputIterator>
 		// vector(InputIterator first,
-		// 		InputIterator last,
-		// 		const allocator_type& alloc = allocator_type())
+		// 				InputIterator last,
+		// 				const allocator_type& alloc = allocator_type())
 		// 		{
 		// 			(void)first; (void)last; (void)alloc;
 		// 			std::cout << "Constuctor range" << std::endl;
 		// 		};
 		// Copy
 		vector(const vector& cpy)
-				{
-					(void)cpy;
-					std::cout << "Constructor copy" << std::endl;
-				};
-
+		{
+			(void)cpy;
+			std::cout << "Constructor copy" << std::endl;
+		};
+		~vector()
+		{
+			if (_array) {
+				for (size_type i = 0; i < _size; i++) {
+					_CpyAlloc.destroy((_array + i));
+				}
+					_CpyAlloc.deallocate(_array, _reserve);
+			}
+		};
+	/****************************/
+	/*			Overcharge		*/
+	/****************************/
+		vector& operator=(const vector& x)
+		{
+			std::cout << "operator = used " << x.size()  << std::endl;
+			// if this has content ==> destroy
+			// assign x to this
+		}
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
-
+		iterator	begin() {return iterator(&_array[0]);} // pas terminé, doit check si vide
+		iterator	end() {return iterator(&_array[this->_size]);}
 
 	/****************************/
 	/*			Capacity		*/
 	/****************************/
+		size_type	size() const {return this->_size;}
 		size_type	capacity() const {return this->_reserve;}
 
 	/****************************/
@@ -99,10 +120,12 @@ class	vector {
 
 		T*			_array;
 	private:
+		allocator_type	_CpyAlloc;
+		size_type	_size;
 		size_type	_reserve;
-		iterator 	_begin;
-		iterator 	_end;
-		iterator 	_end_reserve;
+		// iterator 	_begin;
+		// iterator 	_end;
+		// iterator 	_end_reserve;
 };
 
 
