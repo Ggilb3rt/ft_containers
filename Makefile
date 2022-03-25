@@ -7,7 +7,7 @@ FLAGS = -Wall -Wextra -Werror -I. -g
 STD = -std=c++98
 COMPIL = c++
 
-DEPS = $(INC_DIR)/vector.hpp
+DEPS = $(shell find './$(INC_DIR)' -name '*.hpp') #$(INC_DIR)/vector.hpp
 SRC = $(shell find './mains' -name '*.cpp')
 OBJ = $(SRC:.cpp=.o)
 

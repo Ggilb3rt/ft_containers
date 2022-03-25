@@ -37,9 +37,6 @@ struct MyIterator {
 };
 
 
-template< class _Iterator >
-struct iterator_traits;
-
 template<typename _Iterator>
 struct iterator_traits
 {
@@ -49,5 +46,16 @@ struct iterator_traits
 	typedef typename _Iterator::pointer           pointer;
 	typedef typename _Iterator::reference         reference;
 };
+
+template <class T>
+struct iterator_traits
+{
+	typedef T							value_type;
+	typedef ptrdiff_t					difference_type;
+	typedef T*							pointer;
+	typedef T&							reference;
+	typedef random_access_iterator_tag	iterator_category;
+};
+
 
 #endif
