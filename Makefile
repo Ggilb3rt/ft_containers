@@ -13,7 +13,7 @@ OBJ = $(SRC:.cpp=.o)
 
 
 %.o: %.cpp $(DEPS)
-	$(COMPIL) $(FLAGS) $(STD) -o $@ -c $<
+	$(COMPIL) $(FLAGS) -DUSING_STD=0 $(STD) -o $@ -c $<
 
 all: $(NAME)
 

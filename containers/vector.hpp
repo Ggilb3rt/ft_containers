@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <stdexcept>
 #include <memory>
 #include <cstddef>
 #include <iterator>
@@ -34,10 +35,14 @@ class	vector {
 	/****************************/
 		// Default
 		explicit vector(const allocator_type& alloc = allocator_type())
-						: _reserve(0)
+						: _size(0), _reserve(0)
 		{
-			(void)alloc;
-			_array = 0;
+			_CpyAlloc = alloc;
+			try {_array = _CpyAlloc.allocate(this->_reserve);}
+			catch(const std::exception& e) {
+				std::cerr << e.what() << std::endl;
+				return ;
+			}
 			std::cout << "contstructeur par default " << this->_reserve << std::endl;
 		};
 		//	Fill
@@ -46,16 +51,16 @@ class	vector {
 						const allocator_type& alloc = allocator_type())
 						:  _size(n), _reserve(n)
 		{
-			_CpyAlloc = alloc; //! solution temporaire je pense
+			_CpyAlloc = alloc;
 			try {_array = _CpyAlloc.allocate(n + 1);}
 			catch(const std::bad_alloc& e) {
-				std::cerr << e.what() << '\n';
+				std::cerr << e.what() << std::endl;
 				return ;
 			}
 			for (size_type i = 0; i < n; i++) {
 				_CpyAlloc.construct((_array + i), val);
 			}
-			_array[n] = 0;
+			//_array[n] = 0;
 			std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
@@ -108,7 +113,50 @@ class	vector {
 	/*			Capacity		*/
 	/****************************/
 		size_type	size() const {return this->_size;}
+		size_type	max_size() const {return this->_CpyAlloc.max_size();} //? throw() dans la definition, pourquoi ? 
+		void		resize(size_type n, value_type val = value_type()) {
+			if (n < _size) {
+				for (size_type i = n; i < _size; i++) {
+					_CpyAlloc.destroy((_array + i));
+				}
+			}
+			if (n > _size && n > _reserve) {
+				this->reserve(n);
+			}
+			if (n > _size) {
+				for (size_type i = _size; i < n; i++) {
+					if (val)
+						_CpyAlloc.construct((_array + i), val);
+					//else
+					//	_CpyAlloc.construct((_array + i), new T()) // pas sur que ce soi necessaire car valeur par default set
+				}
+			}
+			_size = n;
+		}
 		size_type	capacity() const {return this->_reserve;}
+		bool		empty() const {return this->_size == 0 ? true : false;}
+		void		reserve(size_type n) {
+			if (n > this->max_size())
+				throw std::length_error("vector::reserve");
+			// n > capacity
+			allocator_type	tmpAlloc;
+			T*				tmpArray;
+			if (n > this->capacity()) {
+				try {
+					tmpArray = tmpAlloc.allocate(n + 1);
+					for (size_type i = 0; i < _size; i++) {
+						tmpAlloc.construct((tmpArray + i), _array[i]);
+						_CpyAlloc.destroy((_array + i));
+					}
+					_CpyAlloc.deallocate(_array, _reserve);
+					_CpyAlloc = tmpAlloc;
+					_array = tmpArray;
+					_reserve = n;
+				}
+				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+			}
+			// n < capacity ==> nothing
+		}
 
 	/****************************/
 	/*			El access		*/
@@ -118,7 +166,12 @@ class	vector {
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
-
+		// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
+		void	push_back(const value_type& val) {
+			if (_size + 1 > _reserve)
+				this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
+			(void)val;
+		}
 
 	/****************************/
 	/*			Allocator		*/
