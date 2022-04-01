@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <memory>
 #include <cstddef>
@@ -30,6 +31,7 @@ class	vector {
 		typedef typename std::ptrdiff_t							difference_type;
 		typedef size_t											size_type;
 
+	
 	/****************************/
 	/*	Constructors/Destructor	*/
 	/****************************/
@@ -43,16 +45,17 @@ class	vector {
 				std::cerr << e.what() << std::endl;
 				return ;
 			}
-			std::cout << "contstructeur par default " << this->_reserve << std::endl;
+			std::cout << "contstructeur par default, reserve : " << this->_reserve << std::endl;
 		};
 		//	Fill
+		// use is_integral()
 		explicit vector(size_type n,
 						const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type())
 						:  _size(n), _reserve(n)
 		{
 			_CpyAlloc = alloc;
-			try {_array = _CpyAlloc.allocate(n + 1);}
+			try {_array = _CpyAlloc.allocate(n);} //? n + 1 pour avoir un element vide a la fin ?
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
 				return ;
@@ -60,10 +63,10 @@ class	vector {
 			for (size_type i = 0; i < n; i++) {
 				_CpyAlloc.construct((_array + i), val);
 			}
-			//_array[n] = 0;
-			std::cout << "addr _array : " << _array << std::endl;
+			//std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
+		// use is_enable()
 		// template <class InputIterator>
 		// vector(InputIterator first,
 		// 				InputIterator last,
@@ -87,8 +90,10 @@ class	vector {
 					_CpyAlloc.deallocate(_array, _reserve);
 			}
 		};
+	
+	
 	/****************************/
-	/*			Overcharge		*/
+	/*	Operator overcharge		*/
 	/****************************/
 		vector& operator=(const vector& x)
 		{
@@ -97,17 +102,16 @@ class	vector {
 			// assign x to this
 		}
 
-		value_type& operator[](const unsigned int index)
-		{
-			if (index >= this->_size || this->_size == 0)
-				throw vector::BadIndexException();	// pas bon, devrait return une valeur par default cf std::vector
-			return this->_array[index];
-		}
+		value_type& operator[](const unsigned int index){return this->_array[index];}
+	
+	
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
 		iterator	begin() {return iterator(&_array[0]);} // pas terminé, doit check si vide
 		iterator	end() {return iterator(&_array[this->_size]);}
+
+
 
 	/****************************/
 	/*			Capacity		*/
@@ -125,10 +129,7 @@ class	vector {
 			}
 			if (n > _size) {
 				for (size_type i = _size; i < n; i++) {
-					if (val)
-						_CpyAlloc.construct((_array + i), val);
-					//else
-					//	_CpyAlloc.construct((_array + i), new T()) // pas sur que ce soi necessaire car valeur par default set
+					_CpyAlloc.construct((_array + i), val);
 				}
 			}
 			_size = n;
@@ -136,31 +137,62 @@ class	vector {
 		size_type	capacity() const {return this->_reserve;}
 		bool		empty() const {return this->_size == 0 ? true : false;}
 		void		reserve(size_type n) {
+			// std::cout << n <<  "| reserve start : " << this->capacity() << std::endl;
 			if (n > this->max_size())
 				throw std::length_error("vector::reserve");
 			// n > capacity
 			allocator_type	tmpAlloc;
 			T*				tmpArray;
-			if (n > this->capacity()) {
+			if (n >= this->capacity()) {
 				try {
-					tmpArray = tmpAlloc.allocate(n + 1);
+					tmpArray = tmpAlloc.allocate(n);
 					for (size_type i = 0; i < _size; i++) {
 						tmpAlloc.construct((tmpArray + i), _array[i]);
 						_CpyAlloc.destroy((_array + i));
 					}
-					_CpyAlloc.deallocate(_array, _reserve);
-					_CpyAlloc = tmpAlloc;
-					_array = tmpArray;
-					_reserve = n;
+					this->_CpyAlloc.deallocate(this->_array, this->_reserve);
+					this->_CpyAlloc = tmpAlloc;
+					this->_array = tmpArray;
+					this->_reserve = n;
 				}
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+			// std::cout << "reserve at the end " << this->_reserve << std::endl;
 			}
 			// n < capacity ==> nothing
 		}
 
+
+
 	/****************************/
 	/*			El access		*/
 	/****************************/
+	reference	at(size_type n) {
+		if (n >= this->_size)
+		{
+			std::stringstream ss;
+			ss << "vector::_M_range_check: __n (which is " << n
+				<< ") >= this->size() (which is " << this->size()
+				<< ")";
+			throw std::out_of_range(ss.str());
+		}
+		return this->_array[n];
+	}
+	const_reference	at(size_type n) const{
+		if (n >= this->_size)
+		{
+			std::stringstream ss;
+			ss << "vector::_M_range_check: __n (which is " << n
+				<< ") >= this->size() (which is " << this->size()
+				<< ")";
+			throw std::out_of_range(ss.str());
+		}
+		return this->_array[n];
+	}
+	reference	front() {return (this->_array[0]);}
+	const_reference	front() const{return (this->_array[0]);}
+	reference	back() { return (this->_array[this->_size - 1]);}
+	const_reference	back() const{ return (this->_array[this->_size - 1]);}
+
 
 
 	/****************************/
@@ -168,14 +200,19 @@ class	vector {
 	/****************************/
 		// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
 		void	push_back(const value_type& val) {
-			if (_size + 1 > _reserve)
+			if (_size >= _reserve)
 				this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
-			(void)val;
+			_CpyAlloc.construct(&_array[_size], val); // j'aimerai utiliser this->end()
+			this->_size++;
 		}
+
+
 
 	/****************************/
 	/*			Allocator		*/
 	/****************************/
+
+
 
 	/****************************/
 	/*			Non-member		*/
