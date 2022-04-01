@@ -137,7 +137,6 @@ class	vector {
 		size_type	capacity() const {return this->_reserve;}
 		bool		empty() const {return this->_size == 0 ? true : false;}
 		void		reserve(size_type n) {
-			// std::cout << n <<  "| reserve start : " << this->capacity() << std::endl;
 			if (n > this->max_size())
 				throw std::length_error("vector::reserve");
 			// n > capacity
@@ -156,7 +155,6 @@ class	vector {
 					this->_reserve = n;
 				}
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
-			// std::cout << "reserve at the end " << this->_reserve << std::endl;
 			}
 			// n < capacity ==> nothing
 		}
@@ -198,20 +196,38 @@ class	vector {
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
-		// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
-		void	push_back(const value_type& val) {
-			if (_size >= _reserve)
-				this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
-			_CpyAlloc.construct(&_array[_size], val); // j'aimerai utiliser this->end()
-			this->_size++;
+	// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
+	void	push_back(const value_type& val) {
+		if (_size >= _reserve)
+			this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
+		_CpyAlloc.construct(&_array[_size], val); // j'aimerai utiliser this->end()
+		this->_size++;
+	}
+	void	pop_back() {
+		if (this->_size > 0) {
+			_CpyAlloc.destroy((_array + _size - 1));
+			this->_size--;
 		}
-
+	}
+	//! need is_enable and is_integer 
+	// iterator	erase(iterator position) {
+	// 	_CpyAlloc.destroy(*position);
+	// 	for(iterator i = position; i != this->end(); i++)
+	// 		*i = *(i + 1);
+	// 	this->_size--;
+	// 	return position;
+	// }
+	void	clear() {
+		for (size_type i = 0; i < this->_size; i++)
+			_CpyAlloc.destroy((_array + i));
+		this->_size = 0;
+	}
 
 
 	/****************************/
 	/*			Allocator		*/
 	/****************************/
-
+	allocator_type	get_allocator() const {return this->_CpyAlloc;}
 
 
 	/****************************/

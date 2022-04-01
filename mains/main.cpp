@@ -10,54 +10,14 @@
 	#define TYPE ft
 #endif
 
+void	create_header(std::string const title) {
+		std::cout << std::endl << std::endl << "|************************|" << std::endl
+		<< "|*\t" << title << "\t*|" << std::endl
+		<< "|************************|";
+}
+
+
 int main() {
-	TYPE::vector<int> lel;
-	TYPE::vector<std::string> empty_str;	
-	std::cout << lel.size() << " | "
-		<< lel.capacity() << " | "
-		<< lel.empty() << " | " 
-		<< lel.max_size() << std::endl;
-	// std::cout << stdlel[0]; //segfault
-	try
-	{
-		empty_str.reserve(empty_str.max_size() + 1);
-	}
-	catch(const std::length_error& e) {std::cerr << e.what() << '\n';}
-	
-
-
-
-	/* Use [] */
-	std::cout << std::endl << std::endl << "\tUse []" << std::endl;
-
-{
-	TYPE::vector<int> myvector (10);   // 10 zero-initialized elements
-	TYPE::vector<int>::size_type sz = myvector.size();
-	// assign some values:
-	for (unsigned i=0; i<sz; i++) myvector[i]=i;
-	// reverse vector using operator[]:
-	for (unsigned i=0; i<sz/2; i++)
-	{
-	int temp;
-	temp = myvector[sz-1-i];
-	myvector[sz-1-i]=myvector[i];
-	myvector[i]=temp;
-	}
-	std::cout << "myvector contains:";
-	for (unsigned i=0; i<sz; i++)
-		std::cout << ' ' << myvector[i];
-	std::cout << '\n';
-	//std::cout << "out of range :" << myvector[15] << std::endl; // working but create invalid read (as expected)
-
-	TYPE::vector<std::string> str(2, "Whaou !");
-	for(int i = 0; i < 2; i++)
-		std::cout << str[i] << std::endl;
-	std::cout << "out of range : \"" << str[15] << "\"" << std::endl; // working but create invalid read (as expected)
-	str.reserve(10);
-	std::cout << "change reserve " << str.capacity() << " | " << str.size() << std::endl;
-	for(size_t i = 0; i < str.size(); i++)
-		std::cout << str[i] << std::endl;
-}	
 
 
 	/* Use Iterator */
@@ -79,6 +39,25 @@ int main() {
 		std::cout << *pos++ << std::endl;
 
 
+	/****************************/
+	/*			Capacity		*/
+	/****************************/
+	create_header("Capacity");
+	/* Basics */
+	std::cout << std::endl << std::endl << "\tUse .size(), .capacity(), .empty(), .max_size()" << std::endl;
+	TYPE::vector<int> lel;
+	TYPE::vector<std::string> empty_str;	
+	std::cout << lel.size() << " | "
+		<< lel.capacity() << " | "
+		<< lel.empty() << " | " 
+		<< lel.max_size() << std::endl;
+	// std::cout << stdlel[0]; //segfault
+	try
+	{
+		std::cout << "try to reserve over max_size" << std::endl;
+		empty_str.reserve(empty_str.max_size() + 1);
+	}
+	catch(const std::length_error& e) {std::cerr << e.what() << '\n';}
 
 	/* Use .reserve() */
 	std::cout << std::endl << std::endl << "\tUse .reserve()" << std::endl;
@@ -107,8 +86,6 @@ int main() {
 		}
 	}
 
-
-
 	/* Use .resize() */
 	std::cout << std::endl << std::endl << "\tUse .resize()" << std::endl;
 	TYPE::vector<int> myvector;
@@ -125,15 +102,44 @@ int main() {
 	std::cout << '\n';
 
 
+
 	/****************************/
 	/*			El access		*/
 	/****************************/
+	create_header("Element access");
+	/* Use [] */
+	std::cout << std::endl << std::endl << "\tUse []" << std::endl;
+{
+	TYPE::vector<int> myvector (10);   // 10 zero-initialized elements
+	TYPE::vector<int>::size_type sz = myvector.size();
+	for (unsigned i=0; i<sz; i++) myvector[i]=i;	// assign some values
+	for (unsigned i=0; i<sz/2; i++)	// reverse vector using operator[]
+	{
+		int temp;
+		temp = myvector[sz-1-i];
+		myvector[sz-1-i]=myvector[i];
+		myvector[i]=temp;
+	}
+	std::cout << "myvector contains:";
+	for (unsigned i=0; i<sz; i++)
+		std::cout << ' ' << myvector[i];
+	std::cout << '\n';
+	//std::cout << "out of range :" << myvector[15] << std::endl; // working but create invalid read (as expected)
+
+	TYPE::vector<std::string> str(2, "Whaou !");
+	for(int i = 0; i < 2; i++)
+		std::cout << str[i] << std::endl;
+	std::cout << "out of range : \"" << str[15] << "\"" << std::endl; // working but create invalid read (as expected)
+	str.reserve(10);
+	std::cout << "change reserve " << str.capacity() << " | " << str.size() << std::endl;
+	for(size_t i = 0; i < str.size(); i++)
+		std::cout << str[i] << std::endl;
+}	
 	/* Use .at() */
 	std::cout << std::endl << std::endl << "\tUse .at()" << std::endl;
 {
 	TYPE::vector<int> myvector (10);   // 10 zero-initialized ints
-	// assign some values:
-	for (unsigned i=0; i<myvector.size(); i++)
+	for (unsigned i=0; i<myvector.size(); i++) // assign some values
 		myvector.at(i)=i;
 
 	std::cout << "myvector contains:";
@@ -155,10 +161,8 @@ int main() {
 	std::cout << std::endl << std::endl << "\tUse .front() and .back()" << std::endl;
 {
 	TYPE::vector<int> myvector;
-
 	myvector.push_back(78);
-	myvector.push_back(16);
-	// now front equals 78, and back 16
+	myvector.push_back(16); // now front equals 78, and back 16
 	myvector.front() -= myvector.back();
 	std::cout << "myvector.front() is now " << myvector.front() << '\n';
 
@@ -166,6 +170,104 @@ int main() {
 	std::cout << "|" << empty_str.front() << "| |"
 		<< empty_str.back() << "|" << std::endl; //! real segfault, man said undefined behavior sooooo
 }
+
+	/****************************/
+	/*			Modifiers		*/
+	/****************************/
+	create_header("Modifier");
+	/* Use push_back() and pop_back()*/
+	std::cout << std::endl << std::endl << "\tUse .push_back() and .pop_back()" << std::endl;
+{
+	TYPE::vector<int> myvector;
+	int sum (0);
+	myvector.push_back (100);
+	myvector.push_back (200);
+	myvector.push_back (300);
+	while (!myvector.empty()) {
+		sum+=myvector.back();
+		myvector.pop_back();
+		std::cout << "current size : " << myvector.size() << std::endl;
+	}
+	std::cout << "The elements of myvector add up to " << sum << '\n';
+	try {
+		std::cout << "is empty : " << myvector.empty()
+			<< std::endl << "myvector[1] : " << myvector[1]
+			<< std::endl << "iterator.end() : " << *myvector.end() << std::endl;
+	}
+	catch(const std::exception& e){std::cerr << e.what() << '\n';}
+}
+
+	/* Use erase() */
+	std::cout << std::endl << std::endl << "\tUse .erase()" << std::endl;
+{
+	std::vector<int> myvector;
+	for (int i=1; i<=10; i++) myvector.push_back(i);// set some values (from 1 to 10)
+	myvector.erase (myvector.begin()+5); // erase the 6th element
+	myvector.erase (myvector.begin(),myvector.begin()+3); // erase the first 3 elements:
+
+	std::cout << "myvector contains:";
+	for (unsigned i=0; i<myvector.size(); ++i)
+		std::cout << ' ' << myvector[i];
+	std::cout << '\n';
+}
+
+	/* Use clear() */
+	std::cout << std::endl << std::endl << "\tUse .clear()" << std::endl;
+{
+	TYPE::vector<int> myvector;
+	myvector.push_back (100);
+	myvector.push_back (200);
+	myvector.push_back (300);
+
+	std::cout << "myvector contains:";
+	for (unsigned i=0; i<myvector.size(); i++)
+		std::cout << ' ' << myvector[i];
+	std::cout << '\n';
+
+	myvector.clear();
+	myvector.push_back (1101);
+	myvector.push_back (2202);
+
+	std::cout << "myvector contains:";
+	for (unsigned i=0; i<myvector.size(); i++)
+		std::cout << ' ' << myvector[i];
+	std::cout << ' ' << myvector[3] << '\n';
+}
+
+	/****************************/
+	/*			Allocator		*/
+	/****************************/
+	create_header("Allocator");
+	/* Use get_allocator()*/
+	std::cout << std::endl << std::endl << "\tUse .get_allocator()" << std::endl;
+{
+	TYPE::vector<int> myvector;
+	int * p;
+	unsigned int i;
+
+	// allocate an array with space for 5 elements using vector's allocator:
+	p = myvector.get_allocator().allocate(5);
+
+	// construct values in-place on the array:
+	for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i);
+
+	std::cout << "The allocated array contains:";
+	for (i=0; i<5; i++) std::cout << ' ' << p[i];
+	std::cout << '\n';
+
+	std::cout << "The vector contains:";
+	for (i=0; i<5; i++) {
+		try{std::cout << ' ' << myvector.at(i);}
+		catch(const std::exception& e) {std::cerr << e.what() << '\n';}
+	}
+	std::cout << '\n';
+
+	// destroy and deallocate:
+	for (i=0; i<5; i++) myvector.get_allocator().destroy(&p[i]);
+	myvector.get_allocator().deallocate(p,5);
+}
+
+
 	//////////////////////////////////
 	//			operator=			//
 	//////////////////////////////////
