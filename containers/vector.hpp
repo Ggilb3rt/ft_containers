@@ -2,11 +2,14 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <memory>
 #include <cstddef>
 #include <iterator>
 #include "myIterator.hpp"
+#include "is_integral.hpp"
+#include "enable_if.hpp"
 
 namespace ft {
 
@@ -30,6 +33,7 @@ class	vector {
 		typedef typename std::ptrdiff_t							difference_type;
 		typedef size_t											size_type;
 
+	
 	/****************************/
 	/*	Constructors/Destructor	*/
 	/****************************/
@@ -61,8 +65,7 @@ class	vector {
 			for (size_type i = 0; i < n; i++) {
 				_CpyAlloc.construct((_array + i), val);
 			}
-			//_array[n] = 0;
-			std::cout << "addr _array : " << _array << std::endl;
+			//std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
 		// use is_enable()
@@ -89,6 +92,8 @@ class	vector {
 					_CpyAlloc.deallocate(_array, _reserve);
 			}
 		};
+	
+	
 	/****************************/
 	/*	Operator overcharge		*/
 	/****************************/
@@ -99,17 +104,16 @@ class	vector {
 			// assign x to this
 		}
 
-		value_type& operator[](const unsigned int index)
-		{
-			if (index >= this->_size || this->_size == 0)
-				throw vector::BadIndexException();	// pas bon, devrait return une valeur par default cf std::vector
-			return this->_array[index];
-		}
+		value_type& operator[](const unsigned int index){return this->_array[index];}
+	
+	
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
 		iterator	begin() {return iterator(&_array[0]);} // pas terminé, doit check si vide
 		iterator	end() {return iterator(&_array[this->_size]);}
+
+
 
 	/****************************/
 	/*			Capacity		*/
@@ -159,29 +163,76 @@ class	vector {
 			// n < capacity ==> nothing
 		}
 
+
+
 	/****************************/
 	/*			El access		*/
 	/****************************/
+	reference	at(size_type n) {
+		if (n >= this->_size)
+		{
+			std::stringstream ss;
+			ss << "vector::_M_range_check: __n (which is " << n
+				<< ") >= this->size() (which is " << this->size()
+				<< ")";
+			throw std::out_of_range(ss.str());
+		}
+		return this->_array[n];
+	}
+	const_reference	at(size_type n) const{
+		if (n >= this->_size)
+		{
+			std::stringstream ss;
+			ss << "vector::_M_range_check: __n (which is " << n
+				<< ") >= this->size() (which is " << this->size()
+				<< ")";
+			throw std::out_of_range(ss.str());
+		}
+		return this->_array[n];
+	}
+	reference	front() {return (this->_array[0]);}
+	const_reference	front() const{return (this->_array[0]);}
+	reference	back() { return (this->_array[this->_size - 1]);}
+	const_reference	back() const{ return (this->_array[this->_size - 1]);}
+
 
 
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
-		// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
-		void	push_back(const value_type& val) {
-			//std::cout << ((_size <= 1) ? (_size + 1) : (_size * 2)) << std::endl;
-			// std::cout << "\tIn push_back " << val << " | " << _size << " | " << _reserve << std::endl;
-			if (_size >= _reserve)
-				this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
-			//std::cout << ((_size <= 1) ? (_size + 1) : (_size * 2)) << std::endl;
-			//std::cout << "value : " << val << std::endl;
-			_CpyAlloc.construct(&_array[_size], val); // j'aimerai utiliser this->end()
-			this->_size++;
+	// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
+	void	push_back(const value_type& val) {
+		if (_size >= _reserve)
+			this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
+		_CpyAlloc.construct(&_array[_size], val); // j'aimerai utiliser this->end()
+		this->_size++;
+	}
+	void	pop_back() {
+		if (this->_size > 0) {
+			_CpyAlloc.destroy((_array + _size - 1));
+			this->_size--;
 		}
+	}
+	//! need is_enable and is_integer 
+	// iterator	erase(iterator position) {
+	// 	_CpyAlloc.destroy(*position);
+	// 	for(iterator i = position; i != this->end(); i++)
+	// 		*i = *(i + 1);
+	// 	this->_size--;
+	// 	return position;
+	// }
+	void	clear() {
+		for (size_type i = 0; i < this->_size; i++)
+			_CpyAlloc.destroy((_array + i));
+		this->_size = 0;
+	}
+
 
 	/****************************/
 	/*			Allocator		*/
 	/****************************/
+	allocator_type	get_allocator() const {return this->_CpyAlloc;}
+
 
 	/****************************/
 	/*			Non-member		*/

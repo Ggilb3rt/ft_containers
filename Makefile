@@ -4,7 +4,9 @@
 NAME = Container
 INC_DIR = containers
 FLAGS = -Wall -Wextra -Werror -I. -g
-STD = -std=c++98
+DEFINE_FT = -DUSING_STD=0
+DEFINE_STD = -DUSING_STD=1
+STD = -std=c++11
 COMPIL = c++
 
 DEPS = $(shell find './$(INC_DIR)' -name '*.hpp') #$(INC_DIR)/vector.hpp
@@ -13,7 +15,7 @@ OBJ = $(SRC:.cpp=.o)
 
 
 %.o: %.cpp $(DEPS)
-	$(COMPIL) $(FLAGS) -DUSING_STD=0 $(STD) -o $@ -c $<
+	$(COMPIL) $(FLAGS) $(DEFINE_FT) $(STD) -o $@ -c $<
 
 all: $(NAME)
 
