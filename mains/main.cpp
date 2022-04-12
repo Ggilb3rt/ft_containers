@@ -290,15 +290,24 @@ int main() {
 
 {
   // is_integral<T> inherits from integral_constant
-  if ( std::is_integral<int>() )
-    std::cout << "int is an integral type" << std::endl;
+	if ( TYPE::is_integral<int>() )
+		std::cout << "int is an integral type" << std::endl;
 
-  // same result as:
-  if ( std::is_integral<long>::value )
-    std::cout << "int is an integral type" << std::endl;
+	// same result as:
+	if ( TYPE::is_integral<long>::value )
+		std::cout << "long is an integral type" << std::endl;
+
+	if ( TYPE::is_integral<float>() )
+		std::cout << "int is an integral type" << std::endl;
 }
 
+{
+	short int i = 1;    // code does not compile if type of i is not integral
 
+	std::cout << std::boolalpha;
+	std::cout << "i is odd: " << is_odd(i) << std::endl;
+	std::cout << "i is even: " << is_even(i) << std::endl;
+}
 
 
 
