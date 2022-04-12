@@ -26,19 +26,29 @@ int main() {
 	
 
 
-	TYPE::vector<int>	lol(4, 100);
 
-	std::cout << lol.capacity() << ", is empty ?(no) "
-		<< lol.empty() << std::endl;
+	/* Use [] */
+	std::cout << std::endl << std::endl << "\tUse []" << std::endl;
 
-	TYPE::vector<int>::iterator it = lol.begin();
-	TYPE::vector<int>::iterator it_end = lol.end();
-	while(it != it_end)
+{
+	std::vector<int> myvector (10);   // 10 zero-initialized elements
+	std::vector<int>::size_type sz = myvector.size();
+	// assign some values:
+	for (unsigned i=0; i<sz; i++) myvector[i]=i;
+	// reverse vector using operator[]:
+	for (unsigned i=0; i<sz/2; i++)
 	{
-		std::cout << " My iterator : "<< *it << std::endl;
-		it++;
+	int temp;
+	temp = myvector[sz-1-i];
+	myvector[sz-1-i]=myvector[i];
+	myvector[i]=temp;
 	}
-
+	std::cout << "myvector contains:";
+	for (unsigned i=0; i<sz; i++)
+	std::cout << ' ' << myvector[i];
+	std::cout << '\n';
+}	
+	
 	TYPE::vector<std::string> str(2, "Whaou !");
 	for(int i = 0; i < 2; i++)
 	{
@@ -58,16 +68,58 @@ int main() {
 	catch(const std::exception& e) {std::cerr << e.what() << '\n';}
 
 
-	std::vector<int> pouet(3, 5);
-	std::vector<int>::iterator pos;
-	for (pos = pouet.begin(); pos != pouet.end(); ++pos)
-		std::cout << *pos << std::endl;
+	/* Use Iterator */
+	std::cout << std::endl << std::endl << "\tUse Iterator" << std::endl;
+	TYPE::vector<int>	lol(4, 100);
+	std::cout << lol.capacity() << ", is empty ?(no) "
+		<< lol.empty() << std::endl;
+	TYPE::vector<int>::iterator it = lol.begin();
+	TYPE::vector<int>::iterator it_end = lol.end();
+	while(it != it_end)
+	{
+		std::cout << " My iterator : "<< *it << std::endl;
+		it++;
+	}
+
+	TYPE::vector<int> pouet(8, 5);
+	TYPE::vector<int>::iterator pos = pouet.begin();
+	while(pos != pouet.end())
+		std::cout << *pos++ << std::endl;
 
 
 
+	/* Use .reserve() */
+	std::cout << std::endl << std::endl << "\tUse .reserve()" << std::endl;
+	TYPE::vector<int>::size_type sz;
+
+	TYPE::vector<int> foo;
+	sz = foo.capacity();
+	std::cout << "making foo grow:\n";
+	for (int i=0; i<100; ++i) {
+		foo.push_back(i);
+		if (sz!=foo.capacity()) {
+		sz = foo.capacity();
+		std::cout << "capacity changed: " << sz << '\n';
+		}
+	}
+
+	TYPE::vector<int> bar;
+	sz = bar.capacity();
+	bar.reserve(100);   // this is the only difference with foo above
+	std::cout << "making bar grow:\n";
+	for (int i=0; i<100; ++i) {
+		bar.push_back(i);
+		if (sz!=bar.capacity()) {
+		sz = bar.capacity();
+		std::cout << "capacity changed: " << sz << '\n';
+		}
+	}
 
 
-	std::vector<int> myvector;
+
+	/* Use .resize() */
+	std::cout << std::endl << std::endl << "\tUse .resize()" << std::endl;
+	TYPE::vector<int> myvector;
 	// set some initial content:
 	for (int i=1;i<10;i++) myvector.push_back(i);
 

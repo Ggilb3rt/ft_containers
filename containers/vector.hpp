@@ -43,16 +43,17 @@ class	vector {
 				std::cerr << e.what() << std::endl;
 				return ;
 			}
-			std::cout << "contstructeur par default " << this->_reserve << std::endl;
+			std::cout << "contstructeur par default, reserve : " << this->_reserve << std::endl;
 		};
 		//	Fill
+		// use is_integral()
 		explicit vector(size_type n,
 						const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type())
 						:  _size(n), _reserve(n)
 		{
 			_CpyAlloc = alloc;
-			try {_array = _CpyAlloc.allocate(n + 1);}
+			try {_array = _CpyAlloc.allocate(n);} //? n + 1 pour avoir un element vide a la fin ?
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
 				return ;
@@ -64,6 +65,7 @@ class	vector {
 			std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
+		// use is_enable()
 		// template <class InputIterator>
 		// vector(InputIterator first,
 		// 				InputIterator last,
@@ -88,7 +90,7 @@ class	vector {
 			}
 		};
 	/****************************/
-	/*			Overcharge		*/
+	/*	Operator overcharge		*/
 	/****************************/
 		vector& operator=(const vector& x)
 		{
@@ -125,10 +127,7 @@ class	vector {
 			}
 			if (n > _size) {
 				for (size_type i = _size; i < n; i++) {
-					if (val)
-						_CpyAlloc.construct((_array + i), val);
-					//else
-					//	_CpyAlloc.construct((_array + i), new T()) // pas sur que ce soi necessaire car valeur par default set
+					_CpyAlloc.construct((_array + i), val);
 				}
 			}
 			_size = n;
@@ -136,24 +135,26 @@ class	vector {
 		size_type	capacity() const {return this->_reserve;}
 		bool		empty() const {return this->_size == 0 ? true : false;}
 		void		reserve(size_type n) {
+			// std::cout << n <<  "| reserve start : " << this->capacity() << std::endl;
 			if (n > this->max_size())
 				throw std::length_error("vector::reserve");
 			// n > capacity
 			allocator_type	tmpAlloc;
 			T*				tmpArray;
-			if (n > this->capacity()) {
+			if (n >= this->capacity()) {
 				try {
-					tmpArray = tmpAlloc.allocate(n + 1);
+					tmpArray = tmpAlloc.allocate(n);
 					for (size_type i = 0; i < _size; i++) {
 						tmpAlloc.construct((tmpArray + i), _array[i]);
 						_CpyAlloc.destroy((_array + i));
 					}
-					_CpyAlloc.deallocate(_array, _reserve);
-					_CpyAlloc = tmpAlloc;
-					_array = tmpArray;
-					_reserve = n;
+					this->_CpyAlloc.deallocate(this->_array, this->_reserve);
+					this->_CpyAlloc = tmpAlloc;
+					this->_array = tmpArray;
+					this->_reserve = n;
 				}
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+			// std::cout << "reserve at the end " << this->_reserve << std::endl;
 			}
 			// n < capacity ==> nothing
 		}
@@ -168,9 +169,14 @@ class	vector {
 	/****************************/
 		// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
 		void	push_back(const value_type& val) {
-			if (_size + 1 > _reserve)
+			//std::cout << ((_size <= 1) ? (_size + 1) : (_size * 2)) << std::endl;
+			// std::cout << "\tIn push_back " << val << " | " << _size << " | " << _reserve << std::endl;
+			if (_size >= _reserve)
 				this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
-			(void)val;
+			//std::cout << ((_size <= 1) ? (_size + 1) : (_size * 2)) << std::endl;
+			//std::cout << "value : " << val << std::endl;
+			_CpyAlloc.construct(&_array[_size], val); // j'aimerai utiliser this->end()
+			this->_size++;
 		}
 
 	/****************************/
