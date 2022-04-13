@@ -312,15 +312,36 @@ int main() {
 {
 	std::vector<int> pouet(5, 8);
 	pouet.push_back(2);
-	std::vector<int>::iterator it = pouet.begin();
+	std::vector<int>::iterator defIt;
+	std::vector<int>::iterator assignIt = pouet.begin();
+	defIt = pouet.begin(); // segfault without this (normal)
+	std::vector<int>::iterator copyIt(defIt);
+	defIt--;
+	std::cout << "real "
+		<< assignIt[15]
+		<< " |" << *defIt << "|"
+		<< " |" << *copyIt << "|"
+		<< std::endl;
 
-	std::cout << "real " << it[15] << std::endl;
+	if (++defIt == copyIt)
+		{ std::cout << "wahou !" << std::endl;}
 
 	TYPE::vector<int> pouet2(5, 8);
 	pouet2.push_back(2);
-	TYPE::vector<int>::iterator it2 = pouet2.begin();
+	TYPE::vector<int>::iterator defIt2;
+	TYPE::vector<int>::iterator assignIt2 = pouet2.begin();
+	defIt2 = pouet2.begin(); // segfault without this (normal)
+	TYPE::vector<int>::iterator copyIt2(defIt2);
+	defIt2--;
+	std::cout << "real "
+		<< assignIt2[15]
+		<< " |" << *defIt2 << "|"
+		<< " |" << *copyIt2 << "|"
+		<< std::endl;
 
-	std::cout << "mine " << it2[15] << std::endl;
+	if (++defIt2 == copyIt2)
+		{ std::cout << "wahou !" << std::endl;}
+
 
 }
 

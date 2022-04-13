@@ -15,27 +15,26 @@ struct MyIterator {
 	typedef Category  iterator_category;
 
 // this is for forward_iterator_tag, it's not generic, need to put this in iterator_traits ?
-	// Input
+	MyIterator() : _arr_ptr(NULL) {}
 	MyIterator(pointer ptr) : _arr_ptr(ptr) {}
-	MyIterator(MyIterator it) : _arr_ptr(it._arr_ptr) {}
+	MyIterator(const MyIterator &rhs) : _arr_ptr(rhs._arr_ptr) {}
 	~MyIterator() {}
 
-	//MyIterator operator= ()
+	//? PK friend ?
+	//bool operator== (const MyIterator& b) {return this->_arr_ptr == b._arr_ptr;};
+	friend bool operator== (const MyIterator& a, const MyIterator& b) {return a._arr_ptr == b._arr_ptr;};
+	friend bool operator!= (const MyIterator& a, const MyIterator& b) {return a._arr_ptr != b._arr_ptr;};
 
 	reference operator*() const {return *_arr_ptr;}
 	pointer operator->() {return _arr_ptr;}
 
-
-	friend bool operator== (const MyIterator& a, const MyIterator& b) {return a._arr_ptr == b._arr_ptr;};
-	friend bool operator!= (const MyIterator& a, const MyIterator& b) {return a._arr_ptr != b._arr_ptr;};
+	void operator= (MyIterator rhs) {_arr_ptr = rhs._arr_ptr;}
 
 	MyIterator& operator++() {_arr_ptr++; return *this;}
 	MyIterator operator++(int) {MyIterator tmp = *this; ++(*this); return tmp;}
+	MyIterator& operator--() {_arr_ptr--; return *this;}
+	MyIterator operator--(int) {MyIterator tmp = *this; --(*this); return tmp;}
 
-	// default constructor
-	
-	
-	//random access
 	reference operator[] (const unsigned int index) {return *(_arr_ptr + index);};
 	
 	private:
