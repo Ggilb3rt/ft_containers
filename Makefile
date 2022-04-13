@@ -6,7 +6,7 @@ INC_DIR = containers
 FLAGS = -Wall -Wextra -Werror -I. -g
 DEFINE_FT = -DUSING_STD=0
 DEFINE_STD = -DUSING_STD=1
-STD = -std=c++11
+STD = -std=c++98
 COMPIL = c++
 
 DEPS = $(shell find './$(INC_DIR)' -name '*.hpp') #$(INC_DIR)/vector.hpp

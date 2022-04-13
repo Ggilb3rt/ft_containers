@@ -1,6 +1,8 @@
 #ifndef ITERATORS_TRAITS_HPP
 #define ITERATORS_TRAITS_HPP
 
+namespace ft {
+
 struct input_iterator_tag { };
 struct output_iterator_tag { };
 struct forward_iterator_tag : public input_iterator_tag { };
@@ -25,4 +27,5 @@ struct iterator_traits<T*> {
 	typedef random_access_iterator_tag	iterator_category;
 };
 
+}
 #endif

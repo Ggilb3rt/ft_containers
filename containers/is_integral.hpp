@@ -25,11 +25,11 @@ struct __is_integral_help<bool> : public true_type { };
 template<>
 struct __is_integral_help<char> : public true_type { };
 
-template<>
-struct __is_integral_help<char16_t> : public true_type { };
+// template<>
+// struct __is_integral_help<char16_t> : public true_type { };
 
-template<>
-struct __is_integral_help<char32_t> : public true_type { };
+// template<>
+// struct __is_integral_help<char32_t> : public true_type { };
 
 template<>
 struct __is_integral_help<wchar_t> : public true_type { };

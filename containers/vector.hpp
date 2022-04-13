@@ -26,14 +26,14 @@ class	vector {
 		typedef typename allocator_type::const_reference		const_reference;
 		typedef typename allocator_type::pointer				pointer;
 		// typedef typename std::random_access_iterator_tag		iterator;	// need to use mine
-		typedef MyIterator<std::random_access_iterator_tag, T>	iterator;
+		typedef MyIterator<ft::random_access_iterator_tag, T>	iterator;
 		typedef typename std::random_access_iterator_tag		const_iterator;
 		typedef typename std::reverse_iterator<iterator>		reverse_iterator;
 		typedef typename std::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef typename std::ptrdiff_t							difference_type;
 		typedef size_t											size_type;
 
-	
+
 	/****************************/
 	/*	Constructors/Destructor	*/
 	/****************************/
@@ -50,7 +50,6 @@ class	vector {
 			std::cout << "contstructeur par default, reserve : " << this->_reserve << std::endl;
 		};
 		//	Fill
-		// use is_integral()
 		explicit vector(size_type n,
 						const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type())
@@ -68,15 +67,15 @@ class	vector {
 			//std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
-		// use is_enable()
+		// is_enable() if is_integral()
 		// template <class InputIterator>
 		// vector(InputIterator first,
 		// 				InputIterator last,
 		// 				const allocator_type& alloc = allocator_type())
-		// 		{
-		// 			(void)first; (void)last; (void)alloc;
-		// 			std::cout << "Constuctor range" << std::endl;
-		// 		};
+		// {
+		// 	(void)first; (void)last; (void)alloc;
+		// 	std::cout << "Constuctor range" << std::endl;
+		// };
 		// Copy
 		vector(const vector& cpy)
 		{
@@ -92,8 +91,8 @@ class	vector {
 					_CpyAlloc.deallocate(_array, _reserve);
 			}
 		};
-	
-	
+
+
 	/****************************/
 	/*	Operator overcharge		*/
 	/****************************/
@@ -105,8 +104,8 @@ class	vector {
 		}
 
 		value_type& operator[](const unsigned int index){return this->_array[index];}
-	
-	
+
+
 	/****************************/
 	/*			Iterators		*/
 	/****************************/

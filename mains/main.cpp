@@ -12,7 +12,7 @@
 
 
 // A retirer
-#include <type_traits>
+// #include <type_traits>
 
 
 
@@ -24,7 +24,6 @@ void	create_header(std::string const title) {
 
 
 int main() {
-
 
 	/* Use Iterator */
 	std::cout << std::endl << std::endl << "\tUse Iterator" << std::endl;
@@ -302,14 +301,28 @@ int main() {
 }
 
 {
-	short int i = 1;    // code does not compile if type of i is not integral
+	short int i = 2;    // code does not compile if type of i is not integral
 
 	std::cout << std::boolalpha;
 	std::cout << "i is odd: " << is_odd(i) << std::endl;
 	std::cout << "i is even: " << is_even(i) << std::endl;
 }
 
+//// iterator tests
+{
+	std::vector<int> pouet(5, 8);
+	pouet.push_back(2);
+	std::vector<int>::iterator it = pouet.begin();
 
+	std::cout << "real " << it[15] << std::endl;
+
+	TYPE::vector<int> pouet2(5, 8);
+	pouet2.push_back(2);
+	TYPE::vector<int>::iterator it2 = pouet2.begin();
+
+	std::cout << "mine " << it2[15] << std::endl;
+
+}
 
 	return 0;
 }
