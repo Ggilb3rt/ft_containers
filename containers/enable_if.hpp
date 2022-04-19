@@ -21,7 +21,7 @@ typename enable_if<ft::is_integral<T>::value,bool>::type
   is_even (T i) {return !bool(i%2);}
 
 //! CPP11
-// // 2. the second template argument is only valid if T is an integral type:
+// 2. the second template argument is only valid if T is an integral type:
 // template < class T,
 //            class = typename enable_if<ft::is_integral<T>::value>::type>
 // bool is_even (T i) {return !bool(i%2);}

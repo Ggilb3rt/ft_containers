@@ -27,7 +27,7 @@ class	vector {
 		typedef typename allocator_type::pointer				pointer;
 		// typedef typename std::random_access_iterator_tag		iterator;	// need to use mine
 		typedef MyIterator<ft::random_access_iterator_tag, T>	iterator;
-		typedef typename std::random_access_iterator_tag		const_iterator;
+		typedef typename ft::random_access_iterator_tag		const_iterator;
 		typedef typename std::reverse_iterator<iterator>		reverse_iterator;
 		typedef typename std::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef typename std::ptrdiff_t							difference_type;

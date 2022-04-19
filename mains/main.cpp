@@ -19,7 +19,7 @@
 void	create_header(std::string const title) {
 		std::cout << std::endl << std::endl << "|************************|" << std::endl
 		<< "|*\t" << title << "\t*|" << std::endl
-		<< "|************************|";
+		<< "|************************|" << std::endl;
 }
 
 
@@ -308,7 +308,9 @@ int main() {
 	std::cout << "i is even: " << is_even(i) << std::endl;
 }
 
-//// iterator tests
+
+// iterator tests
+create_header("Iterator tests");
 {
 	std::vector<int> pouet(5, 8);
 	pouet.push_back(2);
@@ -333,7 +335,7 @@ int main() {
 	defIt2 = pouet2.begin(); // segfault without this (normal)
 	TYPE::vector<int>::iterator copyIt2(defIt2);
 	defIt2--;
-	std::cout << "real "
+	std::cout << "mine "
 		<< assignIt2[15]
 		<< " |" << *defIt2 << "|"
 		<< " |" << *copyIt2 << "|"
@@ -342,7 +344,8 @@ int main() {
 	if (++defIt2 == copyIt2)
 		{ std::cout << "wahou !" << std::endl;}
 
-
+	std::cout << "begin - end "
+		<< (copyIt2 - copyIt2) << std::endl;
 }
 
 	return 0;

@@ -22,11 +22,11 @@ struct MyIterator {
 
 	//? PK friend ?
 	//bool operator== (const MyIterator& b) {return this->_arr_ptr == b._arr_ptr;};
-	friend bool operator== (const MyIterator& a, const MyIterator& b) {return a._arr_ptr == b._arr_ptr;};
-	friend bool operator!= (const MyIterator& a, const MyIterator& b) {return a._arr_ptr != b._arr_ptr;};
+	friend bool operator==(const MyIterator& a, const MyIterator& b) {return a._arr_ptr == b._arr_ptr;};
+	friend bool operator!=(const MyIterator& a, const MyIterator& b) {return a._arr_ptr != b._arr_ptr;};
 
 	reference operator*() const {return *_arr_ptr;}
-	pointer operator->() {return _arr_ptr;}
+	pointer operator->() const {return _arr_ptr;}
 
 	void operator= (MyIterator rhs) {_arr_ptr = rhs._arr_ptr;}
 
@@ -35,7 +35,20 @@ struct MyIterator {
 	MyIterator& operator--() {_arr_ptr--; return *this;}
 	MyIterator operator--(int) {MyIterator tmp = *this; --(*this); return tmp;}
 
-	reference operator[] (const unsigned int index) {return *(_arr_ptr + index);};
+	MyIterator operator+(MyIterator const & rhs) { return this->_arr_ptr + rhs._arr_ptr;}
+	MyIterator operator-(MyIterator const & rhs) { return this->_arr_ptr - rhs._arr_ptr;}
+	MyIterator operator+(int const & rhs) { return this->_arr_ptr + rhs;}
+	MyIterator operator-(int const & rhs) { return this->_arr_ptr - rhs;}
+
+	bool operator>(MyIterator const & rhs) const { return this->_arr_ptr > rhs._arr_ptr;}
+	bool operator>=(MyIterator const & rhs) const { return this->_arr_ptr >= rhs._arr_ptr;}
+	bool operator<(MyIterator const & rhs) const { return !(this > rhs);}
+	bool operator<=(MyIterator const & rhs) const { return !(this >= rhs);}
+
+	MyIterator operator+=(MyIterator const & rhs) { return this + rhs;}
+	MyIterator operator-=(MyIterator const & rhs) { return this - rhs;}
+
+	reference operator[](const unsigned int index) {return *(_arr_ptr + index);};
 	
 	private:
 		pointer _arr_ptr;
