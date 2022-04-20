@@ -48,8 +48,8 @@ struct MyIterator {
 	bool operator<(MyIterator const & rhs) const { return !(*this > rhs);}
 	bool operator<=(MyIterator const & rhs) const { return !(*this >= rhs);}
 
-	// MyIterator& operator+=(MyIterator const & rhs) { return *this + rhs;}
-	// MyIterator operator-=(MyIterator const & rhs) { return this - rhs;}
+	MyIterator& operator+=(difference_type const & rhs) {_arr_ptr += rhs; return *this;}
+	MyIterator& operator-=(difference_type const & rhs) {_arr_ptr -= rhs; return *this;}
 
 	reference operator[](const unsigned int index) {return *(_arr_ptr + index);};
 

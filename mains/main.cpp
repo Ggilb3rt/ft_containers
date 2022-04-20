@@ -314,6 +314,16 @@ create_header("Iterator tests");
 {
 	std::vector<int> pouet(5, 8);
 	pouet.push_back(2);
+	pouet.push_back(3);
+	pouet.push_back(4);
+	//print all
+	std::vector<int>::iterator start = pouet.begin();
+	while (start != pouet.end()) {
+		std::cout << "[" << *start << "] ";
+		start++;
+	}
+	std::cout << std::endl;
+
 	std::vector<int>::iterator defIt;
 	std::vector<int>::iterator assignIt = pouet.begin();
 	defIt = pouet.begin(); // segfault without this (normal)
@@ -325,20 +335,37 @@ create_header("Iterator tests");
 		<< " |" << *copyIt << "|"
 		<< std::endl;
 
+	if (defIt < copyIt)
+		{ std::cout << "defIt < copyIt" << std::endl;}
 	if (++defIt == copyIt)
 		{ std::cout << "defIt == copyIt" << std::endl;}
+
 	int minusINT = pouet.begin() - pouet.end();
 	std::vector<int>::iterator it = pouet.end() + minusINT;
 	std::cout << minusINT << " " << *it << std::endl;
 	std::vector<int>::iterator minus = pouet.end() - minusINT;
 	std::cout << "begin - end :"
 		<< *copyIt << " | " << *minus << std::endl;
+
+	it = pouet.begin();
+	it += 6;
+	std::cout << "must be 3 : " << *it << std::endl;
+	it -= pouet.end();
 }
 std::cout << std::endl;
 
 {
 	TYPE::vector<int> pouet(5, 8);
 	pouet.push_back(2);
+	pouet.push_back(3);
+	pouet.push_back(4);
+	//print all
+	TYPE::vector<int>::iterator start = pouet.begin();
+	while (start != pouet.end()) {
+		std::cout << "[" << *start << "] ";
+		start++;
+	}
+	std::cout << std::endl;
 	TYPE::vector<int>::iterator defIt;
 	TYPE::vector<int>::iterator assignIt = pouet.begin();
 	defIt = pouet.begin(); // segfault without this (normal)
@@ -361,6 +388,10 @@ std::cout << std::endl;
 	TYPE::vector<int>::iterator minus = pouet.end() - minusINT;
 	std::cout << "begin - end :"
 		<< *copyIt << " | " << *minus << std::endl;
+
+	it = pouet.begin();
+	it += 6;
+	std::cout << "must be 3 : " << *it << std::endl;
 }
 
 	return 0;
