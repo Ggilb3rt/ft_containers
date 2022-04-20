@@ -344,8 +344,9 @@ create_header("Iterator tests");
 	if (++defIt2 == copyIt2)
 		{ std::cout << "wahou !" << std::endl;}
 
-	std::cout << "begin - end "
-		<< (copyIt2 - copyIt2) << std::endl;
+	TYPE::vector<int>::iterator minus = pouet2.end() - pouet2.begin();
+	std::cout << "begin - end :"
+		<< *copyIt2 << " | " << *minus << std::endl;
 }
 
 	return 0;
