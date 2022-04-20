@@ -326,27 +326,41 @@ create_header("Iterator tests");
 		<< std::endl;
 
 	if (++defIt == copyIt)
-		{ std::cout << "wahou !" << std::endl;}
+		{ std::cout << "defIt == copyIt" << std::endl;}
+	int minusINT = pouet.begin() - pouet.end();
+	std::vector<int>::iterator it = pouet.end() + minusINT;
+	std::cout << minusINT << " " << *it << std::endl;
+	std::vector<int>::iterator minus = pouet.end() - minusINT;
+	std::cout << "begin - end :"
+		<< *copyIt << " | " << *minus << std::endl;
+}
+std::cout << std::endl;
 
-	TYPE::vector<int> pouet2(5, 8);
-	pouet2.push_back(2);
-	TYPE::vector<int>::iterator defIt2;
-	TYPE::vector<int>::iterator assignIt2 = pouet2.begin();
-	defIt2 = pouet2.begin(); // segfault without this (normal)
-	TYPE::vector<int>::iterator copyIt2(defIt2);
-	defIt2--;
+{
+	TYPE::vector<int> pouet(5, 8);
+	pouet.push_back(2);
+	TYPE::vector<int>::iterator defIt;
+	TYPE::vector<int>::iterator assignIt = pouet.begin();
+	defIt = pouet.begin(); // segfault without this (normal)
+	TYPE::vector<int>::iterator copyIt(defIt);
+	defIt--;
 	std::cout << "mine "
-		<< assignIt2[15]
-		<< " |" << *defIt2 << "|"
-		<< " |" << *copyIt2 << "|"
+		<< assignIt[15]
+		<< " |" << *defIt << "|"
+		<< " |" << *copyIt << "|"
 		<< std::endl;
 
-	if (++defIt2 == copyIt2)
-		{ std::cout << "wahou !" << std::endl;}
+	if (defIt < copyIt)
+		{ std::cout << "defIt < copyIt" << std::endl;}
+	if (++defIt == copyIt)
+		{ std::cout << "defIt == copyIt" << std::endl;}
 
-	TYPE::vector<int>::iterator minus = pouet2.end() - pouet2.begin();
+	int minusINT = pouet.begin() - pouet.end();
+	TYPE::vector<int>::iterator it = pouet.end() + minusINT;
+	std::cout << minusINT << " " << *it << std::endl;
+	TYPE::vector<int>::iterator minus = pouet.end() - minusINT;
 	std::cout << "begin - end :"
-		<< *copyIt2 << " | " << *minus << std::endl;
+		<< *copyIt << " | " << *minus << std::endl;
 }
 
 	return 0;
