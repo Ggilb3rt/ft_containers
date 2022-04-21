@@ -183,26 +183,6 @@ int main() {
 	/* Use assign() */
 	std::cout << std::endl << std::endl << "\tUse .assign()" << std::endl;
 {
-	std::vector<int> first;
-	std::vector<int> second;
-	std::vector<int> third(10, 34);
-
-	first.assign (7,100);             // 7 ints with a value of 100
-
-	std::vector<int>::iterator it;
-	it=first.begin()+1;
-
-	second.assign (it,first.end()-1); // the 5 central values of first
-
-	int myints[] = {1776,7,4};
-	third.assign (myints,myints+3);   // assigning from array.
-
-	std::cout << "Size of first: " << int (first.size()) << '\n';
-	std::cout << "Size of second: " << int (second.size()) << " | " << int (second.capacity())  << '\n';
-	std::cout << "Size of third: " << int (third.size()) << " | " << int (third.capacity()) << '\n';
-}
-
-{
 	TYPE::vector<int> first;
 	TYPE::vector<int> second;
 	TYPE::vector<int> third(10, 34);
@@ -248,15 +228,19 @@ int main() {
 	/* Use erase() */
 	std::cout << std::endl << std::endl << "\tUse .erase()" << std::endl;
 {
-	std::vector<int> myvector;
+	TYPE::vector<int> myvector;
+	TYPE::vector<int>::iterator retIt;
 	for (int i=1; i<=10; i++) myvector.push_back(i);// set some values (from 1 to 10)
-	myvector.erase (myvector.begin()+5); // erase the 6th element
-	myvector.erase (myvector.begin(),myvector.begin()+3); // erase the first 3 elements:
+	retIt = myvector.erase (myvector.begin()+5); // erase the 6th element
+	std::cout << "retIt val= " << *retIt << " " << &*retIt << std::endl;
+	retIt = myvector.erase (myvector.begin(),myvector.begin()+3); // erase the first 3 elements:
+	std::cout << "retIt val= " << *retIt << " " << &*retIt << std::endl;
+
 
 	std::cout << "myvector contains:";
 	for (unsigned i=0; i<myvector.size(); ++i)
 		std::cout << ' ' << myvector[i];
-	std::cout << '\n';
+	std::cout << '\n' << myvector[myvector.size() + 1];
 }
 
 	/* Use clear() */

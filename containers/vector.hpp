@@ -202,7 +202,8 @@ class	vector {
 	/*			Modifiers		*/
 	/****************************/
 	template <class InputIterator>
-	void	assign(InputIterator first, InputIterator last) {
+	typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
+		assign(InputIterator first, InputIterator last) {
 		difference_type	newSize = last - first;
 
 		this->clear();
@@ -222,7 +223,6 @@ class	vector {
 			n--;
 		}
 	}
-
 	// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
 	void	push_back(const value_type& val) {
 		if (_size >= _reserve)
@@ -236,14 +236,32 @@ class	vector {
 			this->_size--;
 		}
 	}
-	//! need is_enable and is_integer 
-	// iterator	erase(iterator position) {
-	// 	_CpyAlloc.destroy(*position);
-	// 	for(iterator i = position; i != this->end(); i++)
-	// 		*i = *(i + 1);
-	// 	this->_size--;
-	// 	return position;
-	// }
+	iterator	erase(iterator position) {
+		_CpyAlloc.destroy((_array + (position - this->begin())));
+		for(iterator i = position; i != this->end(); i++)
+			*i = *(i + 1);
+		this->_size--;
+		return position;
+	}
+	iterator	erase(iterator first, iterator last) {
+		difference_type	removeQt = last - first;
+		iterator		firstCpy = first;
+		iterator		end = this->end();
+
+		(void)removeQt;
+		while (first != last) {
+			_CpyAlloc.destroy((_array + (first - this->begin())));
+			first++;
+			this->_size--;
+		}
+		first = firstCpy;
+		while (last != end) {
+			*first = *last;
+			last++;
+			first++;
+		}
+		return firstCpy;
+	}
 	void	clear() {
 		for (size_type i = 0; i < this->_size; i++)
 			_CpyAlloc.destroy((_array + i));

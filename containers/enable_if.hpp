@@ -3,6 +3,8 @@
 
 #include "is_integral.hpp"
 
+namespace ft {
+
 template <bool Cond, class T = void>
 struct	enable_if {};
 
@@ -11,13 +13,16 @@ struct enable_if<true, T> {
 		typedef T	type;
 };
 
+}
+
+
 // 1. the return type (bool) is only valid if T is an integral type:
 template <class T>
-typename enable_if<ft::is_integral<T>::value,bool>::type
+typename ft::enable_if<ft::is_integral<T>::value,bool>::type
   is_odd (T i) {return bool(i%2);}
 
 template <class T>
-typename enable_if<ft::is_integral<T>::value,bool>::type
+typename ft::enable_if<ft::is_integral<T>::value,bool>::type
   is_even (T i) {return !bool(i%2);}
 
 //! CPP11
