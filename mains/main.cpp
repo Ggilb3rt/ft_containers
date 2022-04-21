@@ -172,14 +172,56 @@ int main() {
 	std::cout << "myvector.front() is now " << myvector.front() << '\n';
 
 	TYPE::vector<float> empty_str;
-	std::cout << "|" << empty_str.front() << "| |"
-		<< empty_str.back() << "|" << std::endl; //! real segfault, man said undefined behavior sooooo
+	// std::cout << "|" << empty_str.front() << "| |"
+	// 	<< empty_str.back() << "|" << std::endl; //! real segfault, man said undefined behavior sooooo
 }
 
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
-	create_header("Modifier");
+	create_header("Modifiers");
+	/* Use assign() */
+	std::cout << std::endl << std::endl << "\tUse .assign()" << std::endl;
+{
+	std::vector<int> first;
+	std::vector<int> second;
+	std::vector<int> third(10, 34);
+
+	first.assign (7,100);             // 7 ints with a value of 100
+
+	std::vector<int>::iterator it;
+	it=first.begin()+1;
+
+	second.assign (it,first.end()-1); // the 5 central values of first
+
+	int myints[] = {1776,7,4};
+	third.assign (myints,myints+3);   // assigning from array.
+
+	std::cout << "Size of first: " << int (first.size()) << '\n';
+	std::cout << "Size of second: " << int (second.size()) << " | " << int (second.capacity())  << '\n';
+	std::cout << "Size of third: " << int (third.size()) << " | " << int (third.capacity()) << '\n';
+}
+
+{
+	TYPE::vector<int> first;
+	TYPE::vector<int> second;
+	TYPE::vector<int> third(10, 34);
+
+	first.assign (7,100);             // 7 ints with a value of 100
+
+	TYPE::vector<int>::iterator it;
+	it=first.begin()+1;
+
+	second.assign (it,first.end()-1); // the 5 central values of first
+
+	int myints[] = {1776,7,4};
+	third.assign (myints,myints+3);   // assigning from array.
+
+	std::cout << "Size of first: " << int (first.size()) << '\n';
+	std::cout << "Size of second: " << int (second.size()) << " | " << int (second.capacity())  << '\n';
+	std::cout << "Size of third: " << int (third.size()) << " | " << int (third.capacity()) << '\n';
+}
+
 	/* Use push_back() and pop_back()*/
 	std::cout << std::endl << std::endl << "\tUse .push_back() and .pop_back()" << std::endl;
 {
@@ -196,8 +238,9 @@ int main() {
 	std::cout << "The elements of myvector add up to " << sum << '\n';
 	try {
 		std::cout << "is empty : " << myvector.empty()
-			<< std::endl << "myvector[1] : " << myvector[1]
-			<< std::endl << "iterator.end() : " << *myvector.end() << std::endl;
+			<< std::endl << "myvector[1] : " << myvector[1] << std::endl;
+			// << std::endl << "iterator.begin() : " << *myvector.begin() // real works but man said "If the container is empty, the returned iterator value shall not be dereferenced." soooooo
+			// << std::endl << "iterator.end() : " << *myvector.end() << std::endl; // same
 	}
 	catch(const std::exception& e){std::cerr << e.what() << '\n';}
 }
@@ -341,7 +384,7 @@ create_header("Iterator tests");
 		{ std::cout << "defIt == copyIt" << std::endl;}
 
 	int minusINT = pouet.begin() - pouet.end();
-	std::vector<int>::iterator it = pouet.end() + minusINT;
+	std::vector<int>::iterator it = minusINT + pouet.end();
 	std::cout << minusINT << " " << *it << std::endl;
 	std::vector<int>::iterator minus = pouet.end() - minusINT;
 	std::cout << "begin - end :"
@@ -350,7 +393,8 @@ create_header("Iterator tests");
 	it = pouet.begin();
 	it += 6;
 	std::cout << "must be 3 : " << *it << std::endl;
-	it -= pouet.end();
+	it -= 1;
+	std::cout << "must be 2 : " << *it << std::endl;
 }
 std::cout << std::endl;
 
@@ -383,6 +427,7 @@ std::cout << std::endl;
 		{ std::cout << "defIt == copyIt" << std::endl;}
 
 	int minusINT = pouet.begin() - pouet.end();
+	// TYPE::vector<int>::iterator it = minusINT + pouet.end();
 	TYPE::vector<int>::iterator it = pouet.end() + minusINT;
 	std::cout << minusINT << " " << *it << std::endl;
 	TYPE::vector<int>::iterator minus = pouet.end() - minusINT;
@@ -392,7 +437,32 @@ std::cout << std::endl;
 	it = pouet.begin();
 	it += 6;
 	std::cout << "must be 3 : " << *it << std::endl;
+	it -= 1;
+	std::cout << "must be 2 : " << *it << std::endl;
 }
+
+create_header("Itearator");
+{
+	std::vector<std::string> strs;
+	std::vector<std::string>::iterator it = strs.begin();
+	std::vector<std::string>::iterator itEnd = strs.end();
+	std::cout << "lol " << std::endl;
+	strs.push_back("pouet");
+	std::cout << &*it << "\t\t" << &*itEnd << std::endl
+		<< &*(strs.begin()) << "\t" << &*(strs.end());
+}
+std::cout << std::endl;
+{
+	TYPE::vector<std::string> strs;
+	TYPE::vector<std::string>::iterator it = strs.begin();
+	TYPE::vector<std::string>::iterator itEnd = strs.end();
+	std::cout << "lol " << std::endl;
+	strs.push_back("pouet");
+	std::cout << &*it << "\t\t" << &*itEnd << std::endl
+		<< &*(strs.begin()) << "\t" << &*(strs.end());
+}
+
+std::cout << std::endl;
 
 	return 0;
 }

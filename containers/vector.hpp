@@ -27,7 +27,7 @@ class	vector {
 		typedef typename allocator_type::pointer				pointer;
 		// typedef typename std::random_access_iterator_tag		iterator;	// need to use mine
 		typedef MyIterator<ft::random_access_iterator_tag, T>	iterator;
-		typedef typename ft::random_access_iterator_tag		const_iterator;
+		typedef typename ft::random_access_iterator_tag			const_iterator;
 		typedef typename std::reverse_iterator<iterator>		reverse_iterator;
 		typedef typename std::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef typename std::ptrdiff_t							difference_type;
@@ -109,9 +109,11 @@ class	vector {
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
-		iterator	begin() {return iterator(&_array[0]);} // pas terminé, doit check si vide
-		iterator	end() {return iterator(&_array[this->_size]);}
-
+		iterator		begin() {return this->empty() ? iterator() : iterator(&_array[0]);}
+		const_iterator	begin() const {return this->empty() ? iterator() : iterator(&_array[0]);}
+		iterator		end() {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
+		const_iterator	end() const {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
+		// need reverse_iterators
 
 
 	/****************************/
@@ -199,6 +201,28 @@ class	vector {
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
+	template <class InputIterator>
+	void	assign(InputIterator first, InputIterator last) {
+		difference_type	newSize = last - first;
+
+		this->clear();
+		if (this->capacity() < (size_type)newSize)
+			this->reserve(newSize);
+		while (first != last) {
+			this->push_back(*first);
+			first++;
+		}
+	}
+	void	assign(size_type n, const value_type& val) {
+		this->clear();
+		if (this->capacity() < n)
+			this->reserve(n);
+		while (n > 0) {
+			this->push_back(val);
+			n--;
+		}
+	}
+
 	// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
 	void	push_back(const value_type& val) {
 		if (_size >= _reserve)
@@ -254,9 +278,6 @@ class	vector {
 		allocator_type	_CpyAlloc;
 		size_type	_size;
 		size_type	_reserve;
-		// iterator 	_begin;
-		// iterator 	_end;
-		// iterator 	_end_reserve;
 };
 
 } // end namespace ft
