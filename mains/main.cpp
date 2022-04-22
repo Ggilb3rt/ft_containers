@@ -243,6 +243,67 @@ int main() {
 	std::cout << '\n' << myvector[myvector.size() + 1];
 }
 
+	/* Use swap() */
+	int adder = 4;
+	std::cout << std::endl << std::endl << "\tUse .swap()" << std::endl;
+{
+	std::vector<int> foo (3,100);   // three ints with a value of 100
+	std::vector<int> bar (5,200);   // five ints with a value of 200
+	std::vector<int>::iterator it = foo.begin();
+	std::vector<int>::iterator it4 = foo.begin() + adder;
+
+	std::cout << "it addr before swap : " << *it << " | " << &*it << std::endl;
+	std::cout << "it4 addr before swap : " << *it4 << " | " << &*it4 << std::endl;
+	std::cout << "foo " << &foo << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
+	std::cout << "bar " << &bar << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
+	foo.swap(bar);
+
+	std::cout << "foo contains:";
+	for (unsigned i=0; i<foo.size(); i++)
+		std::cout << ' ' << foo[i];
+	std::cout << '\n';
+
+	std::cout << "bar contains:";
+	for (unsigned i=0; i<bar.size(); i++)
+		std::cout << ' ' << bar[i];
+	std::cout << '\n';
+
+	std::cout << "it after swap : " << *it << " | " << &*it << std::endl;
+	std::cout << "it4 after swap must be garbage : " << *it4 << " | " << &*it4 << std::endl;
+	std::cout << "foo " << &foo << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
+	std::cout << "bar " << &bar << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
+}
+std::cout << std::endl;
+{
+	TYPE::vector<int> foo (3,100);   // three ints with a value of 100
+	TYPE::vector<int> bar (5,200);   // five ints with a value of 200
+	TYPE::vector<int>::iterator it = foo.begin();
+	TYPE::vector<int>::iterator it4 = foo.begin() + adder;
+
+	std::cout << "it addr before swap : " << *it << " | " << &*it << std::endl;
+	std::cout << "it4 addr before swap : " << *it4 << " | " << &*it4 << std::endl;
+	std::cout << "foo " << &foo << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
+	std::cout << "bar " << &bar << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
+	foo.swap(bar);
+
+	std::cout << "foo contains:";
+	for (unsigned i=0; i<foo.size(); i++)
+		std::cout << ' ' << foo[i];
+	std::cout << '\n';
+
+	std::cout << "bar contains:";
+	for (unsigned i=0; i<bar.size(); i++)
+		std::cout << ' ' << bar[i];
+	std::cout << '\n';
+
+	std::cout << "it after swap : " << *it << " | " << &*it << std::endl;
+	std::cout << "it4 after swap must be garbage : " << *it4 << " | " << &*it4 << std::endl;
+	std::cout << "foo " << &foo << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
+	std::cout << "bar " << &bar << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
+}
+
+
+
 	/* Use clear() */
 	std::cout << std::endl << std::endl << "\tUse .clear()" << std::endl;
 {
@@ -299,6 +360,21 @@ int main() {
 	myvector.get_allocator().deallocate(p,5);
 }
 
+	/****************************/
+	/*			Operators		*/
+	/****************************/
+	create_header("Operators !TYPE");
+{
+	std::vector<int> foo (3,100);   // three ints with a value of 100
+	std::vector<int> bar (2,200);   // two ints with a value of 200
+
+	if (foo==bar) std::cout << "foo and bar are equal\n";
+	if (foo!=bar) std::cout << "foo and bar are not equal\n";
+	if (foo< bar) std::cout << "foo is less than bar\n";
+	if (foo> bar) std::cout << "foo is greater than bar\n";
+	if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+	if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+}
 
 	//////////////////////////////////
 	//			operator=			//
@@ -313,7 +389,8 @@ int main() {
 	// std::cout << "Size of bar: " << int(bar.size()) << '\n';
 
 
-
+// useless, to remove
+create_header("is_integral test");
 {
   // is_integral<T> inherits from integral_constant
 	if ( TYPE::is_integral<int>() )

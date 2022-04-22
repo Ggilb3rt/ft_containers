@@ -10,6 +10,11 @@
 #include "myIterator.hpp"
 #include "is_integral.hpp"
 #include "enable_if.hpp"
+#include "lexicographical_compare.hpp"
+
+
+// to remove
+#include <algorithm>
 
 namespace ft {
 
@@ -56,7 +61,7 @@ class	vector {
 						:  _size(n), _reserve(n)
 		{
 			_CpyAlloc = alloc;
-			try {_array = _CpyAlloc.allocate(n);} //? n + 1 pour avoir un element vide a la fin ?
+			try {_array = _CpyAlloc.allocate(n);}
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
 				return ;
@@ -101,6 +106,7 @@ class	vector {
 			std::cout << "operator = used " << x.size()  << std::endl;
 			// if this has content ==> destroy
 			// assign x to this
+			return *this;
 		}
 
 		value_type& operator[](const unsigned int index){return this->_array[index];}
@@ -238,7 +244,7 @@ class	vector {
 	}
 	iterator	erase(iterator position) {
 		_CpyAlloc.destroy((_array + (position - this->begin())));
-		for(iterator i = position; i != this->end(); i++)
+		for (iterator i = position; i != this->end(); i++)
 			*i = *(i + 1);
 		this->_size--;
 		return position;
@@ -262,6 +268,20 @@ class	vector {
 		}
 		return firstCpy;
 	}
+	void	swap(vector& x) {
+		// cf iterator validity : l'iterator pointe vers la meme adrss apres le swap
+		// cf complexity : constant ==> must only swap pointer to data and size
+		T*			tmpArray = this->_array;
+		size_type	tmpSize = this->_size;
+		size_type	tmpReserve = this->_reserve;
+
+		this->_array = x._array;
+		this->_size = x._size;
+		this->_reserve = x._reserve;
+		x._array = tmpArray;
+		x._size = tmpSize;
+		x._reserve = tmpReserve;
+	}
 	void	clear() {
 		for (size_type i = 0; i < this->_size; i++)
 			_CpyAlloc.destroy((_array + i));
@@ -275,28 +295,60 @@ class	vector {
 	allocator_type	get_allocator() const {return this->_CpyAlloc;}
 
 
-	/****************************/
-	/*			Non-member		*/
-	/****************************/
-
-
-
-	/****************************/
-	/*			Exceptions		*/
-	/****************************/
-	class	BadIndexException : public std::exception {
-			public:
-				virtual const char * what() const throw() {
-					return ("Invalid index");
-					}
-	};
-
 	private:
-		T*			_array;
+		value_type*			_array;
 		allocator_type	_CpyAlloc;
 		size_type	_size;
 		size_type	_reserve;
 };
+
+	/****************************/
+	/*			Non-member		*/
+	/****************************/
+	template <class T, class Alloc>
+	bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		if (lhs.size() != rhs.size())
+			return false;
+		typename ft::vector<T>::iterator	first = lhs.begin();
+		typename ft::vector<T>::iterator	last = lhs.end();
+		while (first != last) {
+			if (*first != *last)
+				return false;
+			first++;
+		}
+		return true;
+	}
+
+	template <class T, class Alloc>
+	bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return !(lhs == rhs);
+	}
+
+	template <class T, class Alloc>
+	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	}
+
+	template <class T, class Alloc>
+	bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return !(rhs < lhs);
+	}
+
+	template <class T, class Alloc>
+	bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return rhs < lhs;
+	}
+
+	template <class T, class Alloc>
+	bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return !(lhs < rhs);
+	}
+
+	template <class T, class Alloc>
+	void	swap(vector<T,Alloc>&x, vector<T,Alloc>& y) {
+		x.swap(y);
+	}
+
 
 } // end namespace ft
 
