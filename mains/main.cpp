@@ -43,6 +43,9 @@ int main() {
 	while(pos != pouet.end())
 		std::cout << *pos++ << std::endl;
 
+	std::cout << "Range constructor !!!" << std::endl;
+	TYPE::vector<int> ranger(pouet.begin(), pouet.end());
+	std::cout << "Ranger size : " << ranger.size() << std::endl;
 
 	/****************************/
 	/*			Capacity		*/

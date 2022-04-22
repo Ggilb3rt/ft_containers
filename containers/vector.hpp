@@ -72,15 +72,16 @@ class	vector {
 			//std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
-		// is_enable() if is_integral()
-		// template <class InputIterator>
-		// vector(InputIterator first,
-		// 				InputIterator last,
-		// 				const allocator_type& alloc = allocator_type())
-		// {
-		// 	(void)first; (void)last; (void)alloc;
-		// 	std::cout << "Constuctor range" << std::endl;
-		// };
+		template <class InputIterator,
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type>
+		vector(InputIterator first,
+						InputIterator last,
+						const allocator_type& alloc = allocator_type())
+						: _size(last - first), _reserve(last - first)
+		{
+			(void)first; (void)last; (void)alloc;
+			std::cout << "Constuctor range" << std::endl;
+		};
 		// Copy
 		vector(const vector& cpy)
 		{
