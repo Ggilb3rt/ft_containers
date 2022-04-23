@@ -44,9 +44,9 @@ class	vector {
 	/****************************/
 		// Default
 		explicit vector(const allocator_type& alloc = allocator_type())
-						: _size(0), _reserve(0)
+						: _CpyAlloc(alloc), _size(0), _reserve(0)
 		{
-			_CpyAlloc = alloc;
+			// _CpyAlloc = alloc;
 			try {_array = _CpyAlloc.allocate(this->_reserve);}
 			catch(const std::exception& e) {
 				std::cerr << e.what() << std::endl;
@@ -58,9 +58,9 @@ class	vector {
 		explicit vector(size_type n,
 						const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type())
-						:  _size(n), _reserve(n)
+						: _CpyAlloc(alloc), _size(n), _reserve(n)
 		{
-			_CpyAlloc = alloc;
+			// _CpyAlloc = alloc;
 			try {_array = _CpyAlloc.allocate(n);}
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
@@ -72,12 +72,12 @@ class	vector {
 			//std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
-		template <class InputIterator,
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type>
+		template <class InputIterator>
 		vector(InputIterator first,
-						InputIterator last,
-						const allocator_type& alloc = allocator_type())
-						: _size(last - first), _reserve(last - first)
+				InputIterator last,
+				const allocator_type& alloc = allocator_type(),
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = NULL)
+				: _CpyAlloc(alloc), _size(last - first), _reserve(last - first)
 		{
 			(void)first; (void)last; (void)alloc;
 			std::cout << "Constuctor range" << std::endl;
@@ -85,11 +85,12 @@ class	vector {
 		// Copy
 		vector(const vector& cpy)
 		{
-			(void)cpy;
+			*this = cpy;
 			std::cout << "Constructor copy" << std::endl;
 		};
 		~vector()
 		{
+			//use .clear() ?
 			if (_array) {
 				for (size_type i = 0; i < _size; i++) {
 					_CpyAlloc.destroy((_array + i));
@@ -104,9 +105,10 @@ class	vector {
 	/****************************/
 		vector& operator=(const vector& x)
 		{
-			std::cout << "operator = used " << x.size()  << std::endl;
-			// if this has content ==> destroy
-			// assign x to this
+			this->clear();
+			for (iterator it = x.begin(); it != x.end(); it++)
+				this->push_back(*it);
+			// std::cout << "operator = used " << x.size()  << std::endl;
 			return *this;
 		}
 

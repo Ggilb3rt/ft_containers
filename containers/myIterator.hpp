@@ -38,7 +38,7 @@ struct MyIterator {
 	//! fonctionne avec a +/- n MAIS ne fonctionne pas avec n +/- a
 	MyIterator operator+(const difference_type& rhs) const {return MyIterator(this->_arr_ptr + rhs);}
 	MyIterator operator-(const difference_type& rhs) const {return MyIterator(this->_arr_ptr - rhs);}
-	difference_type operator+(const MyIterator& rhs) const {return this + rhs._arr_ptr;}
+	difference_type operator+(const MyIterator& rhs) const {return _arr_ptr + rhs._arr_ptr;}
 	difference_type operator-(const MyIterator& rhs) const {return _arr_ptr - rhs._arr_ptr;}
 	// MyIterator operator+(int const & rhs) {return this->_arr_ptr + rhs;}
 	// MyIterator operator-(int const & rhs) {return this->_arr_ptr - rhs;}
