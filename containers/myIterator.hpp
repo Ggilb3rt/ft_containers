@@ -46,8 +46,8 @@ struct MyIterator {
 
 	bool operator>(MyIterator const & rhs) const { return this->_arr_ptr > rhs._arr_ptr;}
 	bool operator>=(MyIterator const & rhs) const { return this->_arr_ptr >= rhs._arr_ptr;}
-	bool operator<(MyIterator const & rhs) const { return !(*this > rhs);}
-	bool operator<=(MyIterator const & rhs) const { return !(*this >= rhs);}
+	bool operator<(MyIterator const & rhs) const { return this->_arr_ptr < rhs._arr_ptr;}
+	bool operator<=(MyIterator const & rhs) const { return this->_arr_ptr <= rhs._arr_ptr;}
 
 	MyIterator& operator+=(difference_type const & rhs) {this->_arr_ptr += rhs; return *this;}
 	MyIterator& operator-=(difference_type const & rhs) {this->_arr_ptr -= rhs; return *this;}

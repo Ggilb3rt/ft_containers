@@ -17,9 +17,17 @@
 
 
 void	create_header(std::string const title) {
-		std::cout << std::endl << std::endl << "|************************|" << std::endl
-		<< "|*\t" << title << "\t*|" << std::endl
-		<< "|************************|" << std::endl;
+		std::cout << std::endl << std::endl << "|****" ;
+		for (size_t i = 0; i < title.length(); i++) {
+			std::cout << "*";
+		}
+		std::cout << "****|" << std::endl
+			<< "|*   " << title << "   *|" << std::endl
+			<< "|****" ;
+		for (size_t i = 0; i < title.length(); i++) {
+			std::cout << "*";
+		}
+		std::cout << "****|" << std::endl;
 }
 
 
@@ -44,8 +52,10 @@ int main() {
 		std::cout << *pos++ << std::endl;
 
 	std::cout << "Range constructor !!!" << std::endl;
-	TYPE::vector<int> ranger(pouet.begin(), pouet.end());
-	std::cout << "Ranger size : " << ranger.size() << std::endl;
+	pouet.push_back(122);
+	TYPE::vector<int> ranger(pouet.begin() + 2, pouet.end() - 1);
+	std::cout << "Ranger size : " << ranger.size()
+		<< "\tlast value = "<< *(pouet.end() - 1) << std::endl;
 
 	/****************************/
 	/*			Capacity		*/
@@ -160,7 +170,10 @@ int main() {
 	try {
 		myvector.at(20)=100;      // vector::at throws an out-of-range
 	}
-	catch (const std::out_of_range& oor) {
+	catch (std::out_of_range& e) {
+		std::cout << "Catch out_of_range exception!" << std::endl;
+	}
+	catch (const std::exception& oor) {
 		std::cerr << "Out of Range error: " << oor.what() << '\n';
 	}
 }
@@ -226,6 +239,36 @@ int main() {
 			// << std::endl << "iterator.end() : " << *myvector.end() << std::endl; // same
 	}
 	catch(const std::exception& e){std::cerr << e.what() << '\n';}
+}
+	/* Use insert() */
+	std::cout << std::endl << std::endl << "\tUse .insert()" << std::endl;
+
+{
+	std::vector<int> myvector (3,100);
+	std::vector<int>::iterator it;
+
+	it = myvector.begin();
+	//it = myvector.insert ( it, 200 );
+
+	std::cout << &*myvector.end() << std::endl;
+	for (it=myvector.begin(); it<=myvector.end(); it++)
+		std::cout << ' ' << *it << " " << &*it;
+	std::cout << '\n';
+	// myvector.insert (it,2,300);
+
+	// // "it" no longer valid, get a new one:
+	// it = myvector.begin();
+
+	// std::vector<int> anothervector (2,400);
+	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	// int myarray [] = { 501,502,503 };
+	// myvector.insert (myvector.begin(), myarray, myarray+3);
+
+	// std::cout << "myvector contains:";
+	// for (it=myvector.begin(); it<myvector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
 }
 
 	/* Use erase() */
@@ -366,10 +409,10 @@ std::cout << std::endl;
 	/****************************/
 	/*			Operators		*/
 	/****************************/
-	create_header("Operators !TYPE");
+	create_header("Relational operators !TYPE");
 {
-	std::vector<int> foo (3,100);   // three ints with a value of 100
-	std::vector<int> bar (2,200);   // two ints with a value of 200
+	TYPE::vector<int> foo (3,100);   // three ints with a value of 100
+	TYPE::vector<int> bar (2,200);   // two ints with a value of 200
 
 	if (foo==bar) std::cout << "foo and bar are equal\n";
 	if (foo!=bar) std::cout << "foo and bar are not equal\n";
@@ -390,30 +433,6 @@ std::cout << std::endl;
 
 	// std::cout << "Size of foo: " << int(foo.size()) << '\n';
 	// std::cout << "Size of bar: " << int(bar.size()) << '\n';
-
-
-// useless, to remove
-create_header("is_integral test");
-{
-  // is_integral<T> inherits from integral_constant
-	if ( TYPE::is_integral<int>() )
-		std::cout << "int is an integral type" << std::endl;
-
-	// same result as:
-	if ( TYPE::is_integral<long>::value )
-		std::cout << "long is an integral type" << std::endl;
-
-	if ( TYPE::is_integral<float>() )
-		std::cout << "int is an integral type" << std::endl;
-}
-
-{
-	short int i = 2;    // code does not compile if type of i is not integral
-
-	std::cout << std::boolalpha;
-	std::cout << "i is odd: " << is_odd(i) << std::endl;
-	std::cout << "i is even: " << is_even(i) << std::endl;
-}
 
 
 // iterator tests
@@ -527,6 +546,94 @@ std::cout << std::endl;
 }
 
 std::cout << std::endl;
+
+{
+	std::vector<int> vct(7);
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+	{
+		vct.at(i) = (vct.size() - i) * 3;
+		std::cout << "vct.at(): " << vct.at(i) << " | ";
+		std::cout << "vct[]: " << vct[i] << std::endl;
+	}
+
+	std::cout << "ic" << std::endl;
+	std::vector<int> const vct_c(vct);
+	std::cout << "ci" << std::endl;
+	std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
+	std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
+
+	try {
+		vct.at(10) = 42;
+	}
+	catch (std::out_of_range &e) {
+		std::cout << "Catch out_of_range exception!" << std::endl;
+	}
+	catch (std::exception &e) {
+		std::cout << "Catch exception: " << e.what() << std::endl;
+	}
+}
+
+create_header("insert");
+{
+	std::vector<int> myvector (3,100);
+	std::vector<int>::iterator it;
+
+	it = myvector.begin();
+	it = myvector.insert ( it+1, 200 );
+	it = myvector.insert ( it+1, 300 );
+
+	std::cout << myvector.capacity() << " "
+		<< &*it << " " << &*myvector.end() << std::endl;
+	for (it=myvector.begin(); it<=myvector.end(); it++)
+		std::cout << ' ' << *it << " " << &*it << std::endl;
+	std::cout << '\n';
+	// myvector.insert (it,2,300);
+
+	// // "it" no longer valid, get a new one:
+	// it = myvector.begin();
+
+	// std::vector<int> anothervector (2,400);
+	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	// int myarray [] = { 501,502,503 };
+	// myvector.insert (myvector.begin(), myarray, myarray+3);
+
+	// std::cout << "myvector contains:";
+	// for (it=myvector.begin(); it<myvector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+}
+
+std::cout << std::endl;
+{
+	TYPE::vector<int> myvector (3,100);
+	TYPE::vector<int>::iterator it;
+
+	it = myvector.begin();
+	it = myvector.insert ( it+1, 200 );
+
+	std::cout << myvector.capacity() << " "
+		<< &*it << " " << &*myvector.end() << std::endl;
+	for (it=myvector.begin(); it<=myvector.end(); it++)
+		std::cout << ' ' << *it << " " << &*it << std::endl;
+	std::cout << '\n';
+	// myvector.insert (it,2,300);
+
+	// // "it" no longer valid, get a new one:
+	// it = myvector.begin();
+
+	// std::vector<int> anothervector (2,400);
+	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	// int myarray [] = { 501,502,503 };
+	// myvector.insert (myvector.begin(), myarray, myarray+3);
+
+	// std::cout << "myvector contains:";
+	// for (it=myvector.begin(); it<myvector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+}
 
 	return 0;
 }

@@ -14,7 +14,7 @@
 
 
 // to remove
-#include <algorithm>
+// #include <algorithm>
 
 namespace ft {
 
@@ -32,7 +32,7 @@ class	vector {
 		typedef typename allocator_type::pointer				pointer;
 		// typedef typename std::random_access_iterator_tag		iterator;	// need to use mine
 		typedef MyIterator<ft::random_access_iterator_tag, T>	iterator;
-		typedef typename ft::random_access_iterator_tag			const_iterator;
+		typedef MyIterator<ft::random_access_iterator_tag, T>	const_iterator;
 		typedef typename std::reverse_iterator<iterator>		reverse_iterator;
 		typedef typename std::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef typename std::ptrdiff_t							difference_type;
@@ -46,13 +46,11 @@ class	vector {
 		explicit vector(const allocator_type& alloc = allocator_type())
 						: _CpyAlloc(alloc), _size(0), _reserve(0)
 		{
-			// _CpyAlloc = alloc;
 			try {_array = _CpyAlloc.allocate(this->_reserve);}
 			catch(const std::exception& e) {
 				std::cerr << e.what() << std::endl;
 				return ;
 			}
-			std::cout << "contstructeur par default, reserve : " << this->_reserve << std::endl;
 		};
 		//	Fill
 		explicit vector(size_type n,
@@ -60,7 +58,6 @@ class	vector {
 						const allocator_type& alloc = allocator_type())
 						: _CpyAlloc(alloc), _size(n), _reserve(n)
 		{
-			// _CpyAlloc = alloc;
 			try {_array = _CpyAlloc.allocate(n);}
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
@@ -69,24 +66,33 @@ class	vector {
 			for (size_type i = 0; i < n; i++) {
 				_CpyAlloc.construct((_array + i), val);
 			}
-			//std::cout << "addr _array : " << _array << std::endl;
 		};
 		// Range
 		template <class InputIterator>
 		vector(InputIterator first,
 				InputIterator last,
 				const allocator_type& alloc = allocator_type(),
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = NULL)
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = NULL)
 				: _CpyAlloc(alloc), _size(last - first), _reserve(last - first)
 		{
-			(void)first; (void)last; (void)alloc;
-			std::cout << "Constuctor range" << std::endl;
+			try {_array = _CpyAlloc.allocate(this->_size);}
+			catch(const std::bad_alloc& e) {
+				std::cerr << e.what() << std::endl;
+				return ;
+			}
+			InputIterator	firstCpy = first;
+			size_type		i = 0;
+			while (firstCpy != last) {
+				_CpyAlloc.construct((_array + i), *firstCpy);
+				firstCpy++;
+				i++;
+			}
 		};
 		// Copy
 		vector(const vector& cpy)
 		{
+			// pas bon cette histoire
 			*this = cpy;
-			std::cout << "Constructor copy" << std::endl;
 		};
 		~vector()
 		{
@@ -108,7 +114,6 @@ class	vector {
 			this->clear();
 			for (iterator it = x.begin(); it != x.end(); it++)
 				this->push_back(*it);
-			// std::cout << "operator = used " << x.size()  << std::endl;
 			return *this;
 		}
 
@@ -232,7 +237,6 @@ class	vector {
 			n--;
 		}
 	}
-	// si push depasse _reserve la realocation fait un *2 (cf exemple std::vector::reserve)
 	void	push_back(const value_type& val) {
 		if (_size >= _reserve)
 			this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
@@ -245,6 +249,24 @@ class	vector {
 			this->_size--;
 		}
 	}
+	iterator insert (iterator position, const value_type& val) {
+		// iterators are wasted after reserve. need to get position before reserve()
+		if (this->size() == this->capacity())
+			this->reserve(this->capacity() * 2);
+		value_type	tmp = *position;
+		*position = val;
+		for (iterator it = position; it != this->end(); it++) {
+			std::cout << "tmp : " << tmp 
+			<< "\t*it : " << *it
+			<< "\t*position : " << *position << std::endl;
+			*it = tmp;
+			tmp = *(it + 1);
+		}
+		return position;
+	}
+	// void insert (iterator position, size_type n, const value_type& val) {
+
+	// }
 	iterator	erase(iterator position) {
 		_CpyAlloc.destroy((_array + (position - this->begin())));
 		for (iterator i = position; i != this->end(); i++)
@@ -253,11 +275,9 @@ class	vector {
 		return position;
 	}
 	iterator	erase(iterator first, iterator last) {
-		difference_type	removeQt = last - first;
 		iterator		firstCpy = first;
 		iterator		end = this->end();
 
-		(void)removeQt;
 		while (first != last) {
 			_CpyAlloc.destroy((_array + (first - this->begin())));
 			first++;
@@ -309,11 +329,11 @@ class	vector {
 	/*			Non-member		*/
 	/****************************/
 	template <class T, class Alloc>
-	bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	bool operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
 		if (lhs.size() != rhs.size())
 			return false;
-		typename ft::vector<T>::iterator	first = lhs.begin();
-		typename ft::vector<T>::iterator	last = lhs.end();
+		typename ft::vector<T>::const_iterator	first = lhs.begin();
+		typename ft::vector<T>::const_iterator	last = lhs.end();
 		while (first != last) {
 			if (*first != *last)
 				return false;
@@ -351,7 +371,6 @@ class	vector {
 	void	swap(vector<T,Alloc>&x, vector<T,Alloc>& y) {
 		x.swap(y);
 	}
-
 
 } // end namespace ft
 
