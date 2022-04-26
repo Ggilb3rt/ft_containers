@@ -14,6 +14,9 @@
 // A retirer
 // #include <type_traits>
 
+/* Invalid read of size x in valgrind are made by errors in the main
+	this errors are here to compare with the real vector
+*/
 
 
 void	create_header(std::string const title) {
@@ -251,7 +254,7 @@ int main() {
 	//it = myvector.insert ( it, 200 );
 
 	std::cout << &*myvector.end() << std::endl;
-	for (it=myvector.begin(); it<=myvector.end(); it++)
+	for (it=myvector.begin(); it<myvector.end(); it++)
 		std::cout << ' ' << *it << " " << &*it;
 	std::cout << '\n';
 	// myvector.insert (it,2,300);
@@ -290,7 +293,7 @@ int main() {
 }
 
 	/* Use swap() */
-	int adder = 4;
+	int adder = 4; // put to 0 to remove Invalid read size of x in valgrind
 	std::cout << std::endl << std::endl << "\tUse .swap()" << std::endl;
 {
 	std::vector<int> foo (3,100);   // three ints with a value of 100
@@ -370,7 +373,7 @@ std::cout << std::endl;
 	std::cout << "myvector contains:";
 	for (unsigned i=0; i<myvector.size(); i++)
 		std::cout << ' ' << myvector[i];
-	std::cout << ' ' << myvector[3] << '\n';
+	std::cout << '\n';
 }
 
 	/****************************/
@@ -584,26 +587,21 @@ create_header("insert");
 	it = myvector.insert ( it+2, 200 );
 	// it = myvector.insert ( it+1, 300 );
 
-	// std::cout << myvector.capacity() << " "
-	// 	<< &*it << " " << &*myvector.end() << std::endl;
+	myvector.insert (it,2,300);
+
+	// // "it" no longer valid, get a new one:
+	it = myvector.begin();
+
+	std::vector<int> anothervector (3,400);
+	myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	int myarray [] = { 501,502,503 };
+	myvector.insert (myvector.begin(), myarray, myarray+3);
+
+	std::cout << "myvector contains:";
 	for (it=myvector.begin(); it<myvector.end(); it++)
 		std::cout << ' ' << *it << " " << &*it << std::endl;
 	std::cout << '\n';
-	// myvector.insert (it,2,300);
-
-	// // "it" no longer valid, get a new one:
-	// it = myvector.begin();
-
-	// std::vector<int> anothervector (2,400);
-	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
-
-	// int myarray [] = { 501,502,503 };
-	// myvector.insert (myvector.begin(), myarray, myarray+3);
-
-	// std::cout << "myvector contains:";
-	// for (it=myvector.begin(); it<myvector.end(); it++)
-	// 	std::cout << ' ' << *it;
-	// std::cout << '\n';
 
 	std::vector<std::string> str(3, "base");
 	std::vector<std::string>::iterator strIt;
@@ -628,33 +626,31 @@ std::cout << std::endl;
 	it = myvector.insert ( it+2, 200 );
 	// it = myvector.insert ( it+1, 300 );
 
-	// std::cout << myvector.capacity() << " "
-		// << &*it << " " << &*myvector.end() << std::endl;
-	for (it=myvector.begin(); it<myvector.end(); it++)
-		std::cout << ' ' << *it << " " << &*it << std::endl;
-	std::cout << '\n';
+	// myvector.insert (it,2,300);
+
 	myvector.insert (it,2,300);
 
 	// // "it" no longer valid, get a new one:
-	// it = myvector.begin();
+	it = myvector.begin();
 
-	// std::vector<int> anothervector (2,400);
-	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
+	TYPE::vector<int> anothervector (3,400);
+	myvector.insert (it+2,anothervector.begin(),anothervector.end());
 
-	// int myarray [] = { 501,502,503 };
-	// myvector.insert (myvector.begin(), myarray, myarray+3);
+	int myarray [] = { 501,502,503 };
+	myvector.insert (myvector.begin(), myarray, myarray+3);
 
-	// std::cout << "myvector contains:";
-	// for (it=myvector.begin(); it<myvector.end(); it++)
-	// 	std::cout << ' ' << *it;
-	// std::cout << '\n';
+	std::cout << "myvector contains:";
+	for (it=myvector.begin(); it<myvector.end(); it++)
+		std::cout << ' ' << *it << " " << &*it << std::endl;
+	std::cout << '\n';
+
 
 	TYPE::vector<std::string> str(3, "base");
 	TYPE::vector<std::string>::iterator strIt;
 
 	str.push_back("startEnd");
 	strIt = str.begin();
-	strIt = str.insert(strIt+1, "some news");
+	strIt = str.insert(strIt + 1, "some news");
 
 	for (strIt=str.begin(); strIt<str.end(); strIt++) {
 		std::cout << *strIt << std::endl;
