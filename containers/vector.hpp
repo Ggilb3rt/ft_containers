@@ -251,22 +251,38 @@ class	vector {
 	}
 	iterator insert (iterator position, const value_type& val) {
 		// iterators are wasted after reserve. need to get position before reserve()
+		size_type	start_pos = &(*position) - &(*this->begin());
+		value_type	tmp[2] = {this->_array[start_pos], value_type()};
+		this->_array[start_pos] = val;
+
 		if (this->size() == this->capacity())
 			this->reserve(this->capacity() * 2);
-		value_type	tmp = *position;
-		*position = val;
-		for (iterator it = position; it != this->end(); it++) {
-			std::cout << "tmp : " << tmp 
-			<< "\t*it : " << *it
-			<< "\t*position : " << *position << std::endl;
-			*it = tmp;
-			tmp = *(it + 1);
+		this->_size++;
+
+		short		lol = 0;
+		size_type	end_pos = this->end() - this->begin();
+		for (size_type i = start_pos + 1; i < end_pos; i++) {
+			tmp[!lol] = this->_array[i];
+			this->_array[i] = tmp[lol];
+			if (i + 1 < end_pos)
+				tmp[lol] = this->_array[i + 1];
+			lol = !lol;
 		}
 		return position;
 	}
-	// void insert (iterator position, size_type n, const value_type& val) {
+	void insert (iterator position, size_type n, const value_type& val) {
+		// need to put all data after position] to a new vector
+		// get position in size_type
+		// change capacity if size + n > current capacity ==> capacity = capacity + n
+		// add val n times starting at position
+		// copy all elements from new vector to old one
 
-	// }
+		ft::vector<value_type>	save(position, this->end());
+		for (iterator it = save.begin(); it < save.end(); it++) {
+			std::cout << *it << std::endl;
+		}
+		(void)n; (void)val;
+	}
 	iterator	erase(iterator position) {
 		_CpyAlloc.destroy((_array + (position - this->begin())));
 		for (iterator i = position; i != this->end(); i++)

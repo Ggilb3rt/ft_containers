@@ -576,16 +576,17 @@ std::cout << std::endl;
 
 create_header("insert");
 {
-	std::vector<int> myvector (3,100);
+	std::vector<int> myvector (2,100);
 	std::vector<int>::iterator it;
 
+	myvector.push_back(42);
 	it = myvector.begin();
-	it = myvector.insert ( it+1, 200 );
-	it = myvector.insert ( it+1, 300 );
+	it = myvector.insert ( it+2, 200 );
+	// it = myvector.insert ( it+1, 300 );
 
-	std::cout << myvector.capacity() << " "
-		<< &*it << " " << &*myvector.end() << std::endl;
-	for (it=myvector.begin(); it<=myvector.end(); it++)
+	// std::cout << myvector.capacity() << " "
+	// 	<< &*it << " " << &*myvector.end() << std::endl;
+	for (it=myvector.begin(); it<myvector.end(); it++)
 		std::cout << ' ' << *it << " " << &*it << std::endl;
 	std::cout << '\n';
 	// myvector.insert (it,2,300);
@@ -603,22 +604,36 @@ create_header("insert");
 	// for (it=myvector.begin(); it<myvector.end(); it++)
 	// 	std::cout << ' ' << *it;
 	// std::cout << '\n';
+
+	std::vector<std::string> str(3, "base");
+	std::vector<std::string>::iterator strIt;
+
+	str.push_back("startEnd");
+	strIt = str.begin();
+	strIt = str.insert(strIt+1, "some news");
+
+	for (strIt=str.begin(); strIt<str.end(); strIt++) {
+		std::cout << *strIt << std::endl;
+	}
+
 }
 
 std::cout << std::endl;
 {
-	TYPE::vector<int> myvector (3,100);
+	TYPE::vector<int> myvector (2,100);
 	TYPE::vector<int>::iterator it;
 
+	myvector.push_back(42);
 	it = myvector.begin();
-	it = myvector.insert ( it+1, 200 );
+	it = myvector.insert ( it+2, 200 );
+	// it = myvector.insert ( it+1, 300 );
 
-	std::cout << myvector.capacity() << " "
-		<< &*it << " " << &*myvector.end() << std::endl;
-	for (it=myvector.begin(); it<=myvector.end(); it++)
+	// std::cout << myvector.capacity() << " "
+		// << &*it << " " << &*myvector.end() << std::endl;
+	for (it=myvector.begin(); it<myvector.end(); it++)
 		std::cout << ' ' << *it << " " << &*it << std::endl;
 	std::cout << '\n';
-	// myvector.insert (it,2,300);
+	myvector.insert (it,2,300);
 
 	// // "it" no longer valid, get a new one:
 	// it = myvector.begin();
@@ -633,6 +648,18 @@ std::cout << std::endl;
 	// for (it=myvector.begin(); it<myvector.end(); it++)
 	// 	std::cout << ' ' << *it;
 	// std::cout << '\n';
+
+	TYPE::vector<std::string> str(3, "base");
+	TYPE::vector<std::string>::iterator strIt;
+
+	str.push_back("startEnd");
+	strIt = str.begin();
+	strIt = str.insert(strIt+1, "some news");
+
+	for (strIt=str.begin(); strIt<str.end(); strIt++) {
+		std::cout << *strIt << std::endl;
+	}
+
 }
 
 	return 0;
