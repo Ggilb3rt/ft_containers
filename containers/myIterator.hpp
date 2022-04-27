@@ -4,6 +4,7 @@
 #include <cstddef>
 #include "iterators_traits.hpp"
 
+namespace ft {
 
 template <class Category, class T, class Distance = ptrdiff_t,
 			class Pointer = T*, class Reference = T&>
@@ -57,5 +58,7 @@ struct MyIterator {
 	private:
 		pointer _arr_ptr;
 };
+
+}
 
 #endif

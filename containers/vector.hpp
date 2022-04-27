@@ -30,7 +30,6 @@ class	vector {
 		typedef typename allocator_type::reference				reference;
 		typedef typename allocator_type::const_reference		const_reference;
 		typedef typename allocator_type::pointer				pointer;
-		// typedef typename std::random_access_iterator_tag		iterator;	// need to use mine
 		typedef MyIterator<ft::random_access_iterator_tag, T>	iterator;
 		typedef MyIterator<ft::random_access_iterator_tag, T>	const_iterator;
 		typedef typename std::reverse_iterator<iterator>		reverse_iterator;
@@ -252,11 +251,13 @@ class	vector {
 	iterator insert(iterator position, const value_type& val) {
 		// iterators are wasted after reserve. need to get position before reserve()
 		size_type	start_pos = &(*position) - &(*this->begin());
-		value_type	tmp[2] = {this->_array[start_pos], value_type()};
+		value_type	tmp[] = {this->_array[start_pos], 0};
 		this->_array[start_pos] = val;
 
-		if (this->size() == this->capacity())
-			this->reserve(this->capacity() * 2);
+		if (this->size() == this->capacity()){
+			try {this->reserve(this->capacity() * 2);}
+			catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+		}
 		this->_size++;
 
 		short		btn = 0;
@@ -279,8 +280,10 @@ class	vector {
 		size_type	start_pos = &(*position) - &(*this->begin());
 
 		ft::vector<value_type>	save(position, this->end());
-		if (this->size() + n >= this->capacity())
-			this->reserve(this->capacity() + n);
+		if (this->size() + n >= this->capacity()) {
+			try {this->reserve(this->capacity() + n);}
+			catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+		}
 		this->_size += n;
 
 		iterator	position_new((this->_array + start_pos));
@@ -301,8 +304,10 @@ class	vector {
 			size_type	n = &(*last) - &(*first);
 
 			ft::vector<value_type>	save(position, this->end());
-			if (this->size() + n >= this->capacity())
-				this->reserve(this->capacity() + n);
+			if (this->size() + n >= this->capacity()) {
+				try {this->reserve(this->capacity() + n);}
+				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+			}
 			this->_size += n;
 
 			iterator	position_new((this->_array + start_pos));
@@ -312,7 +317,11 @@ class	vector {
 				first++;
 			}
 			for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
+				std::cout << "position new : " << &(*position_new)
+					<< " saveIt : " << &(*saveIt) << std::endl;
 				*position_new = *saveIt;
+				std::cout << "\tposition new : " << &(*position_new)
+					<< " saveIt : " << &(*saveIt) << std::endl;
 				position_new++;
 			}
 	}

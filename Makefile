@@ -34,6 +34,6 @@ test : all
 	./$(NAME)
 
 test_leaks : all
-	valgrind --leak-check=full ./$(NAME)
+	valgrind --leak-check=full --track-origins=yes ./$(NAME)
 
 .PHONY : all re fclean clean test test_leaks

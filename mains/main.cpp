@@ -646,11 +646,12 @@ std::cout << std::endl;
 
 
 	TYPE::vector<std::string> str(3, "base");
+	TYPE::vector<std::string> str2(3, "base2");
 	TYPE::vector<std::string>::iterator strIt;
 
 	str.push_back("startEnd");
 	strIt = str.begin();
-	strIt = str.insert(strIt + 1, "some news");
+	str.insert(strIt, str2.begin(), str2.end());
 
 	for (strIt=str.begin(); strIt<str.end(); strIt++) {
 		std::cout << *strIt << std::endl;
