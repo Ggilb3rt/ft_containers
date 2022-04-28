@@ -15,7 +15,7 @@ struct MyIterator {
 	typedef Reference reference;
 	typedef Category  iterator_category;
 
-	MyIterator() : _arr_ptr(NULL) {}
+	MyIterator() : _arr_ptr() {}
 	MyIterator(pointer ptr) : _arr_ptr(ptr) {}
 	MyIterator(const MyIterator &rhs) : _arr_ptr(rhs._arr_ptr) {}
 	~MyIterator() {}

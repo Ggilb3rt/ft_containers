@@ -111,8 +111,7 @@ class	vector {
 		vector& operator=(const vector& x)
 		{
 			this->clear();
-			for (iterator it = x.begin(); it != x.end(); it++)
-				this->push_back(*it);
+			this->insert(this->begin(), x.begin(), x.end());
 			return *this;
 		}
 
@@ -122,11 +121,12 @@ class	vector {
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
-		iterator		begin() {return this->empty() ? iterator() : iterator(&_array[0]);}
+		iterator			begin() {return this->empty() ? iterator() : iterator(&_array[0]);}
 		const_iterator	begin() const {return this->empty() ? iterator() : iterator(&_array[0]);}
-		iterator		end() {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
+		iterator			end() {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
 		const_iterator	end() const {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
-		// need reverse_iterators
+		reverse_iterator	rbegin() {return this->end();}
+		reverse_iterator	rend() {return this->begin();}
 
 
 	/****************************/
@@ -182,121 +182,93 @@ class	vector {
 	/****************************/
 	/*			El access		*/
 	/****************************/
-	reference	at(size_type n) {
-		if (n >= this->_size)
-		{
-			std::stringstream ss;
-			ss << "vector::_M_range_check: __n (which is " << n
-				<< ") >= this->size() (which is " << this->size()
-				<< ")";
-			throw std::out_of_range(ss.str());
+		reference	at(size_type n) {
+			if (n >= this->_size)
+			{
+				std::stringstream ss;
+				ss << "vector::_M_range_check: __n (which is " << n
+					<< ") >= this->size() (which is " << this->size()
+					<< ")";
+				throw std::out_of_range(ss.str());
+			}
+			return this->_array[n];
 		}
-		return this->_array[n];
-	}
-	const_reference	at(size_type n) const{
-		if (n >= this->_size)
-		{
-			std::stringstream ss;
-			ss << "vector::_M_range_check: __n (which is " << n
-				<< ") >= this->size() (which is " << this->size()
-				<< ")";
-			throw std::out_of_range(ss.str());
+		const_reference	at(size_type n) const{
+			if (n >= this->_size)
+			{
+				std::stringstream ss;
+				ss << "vector::_M_range_check: __n (which is " << n
+					<< ") >= this->size() (which is " << this->size()
+					<< ")";
+				throw std::out_of_range(ss.str());
+			}
+			return this->_array[n];
 		}
-		return this->_array[n];
-	}
-	reference	front() {return (this->_array[0]);}
-	const_reference	front() const{return (this->_array[0]);}
-	reference	back() { return (this->_array[this->_size - 1]);}
-	const_reference	back() const{ return (this->_array[this->_size - 1]);}
+		reference	front() {return (this->_array[0]);}
+		const_reference	front() const{return (this->_array[0]);}
+		reference	back() { return (this->_array[this->_size - 1]);}
+		const_reference	back() const{ return (this->_array[this->_size - 1]);}
 
 
 
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
-	template <class InputIterator>
-	typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
-		assign(InputIterator first, InputIterator last) {
-		difference_type	newSize = last - first;
+		template <class InputIterator>
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
+			assign(InputIterator first, InputIterator last) {
+			difference_type	newSize = last - first;
 
-		this->clear();
-		if (this->capacity() < (size_type)newSize)
-			this->reserve(newSize);
-		while (first != last) {
-			this->push_back(*first);
-			first++;
-		}
-	}
-	void	assign(size_type n, const value_type& val) {
-		this->clear();
-		if (this->capacity() < n)
-			this->reserve(n);
-		while (n > 0) {
-			this->push_back(val);
-			n--;
-		}
-	}
-	void	push_back(const value_type& val) {
-		if (_size >= _reserve)
-			this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
-		_CpyAlloc.construct(&_array[_size], val); // j'aimerai utiliser this->end()
-		this->_size++;
-	}
-	void	pop_back() {
-		if (this->_size > 0) {
-			_CpyAlloc.destroy((_array + _size - 1));
-			this->_size--;
-		}
-	}
-	iterator insert(iterator position, const value_type& val) {
-		size_type	start_pos = &(*position) - &(*this->begin());
-		ft::vector<value_type>	save(position, this->end());
-
-		if (this->size() == this->capacity()){
-			try {this->reserve(this->capacity() * 2);}
-			catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
-		}
-		size_type	pos = start_pos;
-		*(this->_array + pos) = val;
-		pos++;
-		this->_size++;
-
-		for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-			this->_CpyAlloc.construct((this->_array + pos), *saveIt);
-			pos++;
-		}
-		return iterator((this->_array + start_pos));
-	}
-	void insert(iterator position, size_type n, const value_type& val) {
-		size_type	start_pos = &(*position) - &(*this->begin());
-		ft::vector<value_type>	save(position, this->end());
-
-		if (this->size() + n >= this->capacity()) {
-			try {this->reserve(this->capacity() + n);}
-			catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
-		}
-
-		size_type	pos = start_pos;
-		size_type	end = start_pos + n;
-		while (pos < end) {
-			if (pos > this->_size) {
-				this->_CpyAlloc.construct((this->_array + pos), val);
+			this->clear();
+			if (this->capacity() < (size_type)newSize)
+				this->reserve(newSize);
+			while (first != last) {
+				this->push_back(*first);
+				first++;
 			}
-			else
-				*(this->_array + pos) = val;
-			pos++;
+		}
+		void	assign(size_type n, const value_type& val) {
+			this->clear();
+			if (this->capacity() < n)
+				this->reserve(n);
+			while (n > 0) {
+				this->push_back(val);
+				n--;
+			}
+		}
+		void	push_back(const value_type& val) {
+			if (_size >= _reserve)
+				this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
+			_CpyAlloc.construct(&_array[_size], val);
 			this->_size++;
 		}
-		for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-			this->_CpyAlloc.construct((this->_array + pos), *saveIt);
-			pos++;
+		void	pop_back() {
+			if (this->_size > 0) {
+				_CpyAlloc.destroy((_array + _size - 1));
+				this->_size--;
+			}
 		}
-	}
-	template <class InputIterator>
-	typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
-		insert(iterator position, InputIterator first, InputIterator last) {
+		iterator insert(iterator position, const value_type& val) {
 			size_type	start_pos = &(*position) - &(*this->begin());
-			size_type	n = &(*last) - &(*first);
+			ft::vector<value_type>	save(position, this->end());
+
+			if (this->size() == this->capacity()){
+				try {this->reserve(this->capacity() * 2);}
+				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+			}
+			size_type	pos = start_pos;
+			*(this->_array + pos) = val;
+			pos++;
+			this->_size++;
+
+			for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
+				this->_CpyAlloc.construct((this->_array + pos), *saveIt);
+				pos++;
+			}
+			return iterator((this->_array + start_pos));
+		}
+		void insert(iterator position, size_type n, const value_type& val) {
+			size_type	start_pos = &(*position) - &(*this->begin());
 			ft::vector<value_type>	save(position, this->end());
 
 			if (this->size() + n >= this->capacity()) {
@@ -308,68 +280,96 @@ class	vector {
 			size_type	end = start_pos + n;
 			while (pos < end) {
 				if (pos > this->_size) {
-					this->_CpyAlloc.construct((this->_array + pos), *first);
+					this->_CpyAlloc.construct((this->_array + pos), val);
 				}
 				else
-					*(this->_array + pos) = *first;
+					*(this->_array + pos) = val;
 				pos++;
-				first++;
 				this->_size++;
 			}
 			for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
 				this->_CpyAlloc.construct((this->_array + pos), *saveIt);
 				pos++;
 			}
-	}
-	iterator	erase(iterator position) {
-		_CpyAlloc.destroy((_array + (position - this->begin())));
-		for (iterator i = position; i != this->end(); i++)
-			*i = *(i + 1);
-		this->_size--;
-		return position;
-	}
-	iterator	erase(iterator first, iterator last) {
-		iterator		firstCpy = first;
-		iterator		end = this->end();
+		}
+		template <class InputIterator>
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
+			insert(iterator position, InputIterator first, InputIterator last) {
+				size_type	start_pos = &(*position) - &(*this->begin());
+				size_type	n = &(*last) - &(*first);
+				ft::vector<value_type>	save(position, this->end());
 
-		while (first != last) {
-			_CpyAlloc.destroy((_array + (first - this->begin())));
-			first++;
+				if (this->size() + n >= this->capacity()) {
+					try {this->reserve(this->capacity() + n);}
+					catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+				}
+
+				size_type	pos = start_pos;
+				size_type	end = start_pos + n;
+				while (pos < end) {
+					if (pos > this->_size) {
+						this->_CpyAlloc.construct((this->_array + pos), *first);
+					}
+					else
+						*(this->_array + pos) = *first;
+					pos++;
+					first++;
+					this->_size++;
+				}
+				for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
+					this->_CpyAlloc.construct((this->_array + pos), *saveIt);
+					pos++;
+				}
+		}
+		iterator	erase(iterator position) {
+			_CpyAlloc.destroy((_array + (position - this->begin())));
+			for (iterator i = position; i != this->end(); i++)
+				*i = *(i + 1);
 			this->_size--;
+			return position;
 		}
-		first = firstCpy;
-		while (last != end) {
-			*first = *last;
-			last++;
-			first++;
-		}
-		return firstCpy;
-	}
-	void	swap(vector& x) {
-		// cf iterator validity : l'iterator pointe vers la meme adrss apres le swap
-		// cf complexity : constant ==> must only swap pointer to data and size
-		T*			tmpArray = this->_array;
-		size_type	tmpSize = this->_size;
-		size_type	tmpReserve = this->_reserve;
+		iterator	erase(iterator first, iterator last) {
+			iterator		firstCpy = first;
+			iterator		end = this->end();
 
-		this->_array = x._array;
-		this->_size = x._size;
-		this->_reserve = x._reserve;
-		x._array = tmpArray;
-		x._size = tmpSize;
-		x._reserve = tmpReserve;
-	}
-	void	clear() {
-		for (size_type i = 0; i < this->_size; i++)
-			_CpyAlloc.destroy((_array + i));
-		this->_size = 0;
-	}
+			while (first != last) {
+				_CpyAlloc.destroy((_array + (first - this->begin())));
+				first++;
+				this->_size--;
+			}
+			first = firstCpy;
+			while (last != end) {
+				*first = *last;
+				last++;
+				first++;
+			}
+			return firstCpy;
+		}
+		void	swap(vector& x) {
+			// cf iterator validity : l'iterator pointe vers la meme adrss apres le swap
+			// cf complexity : constant ==> must only swap pointer to data and size
+			T*			tmpArray = this->_array;
+			size_type	tmpSize = this->_size;
+			size_type	tmpReserve = this->_reserve;
+
+			this->_array = x._array;
+			this->_size = x._size;
+			this->_reserve = x._reserve;
+			x._array = tmpArray;
+			x._size = tmpSize;
+			x._reserve = tmpReserve;
+		}
+		void	clear() {
+			for (size_type i = 0; i < this->_size; i++)
+				_CpyAlloc.destroy((_array + i));
+			this->_size = 0;
+		}
 
 
 	/****************************/
 	/*			Allocator		*/
 	/****************************/
-	allocator_type	get_allocator() const {return this->_CpyAlloc;}
+		allocator_type	get_allocator() const {return this->_CpyAlloc;}
 
 
 	private:
