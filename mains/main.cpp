@@ -630,7 +630,7 @@ std::cout << std::endl;
 
 	myvector.insert (it,2,300);
 
-	// // "it" no longer valid, get a new one:
+	// "it" no longer valid, get a new one:
 	it = myvector.begin();
 
 	TYPE::vector<int> anothervector (3,400);
@@ -656,7 +656,24 @@ std::cout << std::endl;
 	for (strIt=str.begin(); strIt<str.end(); strIt++) {
 		std::cout << *strIt << std::endl;
 	}
+}
 
+{
+	std::cout << std::endl;
+	TYPE::vector<int> nbr(2, 100);
+	TYPE::vector<std::string> str(3, "lel");
+
+	std::cout << nbr.capacity() << " | " << str.capacity() << std::endl;
+	nbr.reserve(3);
+	str.reserve(100);
+	std::cout << nbr.capacity() << " | "
+		"str size, reserve " << str.size() << ", " << str.capacity() << std::endl;
+	nbr.insert(nbr.begin()+1, 2, 2);
+	str.insert(str.begin()+1, 2, "pouet");
+	std::cout << "str.size() = " << str.size() << std::endl;
+	for (TYPE::vector<std::string>::iterator strIt=str.begin(); strIt<str.end(); strIt++) {
+		std::cout << *strIt << std::endl;
+	}
 }
 
 	return 0;
