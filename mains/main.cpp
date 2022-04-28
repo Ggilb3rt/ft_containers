@@ -243,35 +243,44 @@ int main() {
 	}
 	catch(const std::exception& e){std::cerr << e.what() << '\n';}
 }
+
 	/* Use insert() */
 	std::cout << std::endl << std::endl << "\tUse .insert()" << std::endl;
-
 {
-	std::vector<int> myvector (3,100);
-	std::vector<int>::iterator it;
+	TYPE::vector<int> myvector (2,100);
+	TYPE::vector<int>::iterator it;
 
 	it = myvector.begin();
-	//it = myvector.insert ( it, 200 );
+	std::cout << myvector.capacity() << std::endl;
+	it = myvector.insert ( it+2, 200 );
+	std::cout << myvector.capacity() << std::endl;
 
-	std::cout << &*myvector.end() << std::endl;
+	myvector.insert (it,2,300);
+
+	// "it" no longer valid, get a new one:
+	it = myvector.begin();
+
+	std::vector<int> anothervector (3,400);
+	myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	int myarray [] = { 501,502,503 };
+	myvector.insert (myvector.begin(), myarray, myarray+3);
+
+	std::cout << "myvector contains:";
 	for (it=myvector.begin(); it<myvector.end(); it++)
-		std::cout << ' ' << *it << " " << &*it;
+		std::cout << ' ' << *it;
 	std::cout << '\n';
-	// myvector.insert (it,2,300);
 
-	// // "it" no longer valid, get a new one:
-	// it = myvector.begin();
+	std::vector<std::string> str(3, "base");
+	std::vector<std::string>::iterator strIt;
 
-	// std::vector<int> anothervector (2,400);
-	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
+	str.push_back("startEnd");
+	strIt = str.begin();
+	strIt = str.insert(strIt+1, "some news");
 
-	// int myarray [] = { 501,502,503 };
-	// myvector.insert (myvector.begin(), myarray, myarray+3);
-
-	// std::cout << "myvector contains:";
-	// for (it=myvector.begin(); it<myvector.end(); it++)
-	// 	std::cout << ' ' << *it;
-	// std::cout << '\n';
+	for (strIt=str.begin(); strIt<str.end(); strIt++) {
+		std::cout << *strIt << std::endl;
+	}
 }
 
 	/* Use erase() */
@@ -412,7 +421,7 @@ std::cout << std::endl;
 	/****************************/
 	/*			Operators		*/
 	/****************************/
-	create_header("Relational operators !TYPE");
+	create_header("Relational operators");
 {
 	TYPE::vector<int> foo (3,100);   // three ints with a value of 100
 	TYPE::vector<int> bar (2,200);   // two ints with a value of 200
@@ -577,104 +586,7 @@ std::cout << std::endl;
 	}
 }
 
-create_header("insert");
-{
-	std::vector<int> myvector (2,100);
-	std::vector<int>::iterator it;
-
-	myvector.push_back(42);
-	it = myvector.begin();
-	it = myvector.insert ( it+2, 200 );
-	// it = myvector.insert ( it+1, 300 );
-
-	myvector.insert (it,2,300);
-
-	// // "it" no longer valid, get a new one:
-	it = myvector.begin();
-
-	std::vector<int> anothervector (3,400);
-	myvector.insert (it+2,anothervector.begin(),anothervector.end());
-
-	int myarray [] = { 501,502,503 };
-	myvector.insert (myvector.begin(), myarray, myarray+3);
-
-	std::cout << "myvector contains:";
-	for (it=myvector.begin(); it<myvector.end(); it++)
-		std::cout << ' ' << *it << " " << &*it << std::endl;
-	std::cout << '\n';
-
-	std::vector<std::string> str(3, "base");
-	std::vector<std::string>::iterator strIt;
-
-	str.push_back("startEnd");
-	strIt = str.begin();
-	strIt = str.insert(strIt+1, "some news");
-
-	for (strIt=str.begin(); strIt<str.end(); strIt++) {
-		std::cout << *strIt << std::endl;
-	}
-
-}
-
 std::cout << std::endl;
-{
-	TYPE::vector<int> myvector (2,100);
-	TYPE::vector<int>::iterator it;
-
-	myvector.push_back(42);
-	it = myvector.begin();
-	it = myvector.insert ( it+2, 200 );
-	// it = myvector.insert ( it+1, 300 );
-
-	// myvector.insert (it,2,300);
-
-	myvector.insert (it,2,300);
-
-	// "it" no longer valid, get a new one:
-	it = myvector.begin();
-
-	TYPE::vector<int> anothervector (3,400);
-	myvector.insert (it+2,anothervector.begin(),anothervector.end());
-
-	int myarray [] = { 501,502,503 };
-	myvector.insert (myvector.begin(), myarray, myarray+3);
-
-	std::cout << "myvector contains:";
-	for (it=myvector.begin(); it<myvector.end(); it++)
-		std::cout << ' ' << *it << " " << &*it << std::endl;
-	std::cout << '\n';
-
-
-	TYPE::vector<std::string> str(3, "base");
-	TYPE::vector<std::string> str2(3, "base2");
-	TYPE::vector<std::string>::iterator strIt;
-
-	str.push_back("startEnd");
-	strIt = str.begin();
-	str.insert(strIt, str2.begin(), str2.end());
-
-	for (strIt=str.begin(); strIt<str.end(); strIt++) {
-		std::cout << *strIt << std::endl;
-	}
-}
-
-{
-	std::cout << std::endl;
-	TYPE::vector<int> nbr(2, 100);
-	TYPE::vector<std::string> str(3, "lel");
-
-	std::cout << nbr.capacity() << " | " << str.capacity() << std::endl;
-	nbr.reserve(3);
-	str.reserve(100);
-	std::cout << nbr.capacity() << " | "
-		"str size, reserve " << str.size() << ", " << str.capacity() << std::endl;
-	nbr.insert(nbr.begin()+1, 2, 2);
-	str.insert(str.begin()+1, 2, "pouet");
-	std::cout << "str.size() = " << str.size() << std::endl;
-	for (TYPE::vector<std::string>::iterator strIt=str.begin(); strIt<str.end(); strIt++) {
-		std::cout << *strIt << std::endl;
-	}
-}
 
 	return 0;
 }

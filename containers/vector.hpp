@@ -249,37 +249,25 @@ class	vector {
 		}
 	}
 	iterator insert(iterator position, const value_type& val) {
-		// iterators are wasted after reserve. need to get position before reserve()
 		size_type	start_pos = &(*position) - &(*this->begin());
-		value_type	tmp[] = {this->_array[start_pos], value_type()};
-		this->_array[start_pos] = val;
+		ft::vector<value_type>	save(position, this->end());
 
 		if (this->size() == this->capacity()){
 			try {this->reserve(this->capacity() * 2);}
 			catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
 		}
+		size_type	pos = start_pos;
+		*(this->_array + pos) = val;
+		pos++;
 		this->_size++;
 
-		short		btn = 0;
-		size_type	end_pos = this->end() - this->begin();
-		for (size_type i = start_pos + 1; i < end_pos; i++) {
-			tmp[!btn] = this->_array[i];
-			this->_array[i] = tmp[btn];
-			if (i + 1 < end_pos)
-				tmp[btn] = this->_array[i + 1];
-			btn = !btn;
+		for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
+			this->_CpyAlloc.construct((this->_array + pos), *saveIt);
+			pos++;
 		}
-		return position;
+		return iterator((this->_array + start_pos));
 	}
 	void insert(iterator position, size_type n, const value_type& val) {
-		// need to put all data after position] to a new vector
-		// get position in size_type
-		// change capacity if size + n > current capacity ==> capacity = capacity + n
-		// add val n times starting at position
-		// copy all elements from new vector to old one
-
-
-		//! reserve ne .construct pas les elements apres .size(), je dois les .construct
 		size_type	start_pos = &(*position) - &(*this->begin());
 		ft::vector<value_type>	save(position, this->end());
 
@@ -300,22 +288,9 @@ class	vector {
 			this->_size++;
 		}
 		for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-			std::cout << "im alive ";
 			this->_CpyAlloc.construct((this->_array + pos), *saveIt);
 			pos++;
 		}
-		// this->_size += n;
-
-		// iterator	position_new((this->_array + start_pos));
-		// iterator	position_end((this->_array + start_pos + n));
-		// while (position_new != position_end) {
-		// 	*position_new = val;
-		// 	position_new++;
-		// }
-		// for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-		// 	*position_new = *saveIt;
-		// 	position_new++;
-		// }
 	}
 	template <class InputIterator>
 	typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
@@ -328,21 +303,22 @@ class	vector {
 				try {this->reserve(this->capacity() + n);}
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
 			}
-			this->_size += n;
 
-			iterator	position_new((this->_array + start_pos));
-			while (first < last) {
-				*position_new = *first;
-				position_new++;
+			size_type	pos = start_pos;
+			size_type	end = start_pos + n;
+			while (pos < end) {
+				if (pos > this->_size) {
+					this->_CpyAlloc.construct((this->_array + pos), *first);
+				}
+				else
+					*(this->_array + pos) = *first;
+				pos++;
 				first++;
+				this->_size++;
 			}
 			for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-				// std::cout << "position new : " << &(*position_new)
-				// 	<< " saveIt : " << &(*saveIt) << std::endl;
-				*position_new = *saveIt;
-				// std::cout << "\tposition new : " << &(*position_new)
-					// << " saveIt : " << &(*saveIt) << std::endl;
-				position_new++;
+				this->_CpyAlloc.construct((this->_array + pos), *saveIt);
+				pos++;
 			}
 	}
 	iterator	erase(iterator position) {
