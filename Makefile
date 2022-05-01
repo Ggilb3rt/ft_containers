@@ -30,6 +30,8 @@ fclean: clean
 
 re: fclean all
 
+re_test: re test
+
 test : all
 	./$(NAME)
 

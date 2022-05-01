@@ -20,9 +20,6 @@ struct MyIterator {
 	MyIterator(const MyIterator &rhs) : _arr_ptr(rhs._arr_ptr) {}
 	~MyIterator() {}
 
-	//? PK friend ?
-	//friend bool operator==(const MyIterator& a, const MyIterator& b) {return a._arr_ptr == b._arr_ptr;};
-	// friend bool operator!=(const MyIterator& a, const MyIterator& b) {return a._arr_ptr != b._arr_ptr;};
 	bool operator== (const MyIterator& rhs) {return this->_arr_ptr == rhs._arr_ptr;};
 	bool operator!= (const MyIterator& rhs) {return !(*this == rhs);};
 
@@ -37,10 +34,10 @@ struct MyIterator {
 	MyIterator operator--(int) {MyIterator tmp = *this; --(*this); return tmp;}
 
 	//! fonctionne avec a +/- n MAIS ne fonctionne pas avec n +/- a
-	MyIterator operator+(const difference_type& rhs) const {return MyIterator(this->_arr_ptr + rhs);}
+	MyIterator operator+(const difference_type& rhs) const {std::cout << this << std::endl; return MyIterator(this->_arr_ptr + rhs);}
 	MyIterator operator-(const difference_type& rhs) const {return MyIterator(this->_arr_ptr - rhs);}
-	difference_type operator+(const MyIterator& rhs) const {return _arr_ptr + rhs._arr_ptr;}
-	difference_type operator-(const MyIterator& rhs) const {return _arr_ptr - rhs._arr_ptr;}
+	// difference_type operator+(const MyIterator& rhs) const {return rhs._arr_ptr + _arr_ptr;} // real doesn't works
+	difference_type operator-(const MyIterator& rhs) const {std::cout << "diff" << std::endl; return _arr_ptr - rhs._arr_ptr;}
 	// MyIterator operator+(int const & rhs) {return this->_arr_ptr + rhs;}
 	// MyIterator operator-(int const & rhs) {return this->_arr_ptr - rhs;}
 	// friend MyIterator operator+(MyIterator lhs, const difference_type& rhs) {lhs += rhs; return lhs;}

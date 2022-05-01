@@ -89,9 +89,14 @@ class	vector {
 		};
 		// Copy
 		vector(const vector& cpy)
+			: _CpyAlloc(cpy.get_allocator()), _size(0), _reserve(0)
 		{
-			// pas bon cette histoire
-			*this = cpy;
+			try {_array = _CpyAlloc.allocate(this->_size);}
+			catch(const std::bad_alloc& e) {
+				std::cerr << e.what() << std::endl;
+				return ;
+			}
+			this->insert(this->begin(), cpy.begin(), cpy.end());
 		};
 		~vector()
 		{
@@ -110,6 +115,7 @@ class	vector {
 	/****************************/
 		vector& operator=(const vector& x)
 		{
+
 			this->clear();
 			this->insert(this->begin(), x.begin(), x.end());
 			return *this;

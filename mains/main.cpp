@@ -651,7 +651,8 @@ void	megaTest() {
 
 
 int main() {
-	megaTest();
+	// megaTest();
+
 
 	// {
 	// 	using namespace std;
@@ -685,16 +686,21 @@ int main() {
 	}
 	std::cout << "]" << std::endl;
 
-/* 	// Constructors
+ 	// Constructors
 	TYPE::vector<int>::iterator defaultI;
 	TYPE::vector<int>::iterator ptrI(filler+2);
 	TYPE::vector<int>::iterator assignI = base.begin();
 	TYPE::vector<int>::iterator copyI(assignI);
 
 	// std::cout << *defaultI << std::endl; // segfault (but it's ok)
-	std::cout << *ptrI << std::endl;
-	std::cout << *assignI << std::endl;
-	std::cout << *copyI << std::endl;
+	std::cout << *ptrI << ", post " << *(ptrI++) << ", pre " << *(++ptrI) << std::endl;				// 3 3 5
+	std::cout << *assignI  << ", post " << *(assignI++) << ", pre " << *(++assignI) << std::endl;	// 1 1 3
+	std::cout << *copyI << ", post " << *(copyI++) << ", pre " << *(++copyI) << std::endl;			// 1 1 3
+
+	ptrI -= 2;
+	assignI -= 2;
+	copyI -= 2;
+	std::cout << std::endl << *ptrI << " " << *assignI << " " << *copyI << std::endl;	// 3 1 1
 
 	if (copyI == assignI) std::cout << "CopyI == assignI" << std::endl;
 	if (copyI != assignI) std::cout << "CopyI != assignI" << std::endl;
@@ -709,7 +715,17 @@ int main() {
 	if (copyI > ptrI) std::cout << "CopyI > ptrI" << std::endl;
 	if (copyI <= ptrI) std::cout << "CopyI <= ptrI" << std::endl;
 	if (copyI >= ptrI) std::cout << "CopyI >= ptrI" << std::endl;
- */
+
+	std::cout << std::endl;
+	std::cout << *(ptrI + 5) << std::endl;			// 8
+	// std::cout << *(5 + ptrI) << std::endl;		// 8 //! real works
+	// std::cout << (ptrI + assignI) << std::endl;	// error
+	std::cout << *(ptrI - 2) << std::endl;			// 1
+	std::cout << (ptrI - assignI) << std::endl;		// ?
+	std::cout << *(ptrI + 5 - 2) << std::endl;		// 6
+
+	std::cout << std::endl << ptrI[5] << copyI[8];	// 89
+
 }
 
 
