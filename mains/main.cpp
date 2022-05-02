@@ -674,7 +674,7 @@ int main() {
 	// }
 
 
-	create_header("MyIterator");
+	create_header("VectorIterator");
 {
 	TYPE::vector<int>	base;
 	int	filler[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -726,6 +726,29 @@ int main() {
 
 	std::cout << std::endl << ptrI[5] << copyI[8];	// 89
 
+	std::cout << ptrI.base() << std::endl;
+
+}
+
+	// With const_iterator you can move the iterator but you can't change the content
+	create_header("const_iterator");
+{
+	TYPE::vector<int>					lel(5, 10);
+	lel.push_back(453);
+
+	TYPE::vector<int>::const_iterator	first = lel.begin();
+	TYPE::vector<int>::const_iterator	last = lel.end() - 1;
+	TYPE::vector<int>::iterator			notConstLast = lel.end() - 1;
+
+	std::cout << *first << " " << *last << std::endl;	// 10 453
+	last--;
+	notConstLast--;
+	// *last = 5;
+	*notConstLast = 5;
+	std::cout << *last << std::endl;					// 5
+
+	if (last == first) {std::cout << "last == first" << std::endl;}
+	if (last == notConstLast) {std::cout << "last == notConstLast" << std::endl;}
 }
 
 

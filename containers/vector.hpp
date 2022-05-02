@@ -7,7 +7,8 @@
 #include <memory>
 #include <cstddef>
 #include <iterator>
-#include "myIterator.hpp"
+#include "vector_iterator.hpp"
+// #include "const_vector_iterator.hpp"
 #include "is_integral.hpp"
 #include "enable_if.hpp"
 #include "lexicographical_compare.hpp"
@@ -30,8 +31,8 @@ class	vector {
 		typedef typename allocator_type::reference				reference;
 		typedef typename allocator_type::const_reference		const_reference;
 		typedef typename allocator_type::pointer				pointer;
-		typedef MyIterator<ft::random_access_iterator_tag, T>	iterator;
-		typedef MyIterator<ft::random_access_iterator_tag, T>	const_iterator;
+		typedef VectorIterator<T>								iterator;
+		typedef VectorIterator<T>								const_iterator;
 		typedef typename std::reverse_iterator<iterator>		reverse_iterator;
 		typedef typename std::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef typename std::ptrdiff_t							difference_type;
