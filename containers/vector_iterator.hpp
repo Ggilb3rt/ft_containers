@@ -30,13 +30,12 @@ class VectorIterator {
 
 		pointer	base() const {return this->_arr_ptr;}
 
-
 		reference operator*() const {return *_arr_ptr;}
 		pointer operator->() const {return _arr_ptr;}
 		// const_reference operator*() const {std::cout << "Const hello"; return *_arr_ptr;}
 
-		bool operator== (const VectorIterator& rhs) {return this->_arr_ptr == rhs._arr_ptr;};
-		bool operator!= (const VectorIterator& rhs) {return !(*this == rhs);};
+		// bool operator== (const VectorIterator& rhs) {return this->_arr_ptr == rhs._arr_ptr;};
+		// bool operator!= (const VectorIterator& rhs) {return !(*this == rhs);};
 		bool operator>(VectorIterator const & rhs) const { return this->_arr_ptr > rhs._arr_ptr;}
 		bool operator>=(VectorIterator const & rhs) const { return this->_arr_ptr >= rhs._arr_ptr;}
 		bool operator<(VectorIterator const & rhs) const { return this->_arr_ptr < rhs._arr_ptr;}
@@ -48,10 +47,10 @@ class VectorIterator {
 		VectorIterator operator--(int) {VectorIterator tmp = *this; --(*this); return tmp;}
 
 		//! fonctionne avec a +/- n MAIS ne fonctionne pas avec n +/- a
-		VectorIterator operator+(const difference_type& rhs) const {std::cout << this << std::endl; return VectorIterator(this->_arr_ptr + rhs);}
+		VectorIterator operator+(const difference_type& rhs) const {return VectorIterator(this->_arr_ptr + rhs);}
 		VectorIterator operator-(const difference_type& rhs) const {return VectorIterator(this->_arr_ptr - rhs);}
 		difference_type operator+(const VectorIterator& rhs) const {return rhs._arr_ptr + _arr_ptr;} // real doesn't works
-		difference_type operator-(const VectorIterator& rhs) const {std::cout << "diff" << std::endl; return _arr_ptr - rhs._arr_ptr;}
+		difference_type operator-(const VectorIterator& rhs) const {return _arr_ptr - rhs._arr_ptr;}
 		// VectorIterator operator+(int const & rhs) {return this->_arr_ptr + rhs;}
 		// VectorIterator operator-(int const & rhs) {return this->_arr_ptr - rhs;}
 		// friend VectorIterator operator+(VectorIterator lhs, const difference_type& rhs) {lhs += rhs; return lhs;}
@@ -60,40 +59,39 @@ class VectorIterator {
 		VectorIterator& operator+=(difference_type const & rhs) {this->_arr_ptr += rhs; return *this;}
 		VectorIterator& operator-=(difference_type const & rhs) {this->_arr_ptr -= rhs; return *this;}
 
-		reference operator[](const unsigned int index) {return *(_arr_ptr + index);};
+		reference operator[](difference_type n) const {return *(operator+(n));};
 
 	private:
 		pointer _arr_ptr;
 };
 
 template <typename T>
-typename ft::VectorIterator<T>::diffrence_type
-operator== (const ft::VectorIterator<T> lhs,
+//typename ft::VectorIterator<T>::diffrence_type
+bool operator== (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
-				std::cout << "salut cest cool";
 		return lhs.base() == rhs.base();
 };
 
 // const
 template <typename T_L, typename T_R>
-typename ft::VectorIterator<T_L>::diffrence_type
-operator== (const ft::VectorIterator<T_L> lhs,
+// typename ft::VectorIterator<T_L>::diffrence_type
+bool operator== (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() == rhs.base();
 };
 
 
 template <typename T>
-typename ft::VectorIterator<T>::diffrence_type
-operator!= (const ft::VectorIterator<T> lhs,
+//typename ft::VectorIterator<T>::diffrence_type
+bool operator!= (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
 		return lhs.base() != rhs.base();
 };
 
 // const
 template <typename T_L, typename T_R>
-typename ft::VectorIterator<T_L>::diffrence_type
-operator!= (const ft::VectorIterator<T_L> lhs,
+//typename ft::VectorIterator<T_L>::diffrence_type
+bool operator!= (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() != rhs.base();
 };

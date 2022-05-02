@@ -14,6 +14,7 @@
 // A retirer
 // #include <type_traits>
 
+
 /* Invalid read of size x in valgrind are made by errors in the main
 	this errors are here to compare with the real vector
 */
@@ -693,6 +694,8 @@ int main() {
 	TYPE::vector<int>::iterator copyI(assignI);
 
 	// std::cout << *defaultI << std::endl; // segfault (but it's ok)
+	defaultI = base.end();
+	std::cout << *defaultI << std::endl;	// 0
 	std::cout << *ptrI << ", post " << *(ptrI++) << ", pre " << *(++ptrI) << std::endl;				// 3 3 5
 	std::cout << *assignI  << ", post " << *(assignI++) << ", pre " << *(++assignI) << std::endl;	// 1 1 3
 	std::cout << *copyI << ", post " << *(copyI++) << ", pre " << *(++copyI) << std::endl;			// 1 1 3
@@ -702,18 +705,18 @@ int main() {
 	copyI -= 2;
 	std::cout << std::endl << *ptrI << " " << *assignI << " " << *copyI << std::endl;	// 3 1 1
 
-	if (copyI == assignI) std::cout << "CopyI == assignI" << std::endl;
+	if (copyI == assignI) std::cout << "CopyI == assignI" << std::endl;		//
 	if (copyI != assignI) std::cout << "CopyI != assignI" << std::endl;
 	if (copyI > assignI) std::cout << "CopyI > assignI" << std::endl;
 	if (copyI < assignI) std::cout << "CopyI < assignI" << std::endl;
-	if (copyI >= assignI) std::cout << "CopyI >= assignI" << std::endl;
+	if (copyI >= assignI) std::cout << "CopyI >= assignI" << std::endl;		//
 	if (copyI <= assignI) std::cout << "CopyI <= assignI" << std::endl;
 	
 	if (copyI == ptrI) std::cout << "CopyI == ptrI" << std::endl;
-	if (copyI != ptrI) std::cout << "CopyI != ptrI" << std::endl;
-	if (copyI < ptrI) std::cout << "CopyI < ptrI" << std::endl;
+	if (copyI != ptrI) std::cout << "CopyI != ptrI" << std::endl;			//
+	if (copyI < ptrI) std::cout << "CopyI < ptrI" << std::endl;				//
 	if (copyI > ptrI) std::cout << "CopyI > ptrI" << std::endl;
-	if (copyI <= ptrI) std::cout << "CopyI <= ptrI" << std::endl;
+	if (copyI <= ptrI) std::cout << "CopyI <= ptrI" << std::endl;			//
 	if (copyI >= ptrI) std::cout << "CopyI >= ptrI" << std::endl;
 
 	std::cout << std::endl;
@@ -751,6 +754,47 @@ int main() {
 	if (last == notConstLast) {std::cout << "last == notConstLast" << std::endl;}
 }
 
+	create_header("reverse_iterator");
+{
+	TYPE::vector<int>	lel;
+	int	filler[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+	
+	lel.insert(lel.begin(), filler, filler+12);
+	lel.push_back(987);
+
+	TYPE::vector<int>::reverse_iterator start = lel.rbegin();
+	TYPE::vector<int>::reverse_iterator end = lel.rend();
+
+	std::cout << "Start : " << *start << " End : " << *end << std::endl; // 987 0
+	end--;
+	start++;
+	std::cout << "Start : " << *start << " End : " << *end << std::endl; // 12 1
+	start += 5;
+	end -= 5;
+	std::cout << "Start : " << *start << " End : " << *end << std::endl; // 7 6
+	std::cout << "Start : " << start[5] << " End : " << end[5] << std::endl; // 2 1
+
+
+}
+{
+	TYPE::vector<int> myvector;
+	for (int i=0; i<10; i++) myvector.push_back(i);
+
+	typedef TYPE::vector<int>::iterator iter_type;
+															// ? 9 8 7 6 5 4 3 2 1 0 ?
+	iter_type from (myvector.begin());						//   ^
+															//         ------>
+	iter_type until (myvector.end());						//                       ^
+															//
+	TYPE::VectorReverseIterator<iter_type> rev_until (from);		// ^
+															//         <------
+	TYPE::VectorReverseIterator<iter_type> rev_from (until);		//                     ^
+
+	std::cout << "myvector:";
+	while (rev_from != rev_until)
+		std::cout << ' ' << *rev_from++;
+	std::cout << '\n';
+}
 
 	return 0;
 }
