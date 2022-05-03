@@ -3,6 +3,10 @@
 #include <iterator>
 
 #include <vector>
+#include <map>
+
+#include "../containers/map/pair.hpp"
+
 
 #if USING_STD == 1
 	#define TYPE std
@@ -649,31 +653,7 @@ void	megaTest() {
 }
 
 
-
-
-int main() {
-	// megaTest();
-
-
-	// {
-	// 	using namespace std;
-
-	// 	std::cout << "lol";
-	// 	vector<int> roger(2, 120);
-	// 	for (vector<int>::iterator it = roger.begin(); it < roger.end(); it++) {
-	// 		cout << *it << endl;
-	// 	}
-	// }
-	// {
-	// 	using namespace ft;
-
-	// 	std::cout << "lol";
-	// 	vector<int> roger(2, 120);
-	// 	for (vector<int>::iterator it = roger.begin(); it < roger.end(); it++) {
-	// 		std::cout << *it << std::endl;
-	// 	}
-	// }
-
+void	iterator_tests() {
 
 	create_header("VectorIterator");
 {
@@ -786,15 +766,95 @@ int main() {
 															//         ------>
 	iter_type until (myvector.end());						//                       ^
 															//
-	TYPE::VectorReverseIterator<iter_type> rev_until (from);		// ^
+	TYPE::my_reverse_iterator<iter_type> rev_until (from);		// ^
 															//         <------
-	TYPE::VectorReverseIterator<iter_type> rev_from (until);		//                     ^
+	TYPE::my_reverse_iterator<iter_type> rev_from (until);		//                     ^
 
 	std::cout << "myvector:";
 	while (rev_from != rev_until)
 		std::cout << ' ' << *rev_from++;
 	std::cout << '\n';
 }
+
+}
+
+
+
+int main() {
+	// megaTest();
+	// iterator_tests();
+
+	// {
+	// 	using namespace std;
+
+	// 	std::cout << "lol";
+	// 	vector<int> roger(2, 120);
+	// 	for (vector<int>::iterator it = roger.begin(); it < roger.end(); it++) {
+	// 		cout << *it << endl;
+	// 	}
+	// }
+	// {
+	// 	using namespace ft;
+
+	// 	std::cout << "lol";
+	// 	vector<int> roger(2, 120);
+	// 	for (vector<int>::iterator it = roger.begin(); it < roger.end(); it++) {
+	// 		std::cout << *it << std::endl;
+	// 	}
+	// }
+
+	create_header("Basic Map");
+{
+	std::map<std::string, int> base;
+
+	base["salut"] = 1;
+	base["les"] = 8;
+	base["poulets"] = -12;
+	base["."] = 199;
+	base["a"] = 199;
+	base["a"] = 234;
+
+	for (std::map<std::string, int>::iterator it = base.begin(); it != base.end(); it++) {
+		std::cout << it->first << " => " << it->second << std::endl;
+	}
+}
+
+	create_header("Pair");
+{
+	TYPE::pair<int,char> foo (10,'z');
+	TYPE::pair<int,char> bar (90,'a');
+
+	if (foo==bar) std::cout << "foo and bar are equal\n";
+	if (foo!=bar) std::cout << "foo and bar are not equal\n";	//
+	if (foo< bar) std::cout << "foo is less than bar\n";		//
+	if (foo> bar) std::cout << "foo is greater than bar\n";
+	if (foo<=bar) std::cout << "foo is less than or equal to bar\n";	//
+	if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+
+	std::cout << std::endl << "foo = bar now" << std::endl;
+	foo = bar;
+	
+	if (foo==bar) std::cout << "foo and bar are equal\n";		//
+	if (foo!=bar) std::cout << "foo and bar are not equal\n";	
+	if (foo< bar) std::cout << "foo is less than bar\n";
+	if (foo> bar) std::cout << "foo is greater than bar\n";
+	if (foo<=bar) std::cout << "foo is less than or equal to bar\n";	//
+	if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";	//
+}
+
+	create_header("Make pair");
+{
+	TYPE::pair <int,int> foo;
+	TYPE::pair <int,int> bar;
+
+	foo = TYPE::make_pair (10,20);
+	bar = TYPE::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
+
+	std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
+	std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
+
+}
+
 
 	return 0;
 }

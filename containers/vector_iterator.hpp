@@ -14,7 +14,7 @@ class VectorIterator {
 		typedef Distance	difference_type;
 		typedef Pointer		pointer;
 		typedef Reference	reference;
-		typedef ft::random_access_iterator_tag	iterator_category;
+		typedef std::random_access_iterator_tag	iterator_category;	// use std to be compatible with real containers
 
 		VectorIterator() : _arr_ptr() {}
 		VectorIterator(pointer ptr) : _arr_ptr(ptr) {}

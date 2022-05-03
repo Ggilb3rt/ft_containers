@@ -9,7 +9,7 @@
 #include <iterator>
 #include "vector_iterator.hpp"
 // #include "const_vector_iterator.hpp"
-#include "vector_reverse_iterator.hpp"
+#include "reverse_iterator.hpp"
 #include "is_integral.hpp"
 #include "enable_if.hpp"
 #include "lexicographical_compare.hpp"
@@ -25,17 +25,14 @@ class	vector {
 	public :
 		typedef T											value_type;
 		typedef Allocator									allocator_type;
-		// typedef value_type&			reference;
-		// typedef value_type& const	const_reference;
-		// typedef value_type*			pointer;
-		// typedef value_type* const	const_pointer;
 		typedef typename allocator_type::reference			reference;
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::pointer			pointer;
-		typedef VectorIterator<T>							iterator;
-		typedef VectorIterator<T>							const_iterator;
-		typedef VectorReverseIterator<iterator>				reverse_iterator;
-		typedef VectorReverseIterator<const_iterator>		const_reverse_iterator;
+		typedef typename allocator_type::const_pointer		const_pointer;
+		typedef VectorIterator<value_type>					iterator;
+		typedef VectorIterator<value_type>					const_iterator;
+		typedef my_reverse_iterator<iterator>				reverse_iterator;
+		typedef my_reverse_iterator<const_iterator>			const_reverse_iterator;
 		typedef typename std::ptrdiff_t						difference_type;
 		typedef size_t										size_type;
 
@@ -74,10 +71,17 @@ class	vector {
 				InputIterator last,
 				const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = NULL)
-				: _CpyAlloc(alloc), _size(last - first), _reserve(last - first)
+				: _CpyAlloc(alloc)
 		{
-			try {_array = _CpyAlloc.allocate(this->_size);}
+			try {
+				_size = std::distance(first, last);
+				_reserve = _size;
+				_array = _CpyAlloc.allocate(this->_size);}
 			catch(const std::bad_alloc& e) {
+				std::cerr << e.what() << std::endl;
+				return ;
+			}
+			catch(const std::exception& e) {
 				std::cerr << e.what() << std::endl;
 				return ;
 			}
@@ -100,6 +104,7 @@ class	vector {
 			}
 			this->insert(this->begin(), cpy.begin(), cpy.end());
 		};
+		// Destructor
 		~vector()
 		{
 			//use .clear() ?

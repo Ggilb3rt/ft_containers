@@ -3,6 +3,9 @@
 
 namespace ft {
 
+//! ajouter remove const et remove volatile ??
+
+
 template<class T, T v>
 struct	integral_constant {
 	static const T value = v;
