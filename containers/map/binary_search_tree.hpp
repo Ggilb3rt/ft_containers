@@ -11,14 +11,18 @@
 namespace ft {
 
 template <class T>
-struct	s_node {
-		T		_key;
-		struct	s_node *_left, *_right;
+struct	BST_node {
+	public:
+		typedef T	value_type;
+
+		value_types	key;
+		BST_node	*parent, *left, *right;
 };
 
 // struct s_node	*createNode();
 
 // }
 
+}
 
 #endif
