@@ -3,8 +3,11 @@
 
 namespace ft {
 
-//! ajouter remove const et remove volatile ??
+//! ajouter remove const et remove volatile ?? OUI
+// template <class T>
+// struct remove_const {
 
+// };
 
 template<class T, T v>
 struct	integral_constant {

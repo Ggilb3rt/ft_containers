@@ -5,8 +5,7 @@
 #include <memory>
 
 
-// map se class par rapport à key
-// fait ft::pair<> avant
+// map se classe par rapport à key
 
 namespace ft {
 
@@ -17,11 +16,10 @@ struct	BST_node {
 
 		value_types	key;
 		BST_node	*parent, *left, *right;
+
+		BST_node() {};
 };
 
-// struct s_node	*createNode();
-
-// }
 
 }
 

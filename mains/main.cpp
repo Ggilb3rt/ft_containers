@@ -1,11 +1,12 @@
 #include <iostream>
-#include "../containers/vector.hpp"
 #include <iterator>
+
+#include "../containers/vector.hpp"
+#include "../containers/map/pair.hpp"
 
 #include <vector>
 #include <map>
 
-#include "../containers/map/pair.hpp"
 
 
 #if USING_STD == 1
@@ -802,6 +803,16 @@ int main() {
 	// 		std::cout << *it << std::endl;
 	// 	}
 	// }
+	create_header("is_integral (const not works)");
+{
+	std::cout << std::boolalpha;
+	std::cout << "is_integral:" << std::endl;
+	std::cout << "char: " << TYPE::is_integral<char>::value << std::endl;
+	std::cout << "int: " << TYPE::is_integral<int>::value << std::endl;
+	std::cout << "const int: " << TYPE::is_integral<const int>::value << std::endl; // must be true
+	std::cout << "float: " << TYPE::is_integral<float>::value << std::endl;
+}
+
 
 	create_header("Basic Map");
 {
@@ -852,8 +863,37 @@ int main() {
 
 	std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
 	std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
+}
+
+
+	create_header("value_comp()");
+{
+	std::map<char,int> mymap;
+
+	mymap['x']=1001;
+	mymap['y']=2002;
+	mymap['z']=3003;
+
+	std::cout << "mymap contains:\n";
+
+	std::pair<char,int> highest = *mymap.rbegin();          // last element
+
+	std::map<char,int>::iterator it = mymap.begin();
+	do {
+		std::cout << it->first << " => " << it->second
+		<< " " << mymap.value_comp()(*it, highest) << '\n';
+	} while ( mymap.value_comp()(*it++, highest) );
 
 }
+
+
+
+
+
+
+
+
+
 
 
 	return 0;
