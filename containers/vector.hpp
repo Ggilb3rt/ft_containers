@@ -8,7 +8,6 @@
 #include <cstddef>
 #include <iterator>
 #include "vector_iterator.hpp"
-// #include "const_vector_iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "is_integral.hpp"
 #include "enable_if.hpp"
@@ -269,7 +268,11 @@ class	vector {
 			ft::vector<value_type>	save(position, this->end());
 
 			if (this->size() == this->capacity()){
-				try {this->reserve(this->capacity() * 2);}
+				try {
+					if (this->capacity() == 0)
+						this->reserve(1);
+					else
+						this->reserve(this->capacity() * 2);}
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
 			}
 			size_type	pos = start_pos;
@@ -312,7 +315,7 @@ class	vector {
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
 			insert(iterator position, InputIterator first, InputIterator last) {
 				size_type	start_pos = &(*position) - &(*this->begin());
-				size_type	n = &(*last) - &(*first);
+				size_type	n = std::distance(first, last);
 				ft::vector<value_type>	save(position, this->end());
 
 				if (this->size() + n >= this->capacity()) {
@@ -338,10 +341,7 @@ class	vector {
 				}
 		}
 		iterator	erase(iterator position) {
-			_CpyAlloc.destroy((_array + (position - this->begin())));
-			for (iterator i = position; i != this->end(); i++)
-				*i = *(i + 1);
-			this->_size--;
+			erase(position, position + 1);
 			return position;
 		}
 		iterator	erase(iterator first, iterator last) {
@@ -419,7 +419,7 @@ class	vector {
 
 	template <class T, class Alloc>
 	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}	//! mec il faut utiliser ft::
 
 	template <class T, class Alloc>
