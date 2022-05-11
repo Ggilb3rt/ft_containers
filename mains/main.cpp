@@ -702,7 +702,7 @@ void	iterator_tests() {
 
 	std::cout << std::endl;
 	std::cout << *(ptrI + 5) << std::endl;			// 8
-	// std::cout << *(5 + ptrI) << std::endl;		// 8 //! real works
+	std::cout << *(5 + ptrI) << std::endl;			// 8
 	// std::cout << (ptrI + assignI) << std::endl;	// error
 	std::cout << *(ptrI - 2) << std::endl;			// 1
 	std::cout << (ptrI - assignI) << std::endl;		// ?
@@ -710,7 +710,7 @@ void	iterator_tests() {
 
 	std::cout << std::endl << ptrI[5] << copyI[8];	// 89
 
-	std::cout << ptrI.base() << std::endl;
+	std::cout << std::endl << ptrI.base() << std::endl;
 
 }
 
@@ -727,7 +727,7 @@ void	iterator_tests() {
 	std::cout << *first << " " << *last << std::endl;	// 10 453
 	last--;
 	notConstLast--;
-	// *last = 5;
+	// *last = 5;										// error
 	*notConstLast = 5;
 	std::cout << *last << std::endl;					// 5
 
@@ -767,9 +767,9 @@ void	iterator_tests() {
 															//         ------>
 	iter_type until (myvector.end());						//                       ^
 															//
-	TYPE::my_reverse_iterator<iter_type> rev_until (from);		// ^
+	TYPE::reverse_iterator<iter_type> rev_until (from);		// ^
 															//         <------
-	TYPE::my_reverse_iterator<iter_type> rev_from (until);		//                     ^
+	TYPE::reverse_iterator<iter_type> rev_from (until);		//                     ^
 
 	std::cout << "myvector:";
 	while (rev_from != rev_until)
@@ -782,8 +782,8 @@ void	iterator_tests() {
 
 
 int main() {
-	// megaTest();
-	// iterator_tests();
+	//megaTest();
+	iterator_tests();
 
 	// {
 	// 	using namespace std;
@@ -803,88 +803,92 @@ int main() {
 	// 		std::cout << *it << std::endl;
 	// 	}
 	// }
-	create_header("is_integral (const not works)");
-{
-	std::cout << std::boolalpha;
-	std::cout << "is_integral:" << std::endl;
-	std::cout << "char: " << TYPE::is_integral<char>::value << std::endl;
-	std::cout << "int: " << TYPE::is_integral<int>::value << std::endl;
-	std::cout << "const int: " << TYPE::is_integral<const int>::value << std::endl; // must be true
-	std::cout << "float: " << TYPE::is_integral<float>::value << std::endl;
-}
 
 
-	create_header("Basic Map");
-{
-	std::map<std::string, int> base;
 
-	base["salut"] = 1;
-	base["les"] = 8;
-	base["poulets"] = -12;
-	base["."] = 199;
-	base["a"] = 199;
-	base["a"] = 234;
 
-	for (std::map<std::string, int>::iterator it = base.begin(); it != base.end(); it++) {
-		std::cout << it->first << " => " << it->second << std::endl;
-	}
-}
+// 	create_header("is_integral (const not works)");
+// {
+// 	std::cout << std::boolalpha;
+// 	std::cout << "is_integral:" << std::endl;
+// 	std::cout << "char: " << TYPE::is_integral<char>::value << std::endl;
+// 	std::cout << "int: " << TYPE::is_integral<int>::value << std::endl;
+// 	std::cout << "const int: " << TYPE::is_integral<const int>::value << std::endl; // must be true
+// 	std::cout << "float: " << TYPE::is_integral<float>::value << std::endl;
+// }
 
-	create_header("Pair");
-{
-	TYPE::pair<int,char> foo (10,'z');
-	TYPE::pair<int,char> bar (90,'a');
 
-	if (foo==bar) std::cout << "foo and bar are equal\n";
-	if (foo!=bar) std::cout << "foo and bar are not equal\n";	//
-	if (foo< bar) std::cout << "foo is less than bar\n";		//
-	if (foo> bar) std::cout << "foo is greater than bar\n";
-	if (foo<=bar) std::cout << "foo is less than or equal to bar\n";	//
-	if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+// 	create_header("Basic Map");
+// {
+// 	std::map<std::string, int> base;
 
-	std::cout << std::endl << "foo = bar now" << std::endl;
-	foo = bar;
+// 	base["salut"] = 1;
+// 	base["les"] = 8;
+// 	base["poulets"] = -12;
+// 	base["."] = 199;
+// 	base["a"] = 199;
+// 	base["a"] = 234;
+
+// 	for (std::map<std::string, int>::iterator it = base.begin(); it != base.end(); it++) {
+// 		std::cout << it->first << " => " << it->second << std::endl;
+// 	}
+// }
+
+// 	create_header("Pair");
+// {
+// 	TYPE::pair<int,char> foo (10,'z');
+// 	TYPE::pair<int,char> bar (90,'a');
+
+// 	if (foo==bar) std::cout << "foo and bar are equal\n";
+// 	if (foo!=bar) std::cout << "foo and bar are not equal\n";	//
+// 	if (foo< bar) std::cout << "foo is less than bar\n";		//
+// 	if (foo> bar) std::cout << "foo is greater than bar\n";
+// 	if (foo<=bar) std::cout << "foo is less than or equal to bar\n";	//
+// 	if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+
+// 	std::cout << std::endl << "foo = bar now" << std::endl;
+// 	foo = bar;
 	
-	if (foo==bar) std::cout << "foo and bar are equal\n";		//
-	if (foo!=bar) std::cout << "foo and bar are not equal\n";	
-	if (foo< bar) std::cout << "foo is less than bar\n";
-	if (foo> bar) std::cout << "foo is greater than bar\n";
-	if (foo<=bar) std::cout << "foo is less than or equal to bar\n";	//
-	if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";	//
-}
+// 	if (foo==bar) std::cout << "foo and bar are equal\n";		//
+// 	if (foo!=bar) std::cout << "foo and bar are not equal\n";	
+// 	if (foo< bar) std::cout << "foo is less than bar\n";
+// 	if (foo> bar) std::cout << "foo is greater than bar\n";
+// 	if (foo<=bar) std::cout << "foo is less than or equal to bar\n";	//
+// 	if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";	//
+// }
 
-	create_header("Make pair");
-{
-	TYPE::pair <int,int> foo;
-	TYPE::pair <int,int> bar;
+// 	create_header("Make pair");
+// {
+// 	TYPE::pair <int,int> foo;
+// 	TYPE::pair <int,int> bar;
 
-	foo = TYPE::make_pair (10,20);
-	bar = TYPE::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
+// 	foo = TYPE::make_pair (10,20);
+// 	bar = TYPE::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
 
-	std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
-	std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
-}
+// 	std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
+// 	std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
+// }
 
 
-	create_header("value_comp()");
-{
-	std::map<char,int> mymap;
+// 	create_header("value_comp()");
+// {
+// 	std::map<char,int> mymap;
 
-	mymap['x']=1001;
-	mymap['y']=2002;
-	mymap['z']=3003;
+// 	mymap['x']=1001;
+// 	mymap['y']=2002;
+// 	mymap['z']=3003;
 
-	std::cout << "mymap contains:\n";
+// 	std::cout << "mymap contains:\n";
 
-	std::pair<char,int> highest = *mymap.rbegin();          // last element
+// 	std::pair<char,int> highest = *mymap.rbegin();          // last element
 
-	std::map<char,int>::iterator it = mymap.begin();
-	do {
-		std::cout << it->first << " => " << it->second
-		<< " " << mymap.value_comp()(*it, highest) << '\n';
-	} while ( mymap.value_comp()(*it++, highest) );
+// 	std::map<char,int>::iterator it = mymap.begin();
+// 	do {
+// 		std::cout << it->first << " => " << it->second
+// 		<< " " << mymap.value_comp()(*it, highest) << '\n';
+// 	} while ( mymap.value_comp()(*it++, highest) );
 
-}
+// }
 
 
 

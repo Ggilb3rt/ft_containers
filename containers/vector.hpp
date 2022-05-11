@@ -29,10 +29,10 @@ class	vector {
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::pointer			pointer;
 		typedef typename allocator_type::const_pointer		const_pointer;
-		typedef VectorIterator<value_type>					iterator;
-		typedef VectorIterator<value_type>					const_iterator;
-		typedef my_reverse_iterator<iterator>				reverse_iterator;
-		typedef my_reverse_iterator<const_iterator>			const_reverse_iterator;
+		typedef ft::VectorIterator<value_type>				iterator;
+		typedef ft::VectorIterator<const value_type>		const_iterator;
+		typedef ft::reverse_iterator<iterator>				reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 		typedef typename std::ptrdiff_t						difference_type;
 		typedef size_t										size_type;
 
@@ -70,7 +70,7 @@ class	vector {
 		vector(InputIterator first,
 				InputIterator last,
 				const allocator_type& alloc = allocator_type(),
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = NULL)
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 				: _CpyAlloc(alloc)
 		{
 			try {
@@ -134,10 +134,15 @@ class	vector {
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
-		iterator			begin() {return this->empty() ? iterator() : iterator(&_array[0]);}
-		const_iterator	begin() const {return this->empty() ? iterator() : iterator(&_array[0]);}
-		iterator			end() {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
-		const_iterator	end() const {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
+		// iterator			begin() {return this->empty() ? iterator() : iterator(&_array[0]);}
+		// const_iterator	begin() const {return this->empty() ? const_iterator() : const_iterator(&_array[0]);}
+		// iterator			end() {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
+		// const_iterator	end() const {return this->empty() ? const_iterator() : const_iterator(&_array[this->_size]);}
+		iterator			begin() {return _array;}
+		const_iterator	begin() const {return _array;}
+		iterator			end() {return this->empty() ? this->begin() : &_array[this->_size];}
+		const_iterator	end() const {return this->empty() ? this->begin() : &_array[this->_size];}
+		
 		reverse_iterator	rbegin() {return this->end();}
 		reverse_iterator	rend() {return this->begin();}
 

@@ -6,7 +6,7 @@
 
 namespace ft {
 
-template <class T, class Distance = ptrdiff_t,
+template <typename T, class Distance = ptrdiff_t,
 			class Pointer = T*, class Reference = T&>
 class VectorIterator {
 	public :
@@ -31,7 +31,7 @@ class VectorIterator {
 		pointer	base() const {return this->_arr_ptr;}
 
 		reference operator*() const {return *_arr_ptr;}
-		pointer operator->() const {return _arr_ptr;}
+		pointer operator->() const {return &(this->operator*());}
 		// const_reference operator*() const {std::cout << "Const hello"; return *_arr_ptr;}
 
 		// bool operator== (const VectorIterator& rhs) {return this->_arr_ptr == rhs._arr_ptr;};
@@ -49,8 +49,8 @@ class VectorIterator {
 		//! fonctionne avec a +/- n MAIS ne fonctionne pas avec n +/- a
 		VectorIterator operator+(const difference_type& rhs) const {return VectorIterator(this->_arr_ptr + rhs);}
 		VectorIterator operator-(const difference_type& rhs) const {return VectorIterator(this->_arr_ptr - rhs);}
-		difference_type operator+(const VectorIterator& rhs) const {return rhs._arr_ptr + _arr_ptr;} // real doesn't works
-		difference_type operator-(const VectorIterator& rhs) const {return _arr_ptr - rhs._arr_ptr;}
+		// difference_type operator+(const VectorIterator& rhs) const {return rhs._arr_ptr + _arr_ptr;} // real doesn't works
+		// difference_type operator-(const VectorIterator& rhs) const {return _arr_ptr - rhs._arr_ptr;}
 		// VectorIterator operator+(int const & rhs) {return this->_arr_ptr + rhs;}
 		// VectorIterator operator-(int const & rhs) {return this->_arr_ptr - rhs;}
 		// friend VectorIterator operator+(VectorIterator lhs, const difference_type& rhs) {lhs += rhs; return lhs;}
@@ -60,7 +60,10 @@ class VectorIterator {
 		VectorIterator& operator-=(difference_type const & rhs) {this->_arr_ptr -= rhs; return *this;}
 
 		reference operator[](difference_type n) const {return *(operator+(n));};
-
+		
+		operator VectorIterator<const T>() const {
+			return VectorIterator<const T>(this->_arr_ptr);
+		}
 	private:
 		pointer _arr_ptr;
 };
@@ -158,6 +161,29 @@ typename ft::VectorIterator<T_L>::diffrence_type
 operator>= (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() >= rhs.base();
+};
+
+
+template <typename T>
+ft::VectorIterator<T> operator+(
+	typename ft::VectorIterator<T>::difference_type n,
+	typename ft::VectorIterator<T>& rai) {
+		return &(*rai) + n;
+};
+
+template <typename T>
+typename ft::VectorIterator<T>::difference_type
+operator- (const ft::VectorIterator<T> lhs,
+			const ft::VectorIterator<T> rhs) {
+		return lhs.base() - rhs.base();
+};
+
+// iterator - const iterator
+template <typename T_L, typename T_R>
+typename ft::VectorIterator<T_L>::difference_type
+operator- (const ft::VectorIterator<T_L> lhs,
+			const ft::VectorIterator<T_R> rhs) {
+		return lhs.base() - rhs.base();
 };
 
 }
