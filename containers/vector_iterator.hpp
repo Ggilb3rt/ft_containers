@@ -46,15 +46,8 @@ class VectorIterator {
 		VectorIterator& operator--() {_arr_ptr--; return *this;}
 		VectorIterator operator--(int) {VectorIterator tmp = *this; --(*this); return tmp;}
 
-		//! fonctionne avec a +/- n MAIS ne fonctionne pas avec n +/- a
 		VectorIterator operator+(const difference_type& rhs) const {return VectorIterator(this->_arr_ptr + rhs);}
 		VectorIterator operator-(const difference_type& rhs) const {return VectorIterator(this->_arr_ptr - rhs);}
-		// difference_type operator+(const VectorIterator& rhs) const {return rhs._arr_ptr + _arr_ptr;} // real doesn't works
-		// difference_type operator-(const VectorIterator& rhs) const {return _arr_ptr - rhs._arr_ptr;}
-		// VectorIterator operator+(int const & rhs) {return this->_arr_ptr + rhs;}
-		// VectorIterator operator-(int const & rhs) {return this->_arr_ptr - rhs;}
-		// friend VectorIterator operator+(VectorIterator lhs, const difference_type& rhs) {lhs += rhs; return lhs;}
-
 
 		VectorIterator& operator+=(difference_type const & rhs) {this->_arr_ptr += rhs; return *this;}
 		VectorIterator& operator-=(difference_type const & rhs) {this->_arr_ptr -= rhs; return *this;}
@@ -69,7 +62,6 @@ class VectorIterator {
 };
 
 template <typename T>
-//typename ft::VectorIterator<T>::diffrence_type
 bool operator== (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
 		return lhs.base() == rhs.base();
@@ -77,7 +69,6 @@ bool operator== (const ft::VectorIterator<T> lhs,
 
 // const
 template <typename T_L, typename T_R>
-// typename ft::VectorIterator<T_L>::diffrence_type
 bool operator== (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() == rhs.base();
@@ -85,7 +76,6 @@ bool operator== (const ft::VectorIterator<T_L> lhs,
 
 
 template <typename T>
-//typename ft::VectorIterator<T>::diffrence_type
 bool operator!= (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
 		return lhs.base() != rhs.base();
@@ -93,7 +83,6 @@ bool operator!= (const ft::VectorIterator<T> lhs,
 
 // const
 template <typename T_L, typename T_R>
-//typename ft::VectorIterator<T_L>::diffrence_type
 bool operator!= (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() != rhs.base();
@@ -101,64 +90,56 @@ bool operator!= (const ft::VectorIterator<T_L> lhs,
 
 
 template <typename T>
-typename ft::VectorIterator<T>::diffrence_type
-operator< (const ft::VectorIterator<T> lhs,
+bool operator< (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
 		return lhs.base() < rhs.base();
 };
 
 // const
 template <typename T_L, typename T_R>
-typename ft::VectorIterator<T_L>::diffrence_type
-operator< (const ft::VectorIterator<T_L> lhs,
+bool operator< (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() < rhs.base();
 };
 
 
 template <typename T>
-typename ft::VectorIterator<T>::diffrence_type
-operator<= (const ft::VectorIterator<T> lhs,
+bool operator<= (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
 		return lhs.base() <= rhs.base();
 };
 
 // const
 template <typename T_L, typename T_R>
-typename ft::VectorIterator<T_L>::diffrence_type
-operator<= (const ft::VectorIterator<T_L> lhs,
+bool operator<= (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() <= rhs.base();
 };
 
 
 template <typename T>
-typename ft::VectorIterator<T>::diffrence_type
-operator> (const ft::VectorIterator<T> lhs,
+bool operator> (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
 		return lhs.base() > rhs.base();
 };
 
 // const
 template <typename T_L, typename T_R>
-typename ft::VectorIterator<T_L>::diffrence_type
-operator> (const ft::VectorIterator<T_L> lhs,
+bool operator> (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() > rhs.base();
 };
 
 
 template <typename T>
-typename ft::VectorIterator<T>::diffrence_type
-operator>= (const ft::VectorIterator<T> lhs,
+bool operator>= (const ft::VectorIterator<T> lhs,
 			const ft::VectorIterator<T> rhs) {
 		return lhs.base() >= rhs.base();
 };
 
 // const
 template <typename T_L, typename T_R>
-typename ft::VectorIterator<T_L>::diffrence_type
-operator>= (const ft::VectorIterator<T_L> lhs,
+bool operator>= (const ft::VectorIterator<T_L> lhs,
 			const ft::VectorIterator<T_R> rhs) {
 		return lhs.base() >= rhs.base();
 };
@@ -167,8 +148,8 @@ operator>= (const ft::VectorIterator<T_L> lhs,
 template <typename T>
 ft::VectorIterator<T> operator+(
 	typename ft::VectorIterator<T>::difference_type n,
-	typename ft::VectorIterator<T>& rai) {
-		return &(*rai) + n;
+	typename ft::VectorIterator<T>& el) {
+		return &(*el) + n;
 };
 
 template <typename T>

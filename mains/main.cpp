@@ -705,8 +705,10 @@ void	iterator_tests() {
 	std::cout << *(5 + ptrI) << std::endl;			// 8
 	// std::cout << (ptrI + assignI) << std::endl;	// error
 	std::cout << *(ptrI - 2) << std::endl;			// 1
-	std::cout << (ptrI - assignI) << std::endl;		// ?
+	std::cout << (ptrI - assignI) << std::endl;		// ? garbage
+	std::cout << (base.end() - base.begin() - 2) << std::endl;	// 10
 	std::cout << *(ptrI + 5 - 2) << std::endl;		// 6
+	// std::cout << *(2 - copyI) << std::endl;		// error
 
 	std::cout << std::endl << ptrI[5] << copyI[8];	// 89
 
@@ -733,6 +735,10 @@ void	iterator_tests() {
 
 	if (last == first) {std::cout << "last == first" << std::endl;}
 	if (last == notConstLast) {std::cout << "last == notConstLast" << std::endl;}
+
+	TYPE::vector<int>::difference_type	newSize = first - notConstLast;	// -4
+	std::cout << newSize << std::endl;
+
 }
 
 	create_header("reverse_iterator");
@@ -782,7 +788,7 @@ void	iterator_tests() {
 
 
 int main() {
-	//megaTest();
+	megaTest();
 	iterator_tests();
 
 	// {

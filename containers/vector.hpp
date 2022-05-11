@@ -45,7 +45,7 @@ class	vector {
 						: _CpyAlloc(alloc), _size(0), _reserve(0)
 		{
 			try {_array = _CpyAlloc.allocate(this->_reserve);}
-			catch(const std::exception& e) {
+			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
 				return ;
 			}
@@ -171,7 +171,6 @@ class	vector {
 		size_type	capacity() const {return this->_reserve;}
 		bool		empty() const {return this->_size == 0 ? true : false;}
 		void		reserve(size_type n) {
-			// std::cout << n <<  "| reserve start : " << this->capacity() << std::endl;
 			if (n > this->max_size())
 				throw std::length_error("vector::reserve");
 			// n > capacity
@@ -190,7 +189,6 @@ class	vector {
 					this->_reserve = n;
 				}
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
-			// std::cout << "reserve at the end " << this->_reserve << std::endl;
 			}
 			// n < capacity ==> nothing
 		}
@@ -233,9 +231,9 @@ class	vector {
 	/*			Modifiers		*/
 	/****************************/
 		template <class InputIterator>
-		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
-			assign(InputIterator first, InputIterator last) {
-			difference_type	newSize = last - first;
+		void	assign(InputIterator first, InputIterator last, 
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL) {
+			difference_type newSize = std::distance(first, last);
 
 			this->clear();
 			if (this->capacity() < (size_type)newSize)
@@ -422,7 +420,7 @@ class	vector {
 	template <class T, class Alloc>
 	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
 		return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
-	}
+	}	//! mec il faut utiliser ft::
 
 	template <class T, class Alloc>
 	bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
