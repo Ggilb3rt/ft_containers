@@ -12,6 +12,7 @@
 #include "is_integral.hpp"
 #include "enable_if.hpp"
 #include "lexicographical_compare.hpp"
+#include "equal.hpp"
 
 
 // to remove
@@ -43,6 +44,8 @@ class	vector {
 		explicit vector(const allocator_type& alloc = allocator_type())
 						: _CpyAlloc(alloc), _size(0), _reserve(0)
 		{
+			std::cout << "\t\tConstruct" << std::endl;
+
 			try {_array = _CpyAlloc.allocate(this->_reserve);}
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
@@ -55,6 +58,8 @@ class	vector {
 						const allocator_type& alloc = allocator_type())
 						: _CpyAlloc(alloc), _size(n), _reserve(n)
 		{
+			std::cout << "\t\tConstruct" << std::endl;
+
 			try {_array = _CpyAlloc.allocate(n);}
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
@@ -72,6 +77,8 @@ class	vector {
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 				: _CpyAlloc(alloc)
 		{
+			std::cout << "\t\tConstruct" << std::endl;
+
 			try {
 				_size = std::distance(first, last);
 				_reserve = _size;
@@ -96,6 +103,8 @@ class	vector {
 		vector(const vector& cpy)
 			: _CpyAlloc(cpy.get_allocator()), _size(0), _reserve(0)
 		{
+			std::cout << "\t\tConstruct" << std::endl;
+
 			try {_array = _CpyAlloc.allocate(this->_size);}
 			catch(const std::bad_alloc& e) {
 				std::cerr << e.what() << std::endl;
@@ -106,6 +115,7 @@ class	vector {
 		// Destructor
 		~vector()
 		{
+			std::cout << "\t\tDestroye" << std::endl;
 			//use .clear() ?
 			if (_array) {
 				for (size_type i = 0; i < _size; i++) {
@@ -173,12 +183,13 @@ class	vector {
 			if (n > this->max_size())
 				throw std::length_error("vector::reserve");
 			// n > capacity
-			allocator_type	tmpAlloc;
-			T*				tmpArray;
-			if (n >= this->capacity()) {
+			if (n >= this->capacity()) { // just > ?
+				allocator_type	tmpAlloc;
+				T*				tmpArray;
 				try {
 					tmpArray = tmpAlloc.allocate(n);
 					for (size_type i = 0; i < _size; i++) {
+						// std::cout << "Hola gringos " << i << " " << _array[i] << std::endl;
 						tmpAlloc.construct((tmpArray + i), _array[i]);
 						_CpyAlloc.destroy((_array + i));
 					}
@@ -235,6 +246,7 @@ class	vector {
 			difference_type newSize = std::distance(first, last);
 
 			this->clear();
+			//this->insert(this->begin(), first, last);
 			if (this->capacity() < (size_type)newSize)
 				this->reserve(newSize);
 			while (first != last) {
@@ -244,6 +256,7 @@ class	vector {
 		}
 		void	assign(size_type n, const value_type& val) {
 			this->clear();
+			//this->insert(this->begin(), n, val);
 			if (this->capacity() < n)
 				this->reserve(n);
 			while (n > 0) {
@@ -276,7 +289,8 @@ class	vector {
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
 			}
 			size_type	pos = start_pos;
-			*(this->_array + pos) = val;
+			this->_CpyAlloc.construct((this->_array + pos), val);
+			// *(this->_array + pos) = val;
 			pos++;
 			this->_size++;
 
@@ -286,7 +300,71 @@ class	vector {
 			}
 			return iterator((this->_array + start_pos));
 		}
+
+
 		void insert(iterator position, size_type n, const value_type& val) {
+			if (n == 0)
+				return ;
+/* 			vector<value_type>	tmpVect(this->begin(), this->end());
+		iterator			tmpIt = tmpVect.begin();
+
+for( iterator it = tmpVect.begin(); it != tmpVect.end(); it++) {
+	std::cout << "tmpVect " << *it << std::endl;
+}
+
+		if (this->size() + n >= this->capacity()) {
+			try {this->reserve(this->capacity() + n);}
+			catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+		}
+
+std::cout << std::endl << "Printont tout 1" << std::endl
+	// << "Runner " << &(*runner) << " | " << *runner << std::endl
+	<< "This " << this->_size << " | " << this->_reserve << std::endl
+	<< "Tmp" << tmpVect.size() << " | " << tmpVect.capacity() << " | " << *tmpIt << std::endl
+	<< std::endl;
+
+		for (iterator it = this->begin(); it != this->end(); it++) {
+			std::cout << &(*it) << std::endl;
+			this->_CpyAlloc.destroy(&(*it));
+		}
+		iterator			runner = this->begin();
+
+std::cout << std::endl << "Printont tout 2" << std::endl
+	<< "Runner " << &(*runner) << std::endl
+	<< "This " << this->_size << " | " << this->_reserve << std::endl
+	<< "Tmp" << tmpVect.size() << " | " << tmpVect.capacity() << std::endl
+	<< std::endl;
+
+		while (runner != position) {
+			this->_CpyAlloc.construct(&(*runner), val);
+			runner++;
+			tmpIt++;
+		}
+
+std::cout << std::endl << "Printont tout 3" << std::endl
+	<< "Runner " << &(*runner) << " | " << *runner << std::endl
+	<< "This " << this->_size << " | " << this->_reserve << std::endl
+	<< "Tmp" << tmpVect.size() << " | " << tmpVect.capacity() << std::endl
+	<< std::endl;
+
+		while(n--) {
+			this->_CpyAlloc.construct(&(*runner), val);
+			this->_size++;
+			runner++;
+		}
+
+std::cout << std::endl << "Printont tout 4" << std::endl
+	<< "Runner " << &(*runner) << " | " << *runner << std::endl
+	<< "This " << this->_size << " | " << this->_reserve << std::endl
+	<< "Tmp" << tmpVect.size() << " | " << tmpVect.capacity() << std::endl
+	<< std::endl;
+		
+		while(runner != this->end()) {
+			this->_CpyAlloc.construct(&(*runner), *tmpIt);
+			runner++;
+			tmpIt++;
+		} */
+
 			size_type	start_pos = &(*position) - &(*this->begin());
 			ft::vector<value_type>	save(position, this->end());
 
@@ -297,12 +375,16 @@ class	vector {
 
 			size_type	pos = start_pos;
 			size_type	end = start_pos + n;
+			// for (iterator it = position ; it != this->end(); it++)
+			// 	this->_CpyAlloc.destroy(&(*it));
 			while (pos < end) {
 				if (pos > this->_size) {
+					this->_CpyAlloc.destroy(this->_array + pos);
 					this->_CpyAlloc.construct((this->_array + pos), val);
 				}
 				else
-					*(this->_array + pos) = val;
+					this->_CpyAlloc.construct((this->_array + pos), val);
+				// 	*(this->_array + pos) = val;
 				pos++;
 				this->_size++;
 			}
@@ -326,11 +408,11 @@ class	vector {
 				size_type	pos = start_pos;
 				size_type	end = start_pos + n;
 				while (pos < end) {
-					if (pos > this->_size) {
+					// if (pos > this->_size) {
 						this->_CpyAlloc.construct((this->_array + pos), *first);
-					}
-					else
-						*(this->_array + pos) = *first;
+					// }
+					// else
+						// *(this->_array + pos) = *first;
 					pos++;
 					first++;
 					this->_size++;
@@ -404,10 +486,8 @@ class	vector {
 			return false;
 		typename ft::vector<T>::const_iterator	first = lhs.begin();
 		typename ft::vector<T>::const_iterator	last = lhs.end();
-		while (first != last) {
-			if (*first != *last)
-				return false;
-			first++;
+		if (!(ft::equal(lhs.begin(), lhs.end(), rhs.begin()))) {
+			return false;
 		}
 		return true;
 	}
@@ -420,7 +500,7 @@ class	vector {
 	template <class T, class Alloc>
 	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
 		return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
-	}	//! mec il faut utiliser ft::
+	}
 
 	template <class T, class Alloc>
 	bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
