@@ -367,6 +367,24 @@ class	vector {
 			return position;
 		}
 		iterator	erase(iterator first, iterator last) {
+			// iterator		firstCpy = first;
+			// size_type	start = std::distance(this->begin(), first);
+			// size_type	end = std::distance(this->begin(), last);
+			// size_type	itsDist = std::distance(first, last);
+
+			// while (start < end) {
+			// 	this->_CpyAlloc.destroy(this->_array + start);
+			// 	if ((last != this->end()) && ((start + itsDist) < this->size()))
+			// 		this->_CpyAlloc.construct(this->_array + start, *(first + start + itsDist));
+			// 	start++;
+			// }
+			// while (last != this->end()) {
+			// 	this->_CpyAlloc.destroy(this->_array + start);
+			// 	start++;
+			// 	last++;
+			// }
+			// this->_size -= itsDist;
+			
 			iterator		firstCpy = first;
 			iterator		end = this->end();
 
@@ -376,10 +394,13 @@ class	vector {
 				this->_size--;
 			}
 			first = firstCpy;
+			difference_type n = std::distance(this->begin(), first);
 			while (last != end) {
-				*first = *last;
+				_CpyAlloc.construct((this->_array + n), *last);
+				// *first = *last;
 				last++;
-				first++;
+				// first++;
+				n++;
 			}
 			return firstCpy;
 		}
