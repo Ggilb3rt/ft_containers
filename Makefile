@@ -38,4 +38,9 @@ test : all
 test_leaks : all
 	valgrind --leak-check=full --track-origins=yes ./$(NAME)
 
+test_massif : all
+	valgrind --tool=massif --time-unit=B ./$(NAME)
+	ms_print massif.out.*
+	rm massif.out.*
+
 .PHONY : all re fclean clean test test_leaks

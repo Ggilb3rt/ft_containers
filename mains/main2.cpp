@@ -59,12 +59,22 @@ int main() {
 {
 	vector<std::string> roger;
 
-	for (size_t i = 0; i < 15 ; i++) {
+	for (size_t i = 0; i < 9 ; i++) {
+		std::cout << "push back " << i << std::endl;
 		roger.push_back("0123456789012345678");
 	}
 
+
+
+	roger.reserve(roger.capacity() + 20);
+	roger.reserve(roger.capacity() + 20);
+
+	// roger.push_back("boujour shf lsk svlkjbe");
+	// roger.push_back("boukjshfkjsdfkjsdfd");
+
+	// roger.reserve(roger.capacity() + 2);
 	vector<std::string>::iterator	tmp;
-	tmp = roger.begin() + 2;
+	tmp = roger.begin();
 	roger.insert(tmp, 8, "lol internet");
 	
 	

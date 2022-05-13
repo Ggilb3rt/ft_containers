@@ -180,10 +180,10 @@ class	vector {
 		size_type	capacity() const {return this->_reserve;}
 		bool		empty() const {return this->_size == 0 ? true : false;}
 		void		reserve(size_type n) {
+			std::cout << "\tin reserve " << this->_size << " | " << n << std::endl;
 			if (n > this->max_size())
 				throw std::length_error("vector::reserve");
-			// n > capacity
-			if (n >= this->capacity()) { // just > ?
+			else if (n > this->capacity()) {
 				allocator_type	tmpAlloc;
 				T*				tmpArray;
 				try {
@@ -266,7 +266,7 @@ class	vector {
 		}
 		void	push_back(const value_type& val) {
 			if (_size >= _reserve)
-				this->reserve((_size <= 1) ? (_size + 1) : (_size * 2));
+				this->reserve((_size == 0) ? (1) : (_size * 2));
 			_CpyAlloc.construct(&_array[_size], val);
 			this->_size++;
 		}
@@ -289,16 +289,21 @@ class	vector {
 				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
 			}
 			size_type	pos = start_pos;
+			this->_CpyAlloc.destroy((this->_array + pos));
 			this->_CpyAlloc.construct((this->_array + pos), val);
 			// *(this->_array + pos) = val;
 			pos++;
 			this->_size++;
 
 			for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
+				this->_CpyAlloc.destroy((this->_array + pos));
 				this->_CpyAlloc.construct((this->_array + pos), *saveIt);
 				pos++;
 			}
 			return iterator((this->_array + start_pos));
+
+			//this->insert(position, 1, val);
+			//return position;
 		}
 
 
@@ -365,8 +370,10 @@ std::cout << std::endl << "Printont tout 4" << std::endl
 			tmpIt++;
 		} */
 
-			size_type	start_pos = &(*position) - &(*this->begin());
+			difference_type	start_pos = std::distance(this->begin(), position);
+			size_type		original_size = this->_size;
 			ft::vector<value_type>	save(position, this->end());
+
 
 			if (this->size() + n >= this->capacity()) {
 				try {this->reserve(this->capacity() + n);}
@@ -378,13 +385,14 @@ std::cout << std::endl << "Printont tout 4" << std::endl
 			// for (iterator it = position ; it != this->end(); it++)
 			// 	this->_CpyAlloc.destroy(&(*it));
 			while (pos < end) {
-				if (pos > this->_size) {
-					this->_CpyAlloc.destroy(this->_array + pos);
+				if (pos >= original_size) {
 					this->_CpyAlloc.construct((this->_array + pos), val);
 				}
-				else
+				else {
+					this->_CpyAlloc.destroy(this->_array + pos);
 					this->_CpyAlloc.construct((this->_array + pos), val);
 				// 	*(this->_array + pos) = val;
+				}
 				pos++;
 				this->_size++;
 			}
