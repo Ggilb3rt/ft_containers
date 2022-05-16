@@ -326,24 +326,39 @@ class	vector {
 			// }
 			// this->_size -= itsDist;
 			
-			iterator		firstCpy = first;
-			iterator		end = this->end();
+			iterator		firstBase = first;
+			size_type		n = std::distance(first, last);
 
-			while (first != last) {
-				_CpyAlloc.destroy((_array + (first - this->begin())));
+			while (last < this->end()) {
+				*first = *last;
 				first++;
-				this->_size--;
-			}
-			first = firstCpy;
-			difference_type n = std::distance(this->begin(), first);
-			while (last != end) {
-				_CpyAlloc.construct((this->_array + n), *last);
-				// *first = *last;
 				last++;
-				// first++;
-				n++;
 			}
-			return firstCpy;
+			this->_size -= n;
+			// while (first < this->end()) {
+			// 	*first = value_type();
+			// 	first++;
+			// }
+
+
+			// iterator		firstBase = first;
+			// iterator		end = this->end();
+
+			// while (first != last) {
+			// 	_CpyAlloc.destroy((_array + (first - this->begin())));
+			// 	first++;
+			// 	this->_size--;
+			// }
+			// // first = firstBase;
+			// difference_type n = std::distance(this->begin(), firstBase);
+			// while (last != end) {
+			// 	_CpyAlloc.construct((this->_array + n), *last);
+			// 	// *first = *last;
+			// 	last++;
+			// 	// first++;
+			// 	n++;
+			// }
+			return firstBase;
 		}
 		void	swap(vector& x) {
 			// cf iterator validity : l'iterator pointe vers la meme adrss apres le swap
