@@ -74,7 +74,7 @@ int main() {
 
 	// roger.reserve(roger.capacity() + 2);
 	vector<std::string>::iterator	tmp;
-	tmp = roger.begin() + 1;
+	tmp = roger.begin() + 4;
 	roger.insert(tmp, 3, "lol internet");
 	// roger.insert(tmp + 10, 2, "lolilol internet");
 	
@@ -87,6 +87,46 @@ int main() {
 	}
 }
 
+
+{
+	// 	std::cout << "\nINSERT\n";
+	// vector<std::string>	insert_in_me;
+	// for (size_t i = 0; i < 15; i++)
+	// 	insert_in_me.push_back(ft::to_string(i) + " I love hbaudet\n");
+	// // std::cout << "after push_back, before at\n";
+	// // for (size_t i = 0; i < insert_in_me.size(); i++)
+	// // 	std::cout << insert_in_me.at(i) << ' ';
+	// // std::cout << '\n';
+
+	// vector<std::string>::iterator	tmp;
+	// tmp = insert_in_me.begin() + 4;
+	// insert_in_me.insert(tmp, 8, "Norminet");
+	// for (size_t i = 0; i < insert_in_me.size(); i++)
+	// 	std::cout << insert_in_me.at(i) << ' ';
+	// std::cout << '\n';
+
+	// vector<std::string>::const_iterator const_it(insert_in_me.begin());
+	// std::cout << "Const it : " << std::endl;
+	// std::cout << *const_it << '\n';
+
+
+	// //INSERT
+	// std::cout << "\nINSERT\n";
+	// vector<std::string>	std_insert_in_me;
+	// for (size_t i = 0; i < 15; i++)
+	// 	std_insert_in_me.push_back(ft::to_string(i) + " 42 ");
+	// for (size_t i = 0; i < std_insert_in_me.size(); i++)
+	// 	std::cout << std_insert_in_me.at(i) << ' ';
+	// std::cout << '\n';
+
+	// vector<std::string>::iterator	std_tmp;
+	// std_tmp = std_insert_in_me.begin() + 4;
+	// std_insert_in_me.insert(std_tmp, 8, "Why are you reading this!?");
+	// for (size_t i = 0; i < std_insert_in_me.size(); i++)
+	// 	std::cout << std_insert_in_me.at(i) << ' ';
+	// std::cout << '\n';
+
+}
 
 
 

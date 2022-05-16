@@ -236,7 +236,6 @@ class	vector {
 			difference_type newSize = std::distance(first, last);
 
 			this->clear();
-			//this->insert(this->begin(), first, last);
 			if (this->capacity() < (size_type)newSize)
 				this->reserve(newSize);
 			while (first != last) {
@@ -246,7 +245,6 @@ class	vector {
 		}
 		void	assign(size_type n, const value_type& val) {
 			this->clear();
-			//this->insert(this->begin(), n, val);
 			if (this->capacity() < n)
 				this->reserve(n);
 			while (n > 0) {
@@ -267,100 +265,43 @@ class	vector {
 			}
 		}
 		iterator insert(iterator position, const value_type& val) {
-			size_type	start_pos = &(*position) - &(*this->begin());
-			ft::vector<value_type>	save(position, this->end());
+			size_type		start_pos = std::distance(this->begin(), position);
 
-			if (this->size() == this->capacity()){
-				try {
-					if (this->capacity() == 0)
-						this->reserve(1);
-					else
-						this->reserve(this->capacity() * 2);}
-				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
-			}
-			size_type	pos = start_pos;
-			this->_CpyAlloc.destroy((this->_array + pos));
-			this->_CpyAlloc.construct((this->_array + pos), val);
-			// *(this->_array + pos) = val;
-			pos++;
-			this->_size++;
-
-			for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-				this->_CpyAlloc.destroy((this->_array + pos));
-				this->_CpyAlloc.construct((this->_array + pos), *saveIt);
-				pos++;
-			}
-			return iterator((this->_array + start_pos));
-
-			// this->insert(position, 1, val);
-			// return position;
+			this->insert(position, 1, val);
+			return this->begin() + start_pos;
 		}
-
 
 		void insert(iterator position, size_type n, const value_type& val) {
 			if (n == 0)
 				return ;
-			difference_type	start_pos = std::distance(this->begin(), position);
-			size_type		original_size = this->_size;
-			ft::vector<value_type>	save(position, this->end());
+			ft::vector<value_type>	tmp(*this);
+			size_type				start_pos = std::distance(this->begin(), position);
+			iterator				tmp_position = tmp.begin() + start_pos;
 
-			if (this->size() + n >= this->capacity()) {
-				try {this->reserve(this->capacity() + n);}
-				catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
+			this->assign(tmp.begin(), tmp_position);
+			while (n-- > 0) {
+				this->push_back(val);
 			}
-
-			size_type	pos = start_pos;
-			size_type	end = start_pos + n;
-			// for (iterator it = position ; it < position + n; it++)
-			// 	this->_CpyAlloc.destroy(&(*it));
-			while (pos < end) {
-				if (pos >= original_size) {
-					this->_CpyAlloc.construct((this->_array + pos), val);
-				}
-				else {
-					this->_CpyAlloc.destroy(this->_array + pos);
-					this->_CpyAlloc.construct((this->_array + pos), val);
-				// 	*(this->_array + pos) = val;
-				}
-				pos++;
-				this->_size++;
-			}
-			for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-				this->_CpyAlloc.destroy(this->_array + pos);
-				//std::cout << "\tWhat is save : " << *saveIt << " | " << (this->_array+pos) << std::endl;
-				//*saveIt = "pouet";
-				this->_CpyAlloc.construct((this->_array + pos), *saveIt);
-				pos++;
-			}
+			for (iterator it = tmp_position; it < tmp.end(); it++)
+				this->push_back(*it);
 		}
+
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
 			insert(iterator position, InputIterator first, InputIterator last) {
-				size_type	start_pos = &(*position) - &(*this->begin());
-				size_type	n = std::distance(first, last);
-				ft::vector<value_type>	save(position, this->end());
-
-				if (this->size() + n >= this->capacity()) {
-					try {this->reserve(this->capacity() + n);}
-					catch(const std::exception& e) {std::cerr << e.what() << std::endl;}
-				}
-
-				size_type	pos = start_pos;
-				size_type	end = start_pos + n;
-				while (pos < end) {
-					// if (pos > this->_size) {
-						this->_CpyAlloc.construct((this->_array + pos), *first);
-					// }
-					// else
-						// *(this->_array + pos) = *first;
-					pos++;
-					first++;
-					this->_size++;
-				}
-				for (iterator saveIt = save.begin(); saveIt < save.end(); saveIt++) {
-					this->_CpyAlloc.construct((this->_array + pos), *saveIt);
-					pos++;
-				}
+					if (std::distance(first, last) == 0)
+						return ;
+					ft::vector<value_type>	tmp(*this);
+					size_type				start_pos = std::distance(this->begin(), position);
+					iterator				tmp_position = tmp.begin() + start_pos;
+					
+					this->assign(tmp.begin(), tmp_position);
+					while (first < last) {
+						this->push_back(*first);
+						first++;
+					}
+					for (iterator it = tmp_position; it < tmp.end(); it++)
+						this->push_back(*it);
 		}
 		iterator	erase(iterator position) {
 			erase(position, position + 1);
