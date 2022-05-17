@@ -29,8 +29,8 @@ class	vector {
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::pointer			pointer;
 		typedef typename allocator_type::const_pointer		const_pointer;
-		typedef ft::VectorIterator<value_type>				iterator;
-		typedef ft::VectorIterator<const value_type>		const_iterator;
+		typedef ft::random_access_iterator<value_type>				iterator;
+		typedef ft::random_access_iterator<const value_type>		const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 		typedef typename std::ptrdiff_t						difference_type;
@@ -102,7 +102,6 @@ class	vector {
 				std::cerr << e.what() << std::endl;
 				return ;
 			}
-			// this->insert(this->begin(), cpy.begin(), cpy.end());
 			this->assign(cpy.begin(), cpy.end());
 		};
 		// Destructor
@@ -144,8 +143,8 @@ class	vector {
 		iterator			end() {return this->empty() ? this->begin() : &_array[this->_size];}
 		const_iterator		end() const {return this->empty() ? this->begin() : &_array[this->_size];}
 		
-		reverse_iterator	rbegin() {return this->end();}
-		reverse_iterator	rend() {return this->begin();}
+		reverse_iterator	rbegin() {return reverse_iterator(this->end());}
+		reverse_iterator	rend() {return reverse_iterator(this->begin());}
 
 
 	/****************************/
@@ -159,12 +158,13 @@ class	vector {
 					_CpyAlloc.destroy((_array + i));
 				}
 			}
-			if (n > _size && n > _reserve) {
+			if (n > _reserve * 2) {
 				this->reserve(n);
 			}
 			if (n > _size) {
 				for (size_type i = _size; i < n; i++) {
-					_CpyAlloc.construct((_array + i), val);
+					push_back(val);
+					// _CpyAlloc.construct((_array + i), val);
 				}
 			}
 			_size = n;
@@ -278,6 +278,11 @@ class	vector {
 			size_type				start_pos = std::distance(this->begin(), position);
 			iterator				tmp_position = tmp.begin() + start_pos;
 
+			if (_size + n >= _reserve * 2)
+				this->reserve(_size + n);
+			else if (_size + n >= _reserve)
+				this->reserve(_size * 2);
+
 			this->assign(tmp.begin(), tmp_position);
 			while (n-- > 0) {
 				this->push_back(val);
@@ -289,12 +294,18 @@ class	vector {
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
 			insert(iterator position, InputIterator first, InputIterator last) {
-					if (std::distance(first, last) == 0)
+					size_type				n = std::distance(first, last);
+					if (n == 0)
 						return ;
 					ft::vector<value_type>	tmp(*this);
 					size_type				start_pos = std::distance(this->begin(), position);
 					iterator				tmp_position = tmp.begin() + start_pos;
 					
+					if (_size + n >= _reserve * 2)
+						this->reserve(_size + n);
+					else if (_size + n >= _reserve)
+						this->reserve(_size * 2);
+
 					this->assign(tmp.begin(), tmp_position);
 					while (first < last) {
 						this->push_back(*first);
@@ -329,16 +340,19 @@ class	vector {
 			iterator		firstBase = first;
 			size_type		n = std::distance(first, last);
 
+			if (n == 0)
+				return firstBase;
 			while (last < this->end()) {
 				*first = *last;
 				first++;
 				last++;
 			}
-			this->_size -= n;
-			// while (first < this->end()) {
-			// 	*first = value_type();
-			// 	first++;
-			// }
+			while (n > 0) {
+				this->_CpyAlloc.destroy(this->_array + _size - n);
+				n--;
+			}
+			this->_size -= std::distance(first, last);
+
 
 
 			// iterator		firstBase = first;

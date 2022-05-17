@@ -18,7 +18,7 @@ class reverse_iterator {
 		typedef typename ft::iterator_traits<Iter>::iterator_category	iterator_category;
 
 		reverse_iterator() : current() {}
-		reverse_iterator(iterator_type x) : current(x) {} // must be explicit
+		explicit reverse_iterator(iterator_type x) : current(x) {} // must be explicit
 		template <class U>
 		reverse_iterator(const reverse_iterator<U>& other) : current(other.base()) {}
 
