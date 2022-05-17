@@ -3,7 +3,7 @@
 
 NAME = Container
 INC_DIR = containers
-FLAGS = -Wall -Wextra -Werror -I. -g -ferror-limit=5
+FLAGS = -Wall -Wextra -Werror -I. -g -ferror-limit=2
 DEFINE_FT = -DUSING_STD=0
 DEFINE_STD = -DUSING_STD=1
 STD = -std=c++98

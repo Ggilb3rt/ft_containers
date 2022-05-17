@@ -28,18 +28,19 @@ class random_access_iterator {
 			return *this;
 		}
 
-		pointer	base() const {return this->_arr_ptr;}
+		const pointer &base() const {return _arr_ptr;}
 
 		reference operator*() const {return *_arr_ptr;}
 		pointer operator->() const {return &(this->operator*());}
-		// const_reference operator*() const {std::cout << "Const hello"; return *_arr_ptr;}
 
 		// bool operator== (const random_access_iterator& rhs) {return this->_arr_ptr == rhs._arr_ptr;};
 		// bool operator!= (const random_access_iterator& rhs) {return !(*this == rhs);};
-		bool operator>(random_access_iterator const & rhs) const { return this->_arr_ptr > rhs._arr_ptr;}
+		bool operator>(random_access_iterator & rhs) { return this->_arr_ptr > rhs._arr_ptr;}
+		bool operator<(random_access_iterator & rhs) { return this->_arr_ptr < rhs._arr_ptr;}
 		bool operator>=(random_access_iterator const & rhs) const { return this->_arr_ptr >= rhs._arr_ptr;}
-		bool operator<(random_access_iterator const & rhs) const { return this->_arr_ptr < rhs._arr_ptr;}
 		bool operator<=(random_access_iterator const & rhs) const { return this->_arr_ptr <= rhs._arr_ptr;}
+		friend bool operator>(random_access_iterator const & lhs, random_access_iterator const & rhs) { return lhs._arr_ptr > rhs._arr_ptr;}
+		friend bool operator<(random_access_iterator const & lhs, random_access_iterator const & rhs) { return lhs._arr_ptr < rhs._arr_ptr;}
 
 		random_access_iterator& operator++() {_arr_ptr++; return *this;}
 		random_access_iterator operator++(int) {random_access_iterator tmp = *this; ++(*this); return tmp;}
@@ -116,7 +117,6 @@ bool operator<= (const ft::random_access_iterator<T_L> lhs,
 		return lhs.base() <= rhs.base();
 };
 
-
 template <typename T>
 bool operator> (const ft::random_access_iterator<T> lhs,
 			const ft::random_access_iterator<T> rhs) {
@@ -146,7 +146,8 @@ bool operator>= (const ft::random_access_iterator<T_L> lhs,
 
 
 template <typename T>
-ft::random_access_iterator<T> operator+(
+ft::random_access_iterator<T>
+operator+(
 	typename ft::random_access_iterator<T>::difference_type n,
 	typename ft::random_access_iterator<T>& el) {
 		return &(*el) + n;
