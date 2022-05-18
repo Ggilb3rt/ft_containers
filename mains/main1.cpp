@@ -3,13 +3,17 @@
 
 #include "../containers/vector/vector.hpp"
 #include "../containers/stack/stack.hpp"
-#include "../containers/map/pair.hpp"
+#include "../containers/utils/pair.hpp"
 #include "../containers/map/map.hpp"
 
+
+#include "../containers/map/binary_search_tree.hpp"
 
 #include <vector>
 #include <stack>
 #include <map>
+
+
 
 
 
@@ -991,6 +995,23 @@ int main() {
 	// 		std::cout << *it << std::endl;
 	// 	}
 	// }
+
+
+{
+	TYPE::map<char, int> lol;
+
+
+	binary_search_tree<int> b;
+	// b.newNode(23);
+	b.insert(b.get_root(), 234);
+
+	b.print();
+
+
+
+}
+
+
 
 
 	create_header("value_comp()");
