@@ -4,7 +4,7 @@
 #include "../containers/vector/vector.hpp"
 #include "../containers/stack/stack.hpp"
 #include "../containers/map/pair.hpp"
-// #include "../containers/map/map.hpp"
+#include "../containers/map/map.hpp"
 
 
 #include <vector>
@@ -969,10 +969,10 @@ using namespace ft;
 
 int main() {
 
-	megaTest();
-	iterator_tests();
-	stack_tests();
-	utils_tests();
+	// megaTest();
+	// iterator_tests();
+	// stack_tests();
+	// utils_tests();
 
 
 	// {
