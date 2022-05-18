@@ -9,14 +9,11 @@
 #include <iterator>
 #include "vector_iterator.hpp"
 #include "reverse_iterator.hpp"
-#include "is_integral.hpp"
-#include "enable_if.hpp"
-#include "lexicographical_compare.hpp"
-#include "equal.hpp"
+#include "../utils/is_integral.hpp"
+#include "../utils/enable_if.hpp"
+#include "../utils/lexicographical_compare.hpp"
+#include "../utils/equal.hpp"
 
-
-// to remove
-// #include <algorithm>
 
 namespace ft {
 
@@ -36,7 +33,13 @@ class	vector {
 		typedef typename std::ptrdiff_t						difference_type;
 		typedef size_t										size_type;
 
-
+	private:
+		value_type*			_array;
+		allocator_type	_CpyAlloc;
+		size_type	_size;
+		size_type	_reserve;
+	
+	public :
 	/****************************/
 	/*	Constructors/Destructor	*/
 	/****************************/
@@ -107,12 +110,9 @@ class	vector {
 		// Destructor
 		~vector()
 		{
-			//use .clear() ?
 			if (_array) {
-				for (size_type i = 0; i < _size; i++) {
-					_CpyAlloc.destroy((_array + i));
-				}
-					_CpyAlloc.deallocate(_array, _reserve);
+				this->clear();
+				_CpyAlloc.deallocate(_array, _reserve);
 			}
 		};
 
@@ -145,6 +145,8 @@ class	vector {
 		
 		reverse_iterator	rbegin() {return reverse_iterator(this->end());}
 		reverse_iterator	rend() {return reverse_iterator(this->begin());}
+		const_reverse_iterator	rbegin() const {return const_reverse_iterator(this->end());}
+		const_reverse_iterator	rend() const {return const_reverse_iterator(this->begin());}
 
 
 	/****************************/
@@ -164,7 +166,6 @@ class	vector {
 			if (n > _size) {
 				for (size_type i = _size; i < n; i++) {
 					push_back(val);
-					// _CpyAlloc.construct((_array + i), val);
 				}
 			}
 			_size = n;
@@ -198,7 +199,7 @@ class	vector {
 	/****************************/
 	/*			El access		*/
 	/****************************/
-		reference	at(size_type n) {
+		reference		at(size_type n) {
 			if (n >= this->_size)
 			{
 				std::stringstream ss;
@@ -220,9 +221,9 @@ class	vector {
 			}
 			return this->_array[n];
 		}
-		reference	front() {return (this->_array[0]);}
+		reference		front() {return (this->_array[0]);}
 		const_reference	front() const{return (this->_array[0]);}
-		reference	back() { return (this->_array[this->_size - 1]);}
+		reference		back() { return (this->_array[this->_size - 1]);}
 		const_reference	back() const{ return (this->_array[this->_size - 1]);}
 
 
@@ -293,26 +294,26 @@ class	vector {
 
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
-			insert(iterator position, InputIterator first, InputIterator last) {
-					size_type				n = std::distance(first, last);
-					if (n == 0)
-						return ;
-					ft::vector<value_type>	tmp(*this);
-					size_type				start_pos = std::distance(this->begin(), position);
-					iterator				tmp_position = tmp.begin() + start_pos;
-					
-					if (_size + n >= _reserve * 2)
-						this->reserve(_size + n);
-					else if (_size + n >= _reserve)
-						this->reserve(_size * 2);
+		insert(iterator position, InputIterator first, InputIterator last) {
+			size_type				n = std::distance(first, last);
+			if (n == 0)
+				return ;
+			ft::vector<value_type>	tmp(*this);
+			size_type				start_pos = std::distance(this->begin(), position);
+			iterator				tmp_position = tmp.begin() + start_pos;
+			
+			if (_size + n >= _reserve * 2)
+				this->reserve(_size + n);
+			else if (_size + n >= _reserve)
+				this->reserve(_size * 2);
 
-					this->assign(tmp.begin(), tmp_position);
-					while (first < last) {
-						this->push_back(*first);
-						first++;
-					}
-					for (iterator it = tmp_position; it < tmp.end(); it++)
-						this->push_back(*it);
+			this->assign(tmp.begin(), tmp_position);
+			while (&(*first) < &(*last)) {
+				this->push_back(*first);
+				first++;
+			}
+			for (iterator it = tmp_position; it < tmp.end(); it++)
+				this->push_back(*it);
 		}
 		iterator	erase(iterator position) {
 			erase(position, position + 1);
@@ -337,8 +338,6 @@ class	vector {
 			return firstBase;
 		}
 		void	swap(vector& x) {
-			// cf iterator validity : l'iterator pointe vers la meme adrss apres le swap
-			// cf complexity : constant ==> must only swap pointer to data and size
 			T*			tmpArray = this->_array;
 			size_type	tmpSize = this->_size;
 			size_type	tmpReserve = this->_reserve;
@@ -361,66 +360,52 @@ class	vector {
 	/*			Allocator		*/
 	/****************************/
 		allocator_type	get_allocator() const {return this->_CpyAlloc;}
-
-
-		void	_print(void) {
-			std::cout << "[ ";
-			for (iterator it = this->begin(); it < this->end(); it++)
-				std::cout << *it << ", ";
-			std::cout << "]" << std::endl;
-		}
-	private:
-		value_type*			_array;
-		allocator_type	_CpyAlloc;
-		size_type	_size;
-		size_type	_reserve;
-
 };
 
 	/****************************/
 	/*			Non-member		*/
 	/****************************/
-	template <class T, class Alloc>
-	bool operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
-		if (lhs.size() != rhs.size())
-			return false;
-		typename ft::vector<T>::const_iterator	first = lhs.begin();
-		typename ft::vector<T>::const_iterator	last = lhs.end();
-		if (!(ft::equal(lhs.begin(), lhs.end(), rhs.begin()))) {
-			return false;
-		}
-		return true;
+template <class T, class Alloc>
+bool operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
+	if (lhs.size() != rhs.size())
+		return false;
+	typename ft::vector<T>::const_iterator	first = lhs.begin();
+	typename ft::vector<T>::const_iterator	last = lhs.end();
+	if (!(ft::equal(lhs.begin(), lhs.end(), rhs.begin()))) {
+		return false;
 	}
+	return true;
+}
 
-	template <class T, class Alloc>
-	bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return !(lhs == rhs);
-	}
+template <class T, class Alloc>
+bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	return !(lhs == rhs);
+}
 
-	template <class T, class Alloc>
-	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
-	}
+template <class T, class Alloc>
+bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
 
-	template <class T, class Alloc>
-	bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return !(rhs < lhs);
-	}
+template <class T, class Alloc>
+bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	return !(rhs < lhs);
+}
 
-	template <class T, class Alloc>
-	bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return rhs < lhs;
-	}
+template <class T, class Alloc>
+bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	return rhs < lhs;
+}
 
-	template <class T, class Alloc>
-	bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return !(lhs < rhs);
-	}
+template <class T, class Alloc>
+bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	return !(lhs < rhs);
+}
 
-	template <class T, class Alloc>
-	void	swap(vector<T,Alloc>&x, vector<T,Alloc>& y) {
-		x.swap(y);
-	}
+template <class T, class Alloc>
+void	swap(vector<T,Alloc>&x, vector<T,Alloc>& y) {
+	x.swap(y);
+}
 
 } // end namespace ft
 

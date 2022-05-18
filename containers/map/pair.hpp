@@ -1,7 +1,7 @@
 #ifndef PAIR_HPP
 #define PAIR_HPP
 
-#include "../lexicographical_compare.hpp"
+#include "../utils/lexicographical_compare.hpp"
 
 namespace ft {
 

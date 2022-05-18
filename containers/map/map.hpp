@@ -9,13 +9,13 @@
 #include <iterator>
 
 #include "pair.hpp"
-#include "../enable_if.hpp"
-#include "../is_integral.hpp"
+#include "../utils/enable_if.hpp"
+#include "../utils/is_integral.hpp"
 
 namespace ft {
 
 template < class Key, class T, class Compare = std::less<Key>,
-			class Alloc = std::allocator<pair<const Key, T>> >
+			class Alloc = std::allocator<pair<const Key, T> > >
 class	map
 {
 	public:
