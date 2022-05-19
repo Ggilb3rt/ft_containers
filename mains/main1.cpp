@@ -9,6 +9,7 @@
 
 #include "../containers/map/binary_search_tree.hpp"
 
+
 #include <vector>
 #include <stack>
 #include <map>
@@ -996,23 +997,82 @@ int main() {
 	// 	}
 	// }
 
+{
+	create_header("Easy rotate");
+	TYPE::map<char, int> lol;
+	
+	binary_search_tree<int> b;
+	b.insert(12);
+	b.insert(8);
+	b.insert(2);
+
+
+	b.print_tree(b.get_root());
+	b.rotate_right(b.get_root());
+	b.print_tree(b.get_root());
+}
 
 {
+	create_header("Rotate left right");
+	TYPE::map<char, int> lol;
+	
+	binary_search_tree<int> b;
+	b.insert(12);
+	b.insert(8);
+	b.insert(10);
+
+
+	b.print_tree(b.get_root());
+	b.rotate_left_right(b.get_root());
+	b.print_tree(b.get_root());
+}
+
+
+{
+	create_header("More fun");
 	TYPE::map<char, int> lol;
 
 
 	binary_search_tree<int> b;
-	// b.newNode(23);
 	b.insert(12);
 	b.insert(234);
 	b.insert(2);
+	// b.insert(1);
+	// b.insert(3);
 	b.insert(23);
+	b.insert(13);
+	b.insert(54);
 
-	b.print(b.get_root());
+	std::cout << "Search : " << b.search(2)->data << std::endl;
+
+	std::cout << "Start tree" << std::endl;
+	b.print_tree(b.get_root());
+
+	std::cout << std::endl << std::endl << "Rotate left" ;
+	b.rotate_left(b.get_root());
+	b.print_tree(b.get_root());
+
+	std::cout << std::endl << std::endl << "Rotate right";
+	b.rotate_right(b.get_root());
+	b.print_tree(b.get_root());
 
 
+	create_header("rotate inside");
+	b.rotate_left(b.get_root());
+	b.print_tree(b.get_root());
+	b.rotate_right(b.search(12));
+	b.print_tree(b.get_root());
 
+	b.rotate_left(b.search(23));
+	b.print_tree(b.get_root());
+
+	std::cout << std::endl << std::endl << "Fuck" ;
+	b.rotate_right(b.search(54));
+	b.print_tree(b.get_root());
 }
+
+
+
 
 
 
