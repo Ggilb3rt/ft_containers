@@ -1101,52 +1101,53 @@ int main() {
 	std::cout << std::endl << std::endl << "Try to balance" ;
 	b.rotate_left_right(b.get_root());
 	b.rotate_left_right(b.search(234));
+	// b.print_tree(b.get_root());
+	b.rotate_right(b.search(54));
+	b.rotate_left(b.search(54));
 	b.print_tree(b.get_root());
-	b.rotate_left(b.get_root());
-	b.print_tree(b.get_root());
 }
 
 
 
+std::cout << std::endl;
 
 
 
+// 	create_header("value_comp()");
+// {
+// 	std::map<char,int> mymap;
 
-	create_header("value_comp()");
-{
-	std::map<char,int> mymap;
+// 	mymap['x']=1001;
+// 	mymap['y']=2002;
+// 	mymap['z']=3003;
 
-	mymap['x']=1001;
-	mymap['y']=2002;
-	mymap['z']=3003;
+// 	std::cout << "mymap contains:\n";
 
-	std::cout << "mymap contains:\n";
+// 	std::pair<char,int> highest = *mymap.rbegin();          // last element
 
-	std::pair<char,int> highest = *mymap.rbegin();          // last element
+// 	std::map<char,int>::iterator it = mymap.begin();
+// 	do {
+// 		std::cout << it->first << " => " << it->second
+// 		<< " " << mymap.value_comp()(*it, highest) << '\n';
+// 	} while ( mymap.value_comp()(*it++, highest) );
 
-	std::map<char,int>::iterator it = mymap.begin();
-	do {
-		std::cout << it->first << " => " << it->second
-		<< " " << mymap.value_comp()(*it, highest) << '\n';
-	} while ( mymap.value_comp()(*it++, highest) );
+// }
 
-}
+// 	create_header("Basic Map");
+// {
+// 	std::map<std::string, int> base;
 
-	create_header("Basic Map");
-{
-	std::map<std::string, int> base;
+// 	base["salut"] = 1;
+// 	base["les"] = 8;
+// 	base["poulets"] = -12;
+// 	base["."] = 199;
+// 	base["a"] = 199;
+// 	base["a"] = 234;
 
-	base["salut"] = 1;
-	base["les"] = 8;
-	base["poulets"] = -12;
-	base["."] = 199;
-	base["a"] = 199;
-	base["a"] = 234;
-
-	for (std::map<std::string, int>::iterator it = base.begin(); it != base.end(); it++) {
-		std::cout << it->first << " => " << it->second << std::endl;
-	}
-}
+// 	for (std::map<std::string, int>::iterator it = base.begin(); it != base.end(); it++) {
+// 		std::cout << it->first << " => " << it->second << std::endl;
+// 	}
+// }
 
 
 

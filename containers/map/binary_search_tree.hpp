@@ -48,7 +48,7 @@ class binary_search_tree
 
 		void		insert(value_type val) {
 			_root = insert_in_tree(this->get_root(), val, NULL);
-			// this->balance();
+			this->balance_insert();
 		};
 		node_type	*search(value_type val) {
 			return search_in_tree(this->_root, val);
@@ -107,6 +107,10 @@ class binary_search_tree
 			return current;
 		};
 
+		void	balance_insert() {
+
+		}
+
 		void	clear(node_type *current) {
 			if (current->right)
 				clear(current->right);
@@ -148,7 +152,7 @@ class binary_search_tree
 			}
 			y->parent = x->parent;
 			if (x->parent == NULL) {
-				y->parent = NULL;
+				// y->parent = NULL;
 				this->_root = y;
 			}
 			else if (is_child_left(x)) {
