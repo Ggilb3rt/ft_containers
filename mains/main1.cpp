@@ -1003,9 +1003,12 @@ int main() {
 
 	binary_search_tree<int> b;
 	// b.newNode(23);
-	b.insert(b.get_root(), 234);
+	b.insert(12);
+	b.insert(234);
+	b.insert(2);
+	b.insert(23);
 
-	b.print();
+	b.print(b.get_root());
 
 
 

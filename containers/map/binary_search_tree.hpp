@@ -30,39 +30,61 @@ template <class T, class Alloc = std::allocator<node<T> > >
 class binary_search_tree
 {
 	public:
-		typedef T		value_type;
-		typedef Alloc	alloc;
-
-	private:
-		node<value_type>	*_root;
-		alloc				_CpyAlloc;
+		typedef T						value_type;
+		typedef Alloc					alloc;
+		typedef node<value_type>		node_type;
 
 	public:
 		binary_search_tree() : _root(NULL) {};
-		~binary_search_tree() {_CpyAlloc.destroy(_root); _CpyAlloc.deallocate(_root, 1);};
+		~binary_search_tree() {this->clear(_root);};
 
-		node<value_type> *newNode(value_type val) {
-			_root = _CpyAlloc.allocate(1);
-			_CpyAlloc.construct(_root, val);
+		node_type	*get_root() {return _root;};
 
-			return _root;
+		node_type *newNode(value_type val, node_type *parent) {
+			node_type	*tmp;
+
+			tmp = _CpyAlloc.allocate(1);
+			_CpyAlloc.construct(tmp, val);
+			tmp->parent = parent;
+			return tmp;
 		};
 
-		node<value_type> *insert(node<value_type> *current, value_type val) {
+		void		insert(value_type val) {
+			_root = insert_in_tree(this->get_root(), val, NULL);
+			// this->balance();
+		};
+
+		void	print(node_type *current) {
+			if (current->right)
+				print(current->right);
+			if (current->left)
+				print(current->left);
+			std::cout << current->get_data() << std::endl;
+		};
+
+
+	private:
+		node_type	*_root;
+		alloc				_CpyAlloc;
+
+		node_type *insert_in_tree(node_type *current, value_type val, node_type *parent) {
 			if (current == NULL)
-				return (newNode(val));
-			if (val <= current->data)
-				current->left = insert(current->left, val);
+				return (newNode(val, parent));
+			if (val <= current->data) // = pas forcement necessaire si clef unique
+				current->left = insert_in_tree(current->left, val, current);
 			else if (val > current->data)
-				current->right = insert(current->right, val);
+				current->right = insert_in_tree(current->right, val, current);
 			return current;
 		};
 
-		void	print() {
-			std::cout << _root->get_data() << std::endl;
+		void	clear(node_type *current) {
+			if (current->right)
+				clear(current->right);
+			if (current->left)
+				clear(current->left);
+			this->_CpyAlloc.destroy(current);
+			this->_CpyAlloc.deallocate(current, 1);
 		};
-
-		node<value_type>	*get_root() {return _root;};
 };
 
 
