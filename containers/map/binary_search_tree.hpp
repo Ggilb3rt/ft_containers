@@ -140,23 +140,23 @@ class binary_search_tree
 
 			if (y == NULL)
 				return ;
-			if (y->left == NULL)	//!probleme
-				x->right = NULL;
-			else if (y->left) {
+			x->right = y->left;
+			if (y->left) {
 				y->left->parent = x;
-				x->right = y->left;
+				// x->right = y->left;
 				y->left = NULL;
 			}
+			y->parent = x->parent;
 			if (x->parent == NULL) {
 				y->parent = NULL;
 				this->_root = y;
 			}
 			else if (is_child_left(x)) {
-				y->parent = x->parent->left;
+				// y->parent = x->parent->left;
 				x->parent->left = y;
 			}
-			else if (!is_child_left(x)) {
-				y->parent = x->parent->right;
+			else {
+				// y->parent = x->parent->right;
 				x->parent->right = y;
 			}
 			x->parent = y;
@@ -174,45 +174,41 @@ class binary_search_tree
 		*/
 		void	rotate_right(node_type *x) {
 			node_type	*y = x->left;
-
-			// probleme de parent de y == null
-
-			print_node(x, 'x');
+			// node_type	*a, *b, *c, *p;
 
 			if (y == NULL)
 				return ;
-			if (y->right == NULL)	//! probleme
-				x->left = NULL;				//			p
+			x->left = y->right;				//			p
 			if (y->right) {					//			|
 				y->right->parent = x;		//		Y	X
-				x->left = y->right;			//	   /   / \		//
+				// x->left = y->right;		//	   /   / \		//
 				y->right = NULL;			//	  b	  c   a
 			}
+			y->parent = x->parent;
 			if (x->parent == NULL) {
-				y->parent = NULL;
+				// y->parent = NULL;
 				this->_root = y;
 			}
 			else if (is_child_left(x)) {
-				std::cout << "aaaaaaa " << &(*x->parent->left) << std::endl;
-				y->parent = x->parent->left;
+				// y->parent = x->parent->left;
 				x->parent->left = y;
 			}
 			else {
-				std::cout << "bbbbbbb " << &(*x->parent->right) << std::endl;
-				y->parent = x->parent->right;
+				// y->parent = x->parent->right;
 				x->parent->right = y;
 			}
 			x->parent = y;
 			y->right = x;
-
-			print_node(x, 'x');
-			print_node(y, 'y');
 		}
-
 
 		void	rotate_left_right(node_type *z) {
 			this->rotate_left(z->left);
 			this->rotate_right(z);
+		}
+
+		void	rotate_right_left(node_type *z) {
+			this->rotate_right(z->right);
+			this->rotate_left(z);
 		}
 
 

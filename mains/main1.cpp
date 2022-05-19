@@ -1027,6 +1027,22 @@ int main() {
 	b.print_tree(b.get_root());
 }
 
+// {
+// 	create_header("Rotate right left");
+// 	TYPE::map<char, int> lol;
+	
+// 	binary_search_tree<int> b;
+// 	b.insert(12);
+// 	b.insert(65);
+// 	b.insert(34);
+
+
+// 	b.print_tree(b.get_root());
+// 	// b.rotate_left_right(b.get_root());
+// 	b.print_tree(b.get_root());
+// }
+
+
 
 {
 	create_header("More fun");
@@ -1048,26 +1064,45 @@ int main() {
 	std::cout << "Start tree" << std::endl;
 	b.print_tree(b.get_root());
 
-	std::cout << std::endl << std::endl << "Rotate left" ;
+	std::cout << std::endl << std::endl << "Rotate left on root" ;
 	b.rotate_left(b.get_root());
 	b.print_tree(b.get_root());
 
-	std::cout << std::endl << std::endl << "Rotate right";
+	std::cout << std::endl << std::endl << "Rotate right on root";
 	b.rotate_right(b.get_root());
 	b.print_tree(b.get_root());
 
 
-	create_header("rotate inside");
+	// create_header("rotate inside");
+	std::cout << std::endl << std::endl << "Left rotate on root" ;
 	b.rotate_left(b.get_root());
 	b.print_tree(b.get_root());
+
+	std::cout << std::endl << std::endl << "Right rotate on 12" ;
 	b.rotate_right(b.search(12));
 	b.print_tree(b.get_root());
 
+	std::cout << std::endl << std::endl << "Left rotate on 23" ;
 	b.rotate_left(b.search(23));
 	b.print_tree(b.get_root());
 
-	std::cout << std::endl << std::endl << "Fuck" ;
+	std::cout << std::endl << std::endl << "Right rotate on 54" ;
 	b.rotate_right(b.search(54));
+	b.print_tree(b.get_root());
+
+	std::cout << std::endl << std::endl << "Right rotate on 13 (do nothing)" ;
+	b.rotate_right(b.search(13));
+	b.print_tree(b.get_root());
+	std::cout << std::endl << std::endl << "Left rotate on 13 (do nothing)" ;
+	b.rotate_left(b.search(13));
+	b.print_tree(b.get_root());
+
+
+	std::cout << std::endl << std::endl << "Try to balance" ;
+	b.rotate_left_right(b.get_root());
+	b.rotate_left_right(b.search(234));
+	b.print_tree(b.get_root());
+	b.rotate_left(b.get_root());
 	b.print_tree(b.get_root());
 }
 
