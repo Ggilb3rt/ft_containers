@@ -2,14 +2,17 @@
 
 // You can change those define
 
-
 #define __NODE node<value_type> // name of your strucure/class which contain your node
 #define __VALUE data // name of your value variable in your structure/class
 #define __SIZE 5 // size between nodes (only for display)
-#define __ROOT _root // name of root variable in your structure/class
+#define __ROOT _root // name of your tree's root variable
+#define __IS_BLACK color // name of the bool variable for the color of nodes
 
 ///////////////////////////////////////////////////////////////////////////////////
 
+# define T_BLACK "\033[40m"
+# define T_RED "\e[1;41m"
+# define STOP "\033[0m"
 
 private:
 
@@ -87,7 +90,10 @@ void print_tree(__NODE *ptr, int level = 0, bool is_right = 0)
 			tmp.push_back(count_btw_p(ptr->left, 0));
 			aff.push_back(tmp);
 		}
-		std::cout << ptr->__VALUE ;
+		 if (ptr->__IS_BLACK)
+			std::cout << T_BLACK << ptr->__VALUE << STOP;
+		else
+			std::cout  << T_RED << ptr->__VALUE << STOP;
 		print_tree(ptr->left, level + 1, 0);
 	}
 }

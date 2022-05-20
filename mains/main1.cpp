@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <iterator>
 
 #include "../containers/vector/vector.hpp"
@@ -1007,8 +1009,8 @@ int main() {
 	b.insert(2);
 
 
-	b.print_tree(b.get_root());
-	b.rotate_right(b.get_root());
+	// b.print_tree(b.get_root());
+	// b.rotate_right(b.get_root());
 	b.print_tree(b.get_root());
 }
 
@@ -1022,8 +1024,8 @@ int main() {
 	b.insert(10);
 
 
-	b.print_tree(b.get_root());
-	b.rotate_left_right(b.get_root());
+	// b.print_tree(b.get_root());
+	// b.rotate_left_right(b.get_root());
 	b.print_tree(b.get_root());
 }
 
@@ -1053,60 +1055,80 @@ int main() {
 	b.insert(12);
 	b.insert(234);
 	b.insert(2);
-	// b.insert(1);
-	// b.insert(3);
+	b.insert(1);
+	b.insert(3);
 	b.insert(23);
-	b.insert(13);
 	b.insert(54);
+	b.insert(13);
 
-	std::cout << "Search : " << b.search(2)->data << std::endl;
+b.print_tree(b.get_root());
 
-	std::cout << "Start tree" << std::endl;
-	b.print_tree(b.get_root());
+	// std::cout << "Depth : " << b.tree_depth(b.get_root());
+	// std::cout << "Search : " << b.search(2)->data << std::endl;
 
-	std::cout << std::endl << std::endl << "Rotate left on root" ;
-	b.rotate_left(b.get_root());
-	b.print_tree(b.get_root());
-
-	std::cout << std::endl << std::endl << "Rotate right on root";
-	b.rotate_right(b.get_root());
-	b.print_tree(b.get_root());
-
-
-	// create_header("rotate inside");
-	std::cout << std::endl << std::endl << "Left rotate on root" ;
-	b.rotate_left(b.get_root());
-	b.print_tree(b.get_root());
-
-	std::cout << std::endl << std::endl << "Right rotate on 12" ;
-	b.rotate_right(b.search(12));
-	b.print_tree(b.get_root());
-
-	std::cout << std::endl << std::endl << "Left rotate on 23" ;
-	b.rotate_left(b.search(23));
-	b.print_tree(b.get_root());
-
-	std::cout << std::endl << std::endl << "Right rotate on 54" ;
-	b.rotate_right(b.search(54));
-	b.print_tree(b.get_root());
-
-	std::cout << std::endl << std::endl << "Right rotate on 13 (do nothing)" ;
-	b.rotate_right(b.search(13));
-	b.print_tree(b.get_root());
-	std::cout << std::endl << std::endl << "Left rotate on 13 (do nothing)" ;
-	b.rotate_left(b.search(13));
-	b.print_tree(b.get_root());
-
-
-	std::cout << std::endl << std::endl << "Try to balance" ;
-	b.rotate_left_right(b.get_root());
-	b.rotate_left_right(b.search(234));
+	// std::cout << "Start tree" << std::endl;
 	// b.print_tree(b.get_root());
-	b.rotate_right(b.search(54));
-	b.rotate_left(b.search(54));
-	b.print_tree(b.get_root());
+
+	// std::cout << std::endl << std::endl << "Rotate left on root" ;
+	// b.rotate_left(b.get_root());
+	// b.print_tree(b.get_root());
+
+	// std::cout << std::endl << std::endl << "Rotate right on root";
+	// b.rotate_right(b.get_root());
+	// b.print_tree(b.get_root());
+
+
+	// // create_header("rotate inside");
+	// std::cout << std::endl << std::endl << "Left rotate on root" ;
+	// b.rotate_left(b.get_root());
+	// b.print_tree(b.get_root());
+
+	// std::cout << std::endl << std::endl << "Right rotate on 12" ;
+	// b.rotate_right(b.search(12));
+	// b.print_tree(b.get_root());
+	// std::cout << "Depth : " << b.tree_depth(b.get_root()) << std::endl;
+
+
+	// std::cout << std::endl << std::endl << "Left rotate on 23" ;
+	// b.rotate_left(b.search(23));
+	// b.print_tree(b.get_root());
+
+	// std::cout << std::endl << std::endl << "Right rotate on 54" ;
+	// b.rotate_right(b.search(54));
+	// b.print_tree(b.get_root());
+
+	// std::cout << std::endl << std::endl << "Right rotate on 13 (do nothing)" ;
+	// b.rotate_right(b.search(13));
+	// b.print_tree(b.get_root());
+	// std::cout << std::endl << std::endl << "Left rotate on 13 (do nothing)" ;
+	// // b.rotate_left(b.search(13));
+	// // b.print_tree(b.get_root());
+
+
+	// std::cout << std::endl << std::endl << "Try to balance" ;
+	// b.rotate_left_right(b.get_root());
+	// b.rotate_left_right(b.search(234));
+	// // b.print_tree(b.get_root());
+	// b.rotate_right(b.search(54));
+	// b.rotate_left(b.search(54));
+	// b.print_tree(b.get_root());
 }
 
+create_header("Let's go random !!!");
+{
+	binary_search_tree<int> b;
+
+	std::srand(std::time(nullptr)); // use current time as seed for random generator
+	// int random_variable = std::rand();
+	std::cout << "Random value on [-500 500]: " << std::endl;
+
+	// roll 6-sided dice 20 times
+	for (int n=0; n != 20; ++n) {
+		int x = -500 + (std::rand() % (500 - (-500) + 1));
+		b.insert(x);
+	}
+	b.print_tree(b.get_root());
+}
 
 
 std::cout << std::endl;

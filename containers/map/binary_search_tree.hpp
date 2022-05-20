@@ -11,6 +11,9 @@
 
 namespace ft {
 
+#define	BLACK 1
+#define	RED 0
+
 template <class T>
 struct	node {
 
@@ -48,7 +51,7 @@ class binary_search_tree
 
 		void		insert(value_type val) {
 			_root = insert_in_tree(this->get_root(), val, NULL);
-			this->balance_insert();
+			this->rb_insert_fixup(this->search(val));
 		};
 		node_type	*search(value_type val) {
 			return search_in_tree(this->_root, val);
@@ -73,6 +76,7 @@ class binary_search_tree
 
 	private:
 		node_type	*_root;
+		node_type	*_last_add;
 		alloc		_CpyAlloc;
 
 		node_type *newNode(value_type val, node_type *parent) {
@@ -81,7 +85,11 @@ class binary_search_tree
 			tmp = _CpyAlloc.allocate(1);
 			_CpyAlloc.construct(tmp, val);
 			tmp->parent = parent;
-			tmp->color = parent == NULL ? 1 : 0;
+			tmp->left = NULL;
+			tmp->right = NULL;
+			// tmp->color = parent == NULL ? BLACK : RED;
+			tmp->color = RED;
+			this->_last_add = tmp;
 
 			return tmp;
 		};
@@ -107,8 +115,55 @@ class binary_search_tree
 			return current;
 		};
 
-		void	balance_insert() {
+		void	rb_insert_fixup(node_type *z) {
+			// std::cout << tree_depth(_root) << std::endl;
 
+			//! need to add getter for parent, grand parent and uncle
+			if (tree_depth(_root) >= 2) {
+				while (z != this->_root && z->parent->color == RED) {
+					if (z->parent == z->parent->parent->left) {
+						node_type	*y = z->parent->parent->right;	// uncle
+						
+						if (y && y->color == RED) {						// case 1
+							z->parent->color = BLACK;
+							y->color = BLACK;
+							z->parent->parent->color = RED;
+							z = z->parent->parent;
+						}
+						else if (z == z->parent->right) {			// case 2
+							z = z->parent;
+							rotate_left(z);
+						}
+						//! cette condition empeche le segfault mais empeche aussi le fonctionnement normal
+						if (z != this->_root && z != this->_root->left && z != this->_root->right) {
+							z->parent->color = BLACK;					// case 3
+							z->parent->parent->color = RED;
+							rotate_right(z->parent->parent);
+						}
+					}
+					else {											// same but switch left and right
+						node_type	*y = z->parent->parent->left;	// uncle
+						
+						if (y && y->color == RED) {						// case 1
+							z->parent->color = BLACK;
+							y->color = BLACK;
+							z->parent->parent->color = RED;
+							z = z->parent->parent;
+						}
+						else if (z == z->parent->left) {			// case 2
+							z = z->parent;
+							rotate_right(z);
+						}
+						//! cette condition empeche le segfault mais empeche aussi le fonctionnement normal
+						if (z != this->_root && z != this->_root->left && z != this->_root->right) {
+							z->parent->color = BLACK;					// case 3
+							z->parent->parent->color = RED;
+							rotate_left(z->parent->parent);
+						}
+					}
+				}
+			}
+			this->_root->color = BLACK;
 		}
 
 		void	clear(node_type *current) {
@@ -121,7 +176,19 @@ class binary_search_tree
 		};
 
 
-	public: //temporaire
+	// public: //temporaire
+
+
+		size_t	tree_depth(node_type *el, size_t depth = 0, size_t max_depth = 0) {
+			// Do not works
+			if (el != NULL && el->right)
+				return tree_depth(el->right, depth + 1, (depth > max_depth ? depth : max_depth));
+			if (el != NULL && el->left)
+				return tree_depth(el->left, depth + 1, (depth > max_depth ? depth : max_depth));
+			// std::cout << "depth " << depth << " | max " << max_depth << std::endl;
+			return (depth > max_depth ? depth : max_depth);
+		}
+
 		// ROTATIONS
 
 		bool	is_child_left(node_type *current) {
@@ -147,22 +214,15 @@ class binary_search_tree
 			x->right = y->left;
 			if (y->left) {
 				y->left->parent = x;
-				// x->right = y->left;
-				y->left = NULL;
+				y->left = NULL;	// needed ?
 			}
 			y->parent = x->parent;
-			if (x->parent == NULL) {
-				// y->parent = NULL;
+			if (x->parent == NULL)
 				this->_root = y;
-			}
-			else if (is_child_left(x)) {
-				// y->parent = x->parent->left;
+			else if (is_child_left(x))
 				x->parent->left = y;
-			}
-			else {
-				// y->parent = x->parent->right;
+			else
 				x->parent->right = y;
-			}
 			x->parent = y;
 			y->left = x;
 		}
@@ -189,18 +249,12 @@ class binary_search_tree
 				y->right = NULL;			//	  b	  c   a
 			}
 			y->parent = x->parent;
-			if (x->parent == NULL) {
-				// y->parent = NULL;
+			if (x->parent == NULL)
 				this->_root = y;
-			}
-			else if (is_child_left(x)) {
-				// y->parent = x->parent->left;
+			else if (is_child_left(x))
 				x->parent->left = y;
-			}
-			else {
-				// y->parent = x->parent->right;
+			else 
 				x->parent->right = y;
-			}
 			x->parent = y;
 			y->right = x;
 		}
