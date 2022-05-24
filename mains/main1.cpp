@@ -1015,7 +1015,7 @@ int main() {
 }
 
 {
-	create_header("Rotate left right");
+	create_header("Another easy rotate");
 	TYPE::map<char, int> lol;
 	
 	binary_search_tree<int> b;
@@ -1114,17 +1114,33 @@ b.print_tree(b.get_root());
 	// b.print_tree(b.get_root());
 }
 
+// create_header("Why segfault ?");
+// {
+// 	binary_search_tree<int> b;
+
+// 	b.insert(277);
+// 	b.insert(160);
+// 	b.insert(37);
+// 	b.insert(25);
+// 	b.insert(316);
+// 	b.insert(325);
+
+// 	b.print_tree(b.get_root());
+// }
+
 create_header("Let's go random !!!");
 {
 	binary_search_tree<int> b;
 
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 	// int random_variable = std::rand();
-	std::cout << "Random value on [-500 500]: " << std::endl;
+	int nb = 10 + (std::rand() % (50 - 10 + 1));
+	std::cout << "Insert " << nb << " elements with random value on [0 500]: " << std::endl;
 
 	// roll 6-sided dice 20 times
-	for (int n=0; n != 20; ++n) {
-		int x = -500 + (std::rand() % (500 - (-500) + 1));
+	for (int n=0; n != nb; ++n) {
+		int x = 0 + (std::rand() % (500 - 0 + 1));
+		// std::cout << "try to insert : " << x << std::endl;
 		b.insert(x);
 	}
 	b.print_tree(b.get_root());

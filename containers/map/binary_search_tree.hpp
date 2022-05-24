@@ -51,7 +51,7 @@ class binary_search_tree
 
 		void		insert(value_type val) {
 			_root = insert_in_tree(this->get_root(), val, NULL);
-			this->rb_insert_fixup(this->search(val));
+			this->rb_insert_fixup(this->_last_add);
 		};
 		node_type	*search(value_type val) {
 			return search_in_tree(this->_root, val);
@@ -87,8 +87,8 @@ class binary_search_tree
 			tmp->parent = parent;
 			tmp->left = NULL;
 			tmp->right = NULL;
-			// tmp->color = parent == NULL ? BLACK : RED;
-			tmp->color = RED;
+			tmp->color = parent == NULL ? BLACK : RED;
+			// tmp->color = RED;
 			this->_last_add = tmp;
 
 			return tmp;
@@ -115,55 +115,88 @@ class binary_search_tree
 			return current;
 		};
 
-		void	rb_insert_fixup(node_type *z) {
-			// std::cout << tree_depth(_root) << std::endl;
+		node_type	*get_parent(node_type *current) {
+			if (current->parent)
+				return current->parent;
+			// std::cout << "get parent " << current->data << std::endl;
+			return NULL;
+		}
 
+		node_type	*get_grandParent(node_type *current) {
+			return this->get_parent(this->get_parent(current));
+		}
+
+		node_type	*get_uncle(node_type *current) {
+			if (this->get_parent(current) && this->get_parent(current) == this->get_grandParent(current)->left)
+				return this->get_grandParent(current)->right;
+			else if (this->get_parent(current) && this->get_parent(current) == this->get_grandParent(current)->right)
+				return this->get_grandParent(current)->left;
+			return NULL;
+		}
+
+		bool	is_left_grand_parent(node_type *current) {
+			if (this->get_parent(current) == this->get_grandParent(current)->left)
+				return true;
+			return false;
+		}
+
+		bool	is_left_parent(node_type *current) {
+			if (current == this->get_parent(current)->left)
+				return true;
+			return false;
+		}
+
+
+		void	rb_insert_fixup(node_type *z) {
 			//! need to add getter for parent, grand parent and uncle
-			if (tree_depth(_root) >= 2) {
-				while (z != this->_root && z->parent->color == RED) {
-					if (z->parent == z->parent->parent->left) {
-						node_type	*y = z->parent->parent->right;	// uncle
+			// if (tree_depth(_root) >= 2) {
+			// std::cout << (z && !z->color && get_parent(z)->color == RED) << std::endl;
+				while (z && z->color == RED && this->get_parent(z)->color == RED) {
+					if (this->is_left_grand_parent(z)) {
+						node_type	*y = get_uncle(z);					// uncle right
 						
 						if (y && y->color == RED) {						// case 1
-							z->parent->color = BLACK;
+							this->get_parent(z)->color = BLACK;
 							y->color = BLACK;
-							z->parent->parent->color = RED;
-							z = z->parent->parent;
+							this->get_grandParent(z)->color = RED;
+							z = this->get_grandParent(z);
+							// std::cout << "Uncle is red (case 1)" << std::endl;
 						}
-						else if (z == z->parent->right) {			// case 2
-							z = z->parent;
-							rotate_left(z);
-						}
-						//! cette condition empeche le segfault mais empeche aussi le fonctionnement normal
-						if (z != this->_root && z != this->_root->left && z != this->_root->right) {
-							z->parent->color = BLACK;					// case 3
-							z->parent->parent->color = RED;
-							rotate_right(z->parent->parent);
+						else {
+							if (!is_left_parent(z)) {			// case 2
+								z = this->get_parent(z);
+								rotate_left(z);
+							// std::cout << "Case 2" << std::endl;
+							}
+							this->get_parent(z)->color = BLACK;					// case 3
+							this->get_grandParent(z)->color = RED;
+							rotate_right(this->get_grandParent(z));
+							// std::cout << "Case 3" << std::endl;
 						}
 					}
 					else {											// same but switch left and right
-						node_type	*y = z->parent->parent->left;	// uncle
-						
+						node_type	*y = get_uncle(z);	// uncle left
 						if (y && y->color == RED) {						// case 1
-							z->parent->color = BLACK;
+							this->get_parent(z)->color = BLACK;
 							y->color = BLACK;
-							z->parent->parent->color = RED;
-							z = z->parent->parent;
+							this->get_grandParent(z)->color = RED;
+							z = this->get_grandParent(z);
+							// std::cout << "new z " << z->data << std::endl;
 						}
-						else if (z == z->parent->left) {			// case 2
-							z = z->parent;
-							rotate_right(z);
-						}
-						//! cette condition empeche le segfault mais empeche aussi le fonctionnement normal
-						if (z != this->_root && z != this->_root->left && z != this->_root->right) {
-							z->parent->color = BLACK;					// case 3
-							z->parent->parent->color = RED;
-							rotate_left(z->parent->parent);
+						else {
+							if (is_left_parent(z)) {			// case 2
+								z = this->get_parent(z);
+								rotate_right(z);
+							}
+							this->get_parent(z)->color = BLACK;					// case 3
+							this->get_grandParent(z)->color = RED;
+							rotate_left(this->get_grandParent(z));
 						}
 					}
+					this->_root->color = BLACK;
+				// std::cout << "next loop" << std::endl;
 				}
-			}
-			this->_root->color = BLACK;
+			// }
 		}
 
 		void	clear(node_type *current) {
