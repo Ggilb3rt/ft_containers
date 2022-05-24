@@ -9,7 +9,7 @@
 #include "../containers/map/map.hpp"
 
 
-#include "../containers/map/binary_search_tree.hpp"
+#include "../containers/map/red_black_tree.hpp"
 
 
 #include <vector>
@@ -975,7 +975,6 @@ void	printSize(TYPE::vector<T> const &vct, bool print_content = true)
 using namespace ft;
 
 int main() {
-
 	// megaTest();
 	// iterator_tests();
 	// stack_tests();
@@ -1000,58 +999,39 @@ int main() {
 	// }
 
 {
-	create_header("Easy rotate");
-	TYPE::map<char, int> lol;
-	
-	binary_search_tree<int> b;
+	create_header("Easy rotate");	
+	red_black_tree<int> b;
 	b.insert(12);
 	b.insert(8);
 	b.insert(2);
 
-
-	// b.print_tree(b.get_root());
-	// b.rotate_right(b.get_root());
 	b.print_tree(b.get_root());
+	std::cout << std::endl << "Delete 2" << std::endl; 
+	b.rb_delete(b.search(2));
+	b.print_tree(b.get_root());
+	std::cout << std::endl << "Delete 12" << std::endl; 
+	b.rb_delete(b.search(12));
+	b.print_tree(b.get_root());
+	std::cout << std::endl << "Delete 8" << std::endl; 
+	b.rb_delete(b.search(8));
+	b.print_tree(b.get_root());
+
+
 }
 
 {
-	create_header("Another easy rotate");
-	TYPE::map<char, int> lol;
-	
-	binary_search_tree<int> b;
+	create_header("Another easy rotate");	
+	red_black_tree<int> b;
 	b.insert(12);
 	b.insert(8);
 	b.insert(10);
 
-
-	// b.print_tree(b.get_root());
-	// b.rotate_left_right(b.get_root());
 	b.print_tree(b.get_root());
 }
 
-// {
-// 	create_header("Rotate right left");
-// 	TYPE::map<char, int> lol;
-	
-// 	binary_search_tree<int> b;
-// 	b.insert(12);
-// 	b.insert(65);
-// 	b.insert(34);
-
-
-// 	b.print_tree(b.get_root());
-// 	// b.rotate_left_right(b.get_root());
-// 	b.print_tree(b.get_root());
-// }
-
-
-
 {
 	create_header("More fun");
-	TYPE::map<char, int> lol;
-
-
-	binary_search_tree<int> b;
+	red_black_tree<int> b;
 	b.insert(12);
 	b.insert(234);
 	b.insert(2);
@@ -1061,78 +1041,26 @@ int main() {
 	b.insert(54);
 	b.insert(13);
 
-b.print_tree(b.get_root());
-
-	// std::cout << "Depth : " << b.tree_depth(b.get_root());
-	// std::cout << "Search : " << b.search(2)->data << std::endl;
-
-	// std::cout << "Start tree" << std::endl;
-	// b.print_tree(b.get_root());
-
-	// std::cout << std::endl << std::endl << "Rotate left on root" ;
-	// b.rotate_left(b.get_root());
-	// b.print_tree(b.get_root());
-
-	// std::cout << std::endl << std::endl << "Rotate right on root";
-	// b.rotate_right(b.get_root());
-	// b.print_tree(b.get_root());
-
-
-	// // create_header("rotate inside");
-	// std::cout << std::endl << std::endl << "Left rotate on root" ;
-	// b.rotate_left(b.get_root());
-	// b.print_tree(b.get_root());
-
-	// std::cout << std::endl << std::endl << "Right rotate on 12" ;
-	// b.rotate_right(b.search(12));
-	// b.print_tree(b.get_root());
-	// std::cout << "Depth : " << b.tree_depth(b.get_root()) << std::endl;
-
-
-	// std::cout << std::endl << std::endl << "Left rotate on 23" ;
-	// b.rotate_left(b.search(23));
-	// b.print_tree(b.get_root());
-
-	// std::cout << std::endl << std::endl << "Right rotate on 54" ;
-	// b.rotate_right(b.search(54));
-	// b.print_tree(b.get_root());
-
-	// std::cout << std::endl << std::endl << "Right rotate on 13 (do nothing)" ;
-	// b.rotate_right(b.search(13));
-	// b.print_tree(b.get_root());
-	// std::cout << std::endl << std::endl << "Left rotate on 13 (do nothing)" ;
-	// // b.rotate_left(b.search(13));
-	// // b.print_tree(b.get_root());
-
-
-	// std::cout << std::endl << std::endl << "Try to balance" ;
-	// b.rotate_left_right(b.get_root());
-	// b.rotate_left_right(b.search(234));
-	// // b.print_tree(b.get_root());
-	// b.rotate_right(b.search(54));
-	// b.rotate_left(b.search(54));
-	// b.print_tree(b.get_root());
+	std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+	b.print_tree(b.get_root());
 }
 
-// create_header("Why segfault ?");
-// {
-// 	binary_search_tree<int> b;
+create_header("Suite");
+{
+	red_black_tree<int> b;
 
-// 	b.insert(277);
-// 	b.insert(160);
-// 	b.insert(37);
-// 	b.insert(25);
-// 	b.insert(316);
-// 	b.insert(325);
-
-// 	b.print_tree(b.get_root());
-// }
+	for (int i=0; i < 100 ; i++) {
+		b.insert(i);
+	}
+	std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+	b.print_tree(b.get_root());
+}
 
 create_header("Let's go random !!!");
 {
-	binary_search_tree<int> b;
+	red_black_tree<int> b;
 
-	std::srand(std::time(nullptr)); // use current time as seed for random generator
+	std::srand(std::time(NULL)); // use current time as seed for random generator
 	// int random_variable = std::rand();
 	int nb = 10 + (std::rand() % (50 - 10 + 1));
 	std::cout << "Insert " << nb << " elements with random value on [0 500]: " << std::endl;
@@ -1143,6 +1071,7 @@ create_header("Let's go random !!!");
 		// std::cout << "try to insert : " << x << std::endl;
 		b.insert(x);
 	}
+	std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
 	b.print_tree(b.get_root());
 }
 

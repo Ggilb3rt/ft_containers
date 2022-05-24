@@ -1,5 +1,5 @@
-#ifndef BINARY_SEARCH_TREE_HPP
-#define BINARY_SEARCH_TREE_HPP
+#ifndef RED_BLACK_TREE_HPP
+#define RED_BLACK_TREE_HPP
 
 #include <iostream>
 #include <memory>
@@ -34,7 +34,7 @@ struct	node {
 
 
 template <class T, class Alloc = std::allocator<node<T> > >
-class binary_search_tree
+class red_black_tree
 {
 
 	public:
@@ -43,14 +43,14 @@ class binary_search_tree
 		typedef node<value_type>		node_type;
 
 	public:
-		binary_search_tree() : _root(NULL) {};
-		~binary_search_tree() {this->clear(_root);};
+		red_black_tree() : _root(NULL) {};
+		~red_black_tree() {this->clear(_root);};
 
 		node_type	*get_root() {return _root;};
 
 
 		void		insert(value_type val) {
-			_root = insert_in_tree(this->get_root(), val, NULL);
+			_root = rb_insert_in_tree(this->get_root(), val, NULL);
 			this->rb_insert_fixup(this->_last_add);
 		};
 		node_type	*search(value_type val) {
@@ -105,16 +105,6 @@ class binary_search_tree
 				return search_in_tree(current->right, val);
 		};
 
-		node_type *insert_in_tree(node_type *current, value_type val, node_type *parent) {
-			if (current == NULL)
-				return (newNode(val, parent));
-			if (val <= current->data) // = pas forcement necessaire si clef unique
-				current->left = insert_in_tree(current->left, val, current);
-			else if (val > current->data)
-				current->right = insert_in_tree(current->right, val, current);
-			return current;
-		};
-
 		node_type	*get_parent(node_type *current) {
 			if (current->parent)
 				return current->parent;
@@ -147,57 +137,70 @@ class binary_search_tree
 		}
 
 
+
+		// ADD
+
+		node_type *rb_insert_in_tree(node_type *current, value_type val, node_type *parent) {
+			if (current == NULL)
+				return (newNode(val, parent));
+			if (val <= current->data) // = pas forcement necessaire si clef unique
+				current->left = rb_insert_in_tree(current->left, val, current);
+			else if (val > current->data)
+				current->right = rb_insert_in_tree(current->right, val, current);
+			return current;
+		};
+
 		void	rb_insert_fixup(node_type *z) {
-			//! need to add getter for parent, grand parent and uncle
-			// if (tree_depth(_root) >= 2) {
-			// std::cout << (z && !z->color && get_parent(z)->color == RED) << std::endl;
-				while (z && z->color == RED && this->get_parent(z)->color == RED) {
-					if (this->is_left_grand_parent(z)) {
-						node_type	*y = get_uncle(z);					// uncle right
-						
-						if (y && y->color == RED) {						// case 1
-							this->get_parent(z)->color = BLACK;
-							y->color = BLACK;
-							this->get_grandParent(z)->color = RED;
-							z = this->get_grandParent(z);
-							// std::cout << "Uncle is red (case 1)" << std::endl;
-						}
-						else {
-							if (!is_left_parent(z)) {			// case 2
-								z = this->get_parent(z);
-								rotate_left(z);
-							// std::cout << "Case 2" << std::endl;
-							}
-							this->get_parent(z)->color = BLACK;					// case 3
-							this->get_grandParent(z)->color = RED;
-							rotate_right(this->get_grandParent(z));
-							// std::cout << "Case 3" << std::endl;
-						}
+			while (z && z->color == RED && this->get_parent(z)->color == RED) {
+				if (this->is_left_grand_parent(z)) {
+					node_type	*y = get_uncle(z);					// uncle right
+					
+					if (y && y->color == RED) {						// case 1
+						this->get_parent(z)->color = BLACK;
+						y->color = BLACK;
+						this->get_grandParent(z)->color = RED;
+						z = this->get_grandParent(z);
+						// std::cout << "Uncle is red (case 1)" << std::endl;
 					}
-					else {											// same but switch left and right
-						node_type	*y = get_uncle(z);	// uncle left
-						if (y && y->color == RED) {						// case 1
-							this->get_parent(z)->color = BLACK;
-							y->color = BLACK;
-							this->get_grandParent(z)->color = RED;
-							z = this->get_grandParent(z);
-							// std::cout << "new z " << z->data << std::endl;
+					else {
+						if (!is_left_parent(z)) {			// case 2
+							z = this->get_parent(z);
+							rotate_left(z);
+						// std::cout << "Case 2" << std::endl;
 						}
-						else {
-							if (is_left_parent(z)) {			// case 2
-								z = this->get_parent(z);
-								rotate_right(z);
-							}
-							this->get_parent(z)->color = BLACK;					// case 3
-							this->get_grandParent(z)->color = RED;
-							rotate_left(this->get_grandParent(z));
-						}
+						this->get_parent(z)->color = BLACK;					// case 3
+						this->get_grandParent(z)->color = RED;
+						rotate_right(this->get_grandParent(z));
+						// std::cout << "Case 3" << std::endl;
 					}
-					this->_root->color = BLACK;
-				// std::cout << "next loop" << std::endl;
 				}
-			// }
+				else {											// same but switch left and right
+					node_type	*y = get_uncle(z);	// uncle left
+					if (y && y->color == RED) {						// case 1
+						this->get_parent(z)->color = BLACK;
+						y->color = BLACK;
+						this->get_grandParent(z)->color = RED;
+						z = this->get_grandParent(z);
+						// std::cout << "new z " << z->data << std::endl;
+					}
+					else {
+						if (is_left_parent(z)) {			// case 2
+							z = this->get_parent(z);
+							rotate_right(z);
+						}
+						this->get_parent(z)->color = BLACK;					// case 3
+						this->get_grandParent(z)->color = RED;
+						rotate_left(this->get_grandParent(z));
+					}
+				}
+				this->_root->color = BLACK;
+			}
 		}
+
+
+
+
+		// REMOVE
 
 		void	clear(node_type *current) {
 			if (current->right)
@@ -208,18 +211,59 @@ class binary_search_tree
 			this->_CpyAlloc.deallocate(current, 1);
 		};
 
+		void	rb_transplant(node_type *to_replace, node_type *to_put) {
+			if (this->get_parent(to_replace) == NULL)
+				this->_root = to_put;
+			else if (is_left_parent(to_replace))
+				to_replace->parent->left = to_put;
+			else
+				get_parent(to_replace)->right = to_put;
+			if (to_put)
+				to_put->parent = to_replace->parent;
+		}
 
-	// public: //temporaire
+		public:
+		node_type	*tree_minimum(node_type *current) {
+			if (current->left)
+				return tree_minimum(current->left);
+			return current;
+		}
 
+		void	rb_delete(node_type *z) {
+			node_type	*x = NULL;
+			node_type	*y = z;
+			bool		y_original_color = y->color;
 
-		size_t	tree_depth(node_type *el, size_t depth = 0, size_t max_depth = 0) {
-			// Do not works
-			if (el != NULL && el->right)
-				return tree_depth(el->right, depth + 1, (depth > max_depth ? depth : max_depth));
-			if (el != NULL && el->left)
-				return tree_depth(el->left, depth + 1, (depth > max_depth ? depth : max_depth));
-			// std::cout << "depth " << depth << " | max " << max_depth << std::endl;
-			return (depth > max_depth ? depth : max_depth);
+			if (z->left == NULL) {
+				x = z->right;
+				rb_transplant(z, z->right);
+			}
+			else if (z->right == NULL) {
+				x = z->left;
+				rb_transplant(z, z->left);
+			}
+			else {
+				y = tree_minimum(z->right);
+				y_original_color = y->color;
+				x = y->right;
+				if (this->get_parent(y) == z)
+					x->parent = y;
+				else {
+					rb_transplant(y, y->right);
+					y->right = z->right;
+					y->parent->right = y;
+				}
+				rb_transplant(z, y);
+				y->left = z->left;
+				y->parent->left = y;
+				y->color = z->color;
+			}
+			if (y_original_color == BLACK)
+				rb_delete_fixup(x);
+		}
+
+		void	rb_delete_fixup(node_type *x) {
+			std::cout << "delete fixup with " << x->data << std::endl; 
 		}
 
 		// ROTATIONS
