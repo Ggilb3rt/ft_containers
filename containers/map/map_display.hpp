@@ -1,5 +1,4 @@
 //////////////////////////////// display binary tree ///////////////////////////////
-
 // You can change those define
 
 #define __NODE node<value_type> // name of your strucure/class which contain your node
@@ -7,22 +6,23 @@
 #define __SIZE 5 // size between nodes (only for display)
 #define __ROOT _root // name of your tree's root variable
 #define __IS_BLACK color // name of the bool variable for the color of nodes
+#define __NIL _nil //name of your NULL pointer
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-# define T_BLACK "\033[40m"
-# define T_RED "\e[1;41m"
+# define CBLACK "\033[40m"
+# define CRED "\e[1;41m"
 # define STOP "\033[0m"
 
 private:
 
 int count_from_node(__NODE *ptr, int count = 0) {
-	if (ptr) {
-	if (ptr->right)
-		count += count_from_node(ptr->right);
-	if (ptr->left)
-		count += count_from_node(ptr->left);
-	return (++count);
+	if (ptr != __NIL) {
+		if (ptr->right != __NIL)
+			count += count_from_node(ptr->right);
+		if (ptr->left != __NIL)
+			count += count_from_node(ptr->left);
+		return (++count);
 	}
 	return count;
 }
@@ -62,7 +62,7 @@ public:
 void print_tree(__NODE *ptr, int level = 0, bool is_right = 0)
 {
 	int i;
-	if (ptr != NULL)
+	if (ptr != __NIL)
 	{
 		print_tree(ptr->right, level + 1, 1);
 		std::cout << std::endl;
@@ -84,16 +84,16 @@ void print_tree(__NODE *ptr, int level = 0, bool is_right = 0)
 			else
 					aff_chars("╰", "─", 1);
 		}
-		if (ptr->left && count_btw_p(ptr->left, 0) > 0) {
+		if (ptr->left != __NIL && count_btw_p(ptr->left, 0) > 0) {
 			std::vector<int> tmp;
 			tmp.push_back(level + 1);
 			tmp.push_back(count_btw_p(ptr->left, 0));
 			aff.push_back(tmp);
 		}
-		 if (ptr->__IS_BLACK)
-			std::cout << T_BLACK << ptr->__VALUE << STOP;
+		if (ptr->__IS_BLACK)
+			std::cout << CBLACK << ptr->__VALUE << STOP;
 		else
-			std::cout  << T_RED << ptr->__VALUE << STOP;
+			std::cout  << CRED << ptr->__VALUE << STOP;
 		print_tree(ptr->left, level + 1, 0);
 	}
 }

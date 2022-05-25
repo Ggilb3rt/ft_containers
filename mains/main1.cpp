@@ -1004,7 +1004,7 @@ int main() {
 	b.insert(12);
 	b.insert(8);
 	b.insert(2);
-
+	
 	b.print_tree(b.get_root());
 }
 
@@ -1066,7 +1066,7 @@ create_header("Let's go random !!!");
 
 
 {
-	// TODO tests
+	// TODO tests REMOVE
 	// remove with right && left == NULL
 	{
 		create_header("Remove with left && right == NULL");	
@@ -1180,6 +1180,42 @@ create_header("Let's go random !!!");
 		b.rb_delete(b.search(5));
 		b.print_tree(b.get_root());
 	}
+}
+
+
+{
+	create_header("0 -> 14");
+	red_black_tree<int> b;
+
+	for (int i = 0; i < 14; i++)
+		b.insert(i);
+	b.print_tree(b.get_root());
+	b.rb_delete(b.search(1));
+	b.print_tree(b.get_root());
+
+	b.rb_delete(b.get_root()->right);
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root()->right);
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root()->right);
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root()->right);
+	b.print_tree(b.get_root());
+
+	b.rb_delete(b.get_root());
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root());
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root());
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root());	// sefgfault
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root());
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root());
+	b.print_tree(b.get_root());
+	b.rb_delete(b.get_root());
+	b.print_tree(b.get_root());
 }
 
 
