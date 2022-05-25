@@ -203,6 +203,8 @@ class red_black_tree
 		// REMOVE
 
 		void	clear(node_type *current) {
+			if (!current)
+				return ;
 			if (current->right)
 				clear(current->right);
 			if (current->left)
@@ -218,14 +220,15 @@ class red_black_tree
 				to_replace->parent->left = to_put;
 			else
 				get_parent(to_replace)->right = to_put;
-			if (to_put)
+			if (to_put && this->get_parent(to_put))
 				to_put->parent = to_replace->parent;
 		}
 
 		public:
 		node_type	*tree_minimum(node_type *current) {
-			if (current->left)
-				return tree_minimum(current->left);
+			
+			while (current->left)
+				current = current->left;
 			return current;
 		}
 
@@ -234,6 +237,8 @@ class red_black_tree
 			node_type	*y = z;
 			bool		y_original_color = y->color;
 
+			if (!z)
+				return ; 
 			if (z->left == NULL) {
 				x = z->right;
 				rb_transplant(z, z->right);
@@ -246,23 +251,29 @@ class red_black_tree
 				y = tree_minimum(z->right);
 				y_original_color = y->color;
 				x = y->right;
-				if (this->get_parent(y) == z)
-					x->parent = y;
+				if (this->get_parent(y) == z) {
+					if (x)
+						x->parent = y;
+				}
 				else {
 					rb_transplant(y, y->right);
 					y->right = z->right;
-					y->parent->right = y;
+					y->right->parent = y;
 				}
 				rb_transplant(z, y);
 				y->left = z->left;
-				y->parent->left = y;
+				y->left->parent = y;
 				y->color = z->color;
 			}
-			if (y_original_color == BLACK)
+			if (z)
+				delete z;
+			if (y_original_color == BLACK && x)
 				rb_delete_fixup(x);
 		}
 
 		void	rb_delete_fixup(node_type *x) {
+			if (!x)
+				return ;
 			std::cout << "delete fixup with " << x->data << std::endl; 
 		}
 

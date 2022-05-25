@@ -1006,17 +1006,6 @@ int main() {
 	b.insert(2);
 
 	b.print_tree(b.get_root());
-	std::cout << std::endl << "Delete 2" << std::endl; 
-	b.rb_delete(b.search(2));
-	b.print_tree(b.get_root());
-	std::cout << std::endl << "Delete 12" << std::endl; 
-	b.rb_delete(b.search(12));
-	b.print_tree(b.get_root());
-	std::cout << std::endl << "Delete 8" << std::endl; 
-	b.rb_delete(b.search(8));
-	b.print_tree(b.get_root());
-
-
 }
 
 {
@@ -1076,7 +1065,131 @@ create_header("Let's go random !!!");
 }
 
 
+{
+	// TODO tests
+	// remove with right && left == NULL
+	{
+		create_header("Remove with left && right == NULL");	
+		red_black_tree<int> b;
+		b.insert(12);
+		b.insert(8);
+		b.insert(2);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 2" << std::endl; 
+		b.rb_delete(b.search(2));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 12" << std::endl; 
+		b.rb_delete(b.search(12));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 8" << std::endl; 
+		b.rb_delete(b.search(8));
+		b.print_tree(b.get_root());
+	}
+	// remove with right || left == NULL
+	{
+		create_header("Remove with left || right == NULL");	
+		red_black_tree<int> b;
+		b.insert(34);
+		b.insert(2);
+		b.insert(12);
+		b.insert(32);
+		b.insert(5);
+		
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 2" << std::endl; 
+		b.rb_delete(b.search(2));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 34" << std::endl; 
+		b.rb_delete(b.search(34));
+		b.print_tree(b.get_root());
+	}
+	// remove with left && right != NULL
+	{
+		create_header("Remove with left && right != NULL and z != root");
+		red_black_tree<int> b;
+		b.insert(34);
+		b.insert(2);
+		b.insert(12);
+		b.insert(32);
+		b.insert(93);
+		b.insert(100);
+		b.insert(43);
+		b.insert(5);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 34" << std::endl; 
+		b.rb_delete(b.search(34));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 43" << std::endl; 
+		b.rb_delete(b.search(43));
+		b.print_tree(b.get_root());
+	}
+	// remove with left && right != NULL and z == root
+	{
+		create_header("Remove with left && right != NULL and z == root");
+		red_black_tree<int> b;
+		b.insert(12);
+		b.insert(8);
+		b.insert(2);
+		b.insert(22);
+		b.insert(32);
+		b.insert(42);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 8" << std::endl; 
+		b.rb_delete(b.search(8));
+		b.print_tree(b.get_root());
+	}
+	// remove with children but !grandChildren
+	{
+		create_header("Remove with children but !grandChildren");
+		red_black_tree<int> b;
+		b.insert(34);
+		b.insert(2);
+		b.insert(12);
+		b.insert(32);
+		b.insert(93);
+		b.insert(100);
+		b.insert(43);
+		b.insert(5);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 93" << std::endl; 
+		b.rb_delete(b.search(93));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 100" << std::endl; 
+		b.rb_delete(b.search(100));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 34" << std::endl; 
+		b.rb_delete(b.search(34));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 12" << std::endl; 
+		b.rb_delete(b.search(12));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 43" << std::endl; 
+		b.rb_delete(b.search(43));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 2" << std::endl; 
+		b.rb_delete(b.search(2));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 32" << std::endl; 
+		b.rb_delete(b.search(32));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 5" << std::endl; 
+		b.rb_delete(b.search(5));
+		b.print_tree(b.get_root());
+	}
+}
+
+
+
+
 std::cout << std::endl;
+
+
+
+
 
 
 
