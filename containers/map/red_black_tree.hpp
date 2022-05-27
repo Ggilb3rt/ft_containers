@@ -25,9 +25,9 @@ struct	node {
 		bool			color : 1;
 		node			*parent, *left, *right;
 		
-
-		node(value_type val) : data(val), parent(NULL), left(NULL), right(NULL) {};
-		node(value_type val, node *parent) : data(val), parent(parent), left(NULL), right(NULL) {};
+		node(void) : data(value_type()), color(RED), parent(NULL), right(NULL), left(NULL) {};
+		node(value_type val) : data(val), color(RED), parent(NULL), left(NULL), right(NULL) {};
+		node(value_type val, node *parent) : data(val), color(RED), parent(parent), left(NULL), right(NULL) {};
 		node(value_type val, bool color, node *parent, node *left, node *right)
 			: data(val), color(color), parent(parent), left(left), right(right) {};
 		~node() {};
@@ -36,16 +36,15 @@ struct	node {
 };
 
 
-template <class T, class Alloc = std::allocator<node<T> > >
+template <class T, class Alloc /*= std::allocator<node<T> >*/ >
 class red_black_tree
 {
-
 	public:
 		typedef T						value_type;
-		typedef Alloc					alloc;
+		// typedef Alloc					alloc;
+		typedef typename Alloc::template rebind<node<value_type> >::other	alloc;
 		typedef node<value_type>		node_type;
 
-	public:
 		red_black_tree() {
 			_nil = _CpyAlloc.allocate(1);
 			_CpyAlloc.construct(_nil, node_type(
@@ -73,6 +72,17 @@ class red_black_tree
 			return search_in_tree(this->_root, val);
 		}
 
+		node_type	*minimum(node_type *current) {
+			while (current->left != this->_nil)
+				current = current->left;
+			return current;
+		}
+
+		node_type	*maximum(node_type *current) {
+			while (current->right != this->_nil)
+				current = current->right;
+			return current;
+		}
 
 	private:
 		node_type 	*_nil;
@@ -198,14 +208,6 @@ class red_black_tree
 			to_put->parent = to_replace->parent;
 		}
 
-		public:
-		node_type	*tree_minimum(node_type *current) {
-			
-			while (current->left != this->_nil)
-				current = current->left;
-			return current;
-		}
-
 		void	rb_delete(node_type *z) {
 			node_type	*x = this->_nil;
 			node_type	*y = z;
@@ -220,7 +222,7 @@ class red_black_tree
 				rb_transplant(z, z->left);
 			}
 			else {
-				y = tree_minimum(z->right);
+				y = minimum(z->right);
 				y_original_color = y->color;
 				x = y->right;
 				if (y->parent == z)
@@ -235,7 +237,8 @@ class red_black_tree
 				y->left->parent = y;
 				y->color = z->color;
 			}
-			delete z;		
+			if (z != this->_nil)
+				delete z;
 			if (y_original_color == BLACK)
 				rb_delete_fixup(x);
 		}
@@ -301,13 +304,6 @@ class red_black_tree
 		}
 
 		// ROTATIONS
-
-		bool	is_child_left(node_type *current) {
-			if (current->parent->left == current)
-				return true;
-			return false;
-		}
-
 		/*
 				p					p
 				|					|
@@ -359,16 +355,6 @@ class red_black_tree
 			y->right = x;
 			x->parent = y;
 		}
-
-		// void	rotate_left_right(node_type *z) {
-		// 	this->rotate_left(z->left);
-		// 	this->rotate_right(z);
-		// }
-
-		// void	rotate_right_left(node_type *z) {
-		// 	this->rotate_right(z->right);
-		// 	this->rotate_left(z);
-		// }
 
 
 		// Display Tree

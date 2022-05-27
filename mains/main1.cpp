@@ -942,7 +942,7 @@ void	utils_tests() {
 }
 }
 
-
+/*
 void	rb_tree_tests() {
 	{
 		create_header("Easy rotate");	
@@ -976,7 +976,8 @@ void	rb_tree_tests() {
 		b.insert(54);
 		b.insert(13);
 
-		std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+		std::cout << "Mini " << b.minimum(b.get_root())->data << std::endl;
+		std::cout << "Maxi " << b.maximum(b.get_root())->data << std::endl;
 		b.print_tree(b.get_root());
 	}
 
@@ -987,7 +988,8 @@ void	rb_tree_tests() {
 		for (int i=0; i < 100 ; i++) {
 			b.insert(i);
 		}
-		std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+		std::cout << "Mini " << b.minimum(b.get_root())->data << std::endl;
+		std::cout << "Maxi " << b.maximum(b.get_root())->data << std::endl;
 		b.print_tree(b.get_root());
 	}
 
@@ -1006,7 +1008,8 @@ void	rb_tree_tests() {
 			// std::cout << "try to insert : " << x << std::endl;
 			b.insert(x);
 		}
-		std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+		std::cout << "Mini " << b.minimum(b.get_root())->data << std::endl;
+		std::cout << "Maxi " << b.maximum(b.get_root())->data << std::endl;
 		b.print_tree(b.get_root());
 	}
 
@@ -1127,10 +1130,10 @@ void	rb_tree_tests() {
 	}
 }
 	{
-		create_header("0 -> 13");
+		create_header("1 -> 14");
 		ft::red_black_tree<int> b;
 
-		for (int i = 0; i < 14; i++)
+		for (int i = 1; i < 15; i++)
 			b.insert(i);
 		b.print_tree(b.get_root());
 		
@@ -1149,11 +1152,13 @@ void	rb_tree_tests() {
 		std::cout << std::endl << "Already empty" << std::endl;
 		b.delete_el(b.get_root());
 		b.print_tree(b.get_root());
-		//! si j'ajoute un delete(root) ici je double free...
-		//! logique, car l'arbre est deja vide, dois-je le proteger ?
+		std::cout << std::endl << "Root must be nil " << b.get_root() << " " << b.get_root()->parent << std::endl;
+
+		b.delete_el(b.get_root());
+		b.print_tree(b.get_root());
 	}
 }
-
+*/
 
 
 
@@ -1192,7 +1197,7 @@ int main() {
 	// stack_tests();
 	// utils_tests();
 
-	rb_tree_tests();
+	// rb_tree_tests();
 
 std::cout << std::endl;
 

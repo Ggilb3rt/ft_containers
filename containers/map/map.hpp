@@ -79,7 +79,8 @@ class	map
 		~map() {};
 
 		map&	operator= (const map& x) {
-			// clear(this)
+			// if (this != x)
+			// 	this->clear();
 			// insert(copy from x)
 			this->_size = x.size();
 
@@ -178,11 +179,13 @@ class	map
 	/****************************/
 		allocator_type	get_allocator() const {return this->_cpyAlloc;}
 
+	
+
 	private:
-		allocator_type	_cpyAlloc;
-		key_compare		_cpyComp;
-		value_type*		_rb_tree;
-		size_type		_size;
+		allocator_type								_cpyAlloc;
+		key_compare									_cpyComp;
+		red_black_tree<value_type, allocator_type>	_rb_tree;
+		size_type									_size;
 };
 
 
