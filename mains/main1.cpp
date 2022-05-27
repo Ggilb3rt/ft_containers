@@ -940,9 +940,221 @@ void	utils_tests() {
 	std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
 	std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
 }
-
-
 }
+
+
+void	rb_tree_tests() {
+	{
+		create_header("Easy rotate");	
+		ft::red_black_tree<int> b;
+		b.insert(12);
+		b.insert(8);
+		b.insert(2);
+		
+		b.print_tree(b.get_root());
+	}
+
+	{
+		create_header("Another easy rotate");	
+		ft::red_black_tree<int> b;
+		b.insert(12);
+		b.insert(8);
+		b.insert(10);
+
+		b.print_tree(b.get_root());
+	}
+
+	{
+		create_header("More fun");
+		ft::red_black_tree<int> b;
+		b.insert(12);
+		b.insert(234);
+		b.insert(2);
+		b.insert(1);
+		b.insert(3);
+		b.insert(23);
+		b.insert(54);
+		b.insert(13);
+
+		std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+		b.print_tree(b.get_root());
+	}
+
+	create_header("Suite");
+	{
+		ft::red_black_tree<int> b;
+
+		for (int i=0; i < 100 ; i++) {
+			b.insert(i);
+		}
+		std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+		b.print_tree(b.get_root());
+	}
+
+	create_header("Let's go random !!!");
+	{
+		ft::red_black_tree<int> b;
+
+		std::srand(std::time(NULL)); // use current time as seed for random generator
+		// int random_variable = std::rand();
+		int nb = 10 + (std::rand() % (50 - 10 + 1));
+		std::cout << "Insert " << nb << " elements with random value on [0 500]: " << std::endl;
+
+		// roll 6-sided dice 20 times
+		for (int n=0; n != nb; ++n) {
+			int x = 0 + (std::rand() % (500 - 0 + 1));
+			// std::cout << "try to insert : " << x << std::endl;
+			b.insert(x);
+		}
+		std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
+		b.print_tree(b.get_root());
+	}
+
+
+	{
+	// remove with right && left == NULL
+	{
+		create_header("Remove with left && right == NULL");	
+		ft::red_black_tree<int> b;
+		b.insert(12);
+		b.insert(8);
+		b.insert(2);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 2" << std::endl; 
+		b.delete_el(b.search(2));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 12" << std::endl; 
+		b.delete_el(b.search(12));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 8" << std::endl; 
+		b.delete_el(b.search(8));
+		b.print_tree(b.get_root());
+	}
+	// remove with right || left == NULL
+	{
+		create_header("Remove with left || right == NULL");	
+		ft::red_black_tree<int> b;
+		b.insert(34);
+		b.insert(2);
+		b.insert(12);
+		b.insert(32);
+		b.insert(5);
+		
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 2" << std::endl; 
+		b.delete_el(b.search(2));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 34" << std::endl; 
+		b.delete_el(b.search(34));
+		b.print_tree(b.get_root());
+	}
+	// remove with left && right != NULL
+	{
+		create_header("Remove with left && right != NULL and z != root");
+		ft::red_black_tree<int> b;
+		b.insert(34);
+		b.insert(2);
+		b.insert(12);
+		b.insert(32);
+		b.insert(93);
+		b.insert(100);
+		b.insert(43);
+		b.insert(5);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 34" << std::endl; 
+		b.delete_el(b.search(34));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 43" << std::endl; 
+		b.delete_el(b.search(43));
+		b.print_tree(b.get_root());
+	}
+	// remove with left && right != NULL and z == root
+	{
+		create_header("Remove with left && right != NULL and z == root");
+		ft::red_black_tree<int> b;
+		b.insert(12);
+		b.insert(8);
+		b.insert(2);
+		b.insert(22);
+		b.insert(32);
+		b.insert(42);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 8" << std::endl; 
+		b.delete_el(b.search(8));
+		b.print_tree(b.get_root());
+	}
+	// remove with children but !grandChildren
+	{
+		create_header("Remove with children but !grandChildren");
+		ft::red_black_tree<int> b;
+		b.insert(34);
+		b.insert(2);
+		b.insert(12);
+		b.insert(32);
+		b.insert(93);
+		b.insert(100);
+		b.insert(43);
+		b.insert(5);
+
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 93" << std::endl; 
+		b.delete_el(b.search(93));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 100" << std::endl; 
+		b.delete_el(b.search(100));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 34" << std::endl; 
+		b.delete_el(b.search(34));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 12" << std::endl; 
+		b.delete_el(b.search(12));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 43" << std::endl; 
+		b.delete_el(b.search(43));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 2" << std::endl; 
+		b.delete_el(b.search(2));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 32" << std::endl; 
+		b.delete_el(b.search(32));
+		b.print_tree(b.get_root());
+		std::cout << std::endl << "Delete 5" << std::endl; 
+		b.delete_el(b.search(5));
+		b.print_tree(b.get_root());
+	}
+}
+	{
+		create_header("0 -> 13");
+		ft::red_black_tree<int> b;
+
+		for (int i = 0; i < 14; i++)
+			b.insert(i);
+		b.print_tree(b.get_root());
+		
+		b.delete_el(b.search(1));
+		b.print_tree(b.get_root());
+
+		for (int i = 0; i < 4; i++) {
+			b.delete_el(b.get_root()->right);
+			b.print_tree(b.get_root());
+		}
+
+		for (int i = 0; i < 8; i++) {
+			b.delete_el(b.get_root());
+			b.print_tree(b.get_root());
+		}
+		std::cout << std::endl << "Already empty" << std::endl;
+		b.delete_el(b.get_root());
+		b.print_tree(b.get_root());
+		//! si j'ajoute un delete(root) ici je double free...
+		//! logique, car l'arbre est deja vide, dois-je le proteger ?
+	}
+}
+
+
 
 
 template <typename T>
@@ -980,6 +1192,20 @@ int main() {
 	// stack_tests();
 	// utils_tests();
 
+	rb_tree_tests();
+
+std::cout << std::endl;
+
+
+	{
+		TYPE::map<int, int> pouet;
+
+		std::cout << pouet.empty() << std::endl;
+		std::cout << pouet.size() << std::endl;
+		std::cout << pouet.max_size() << std::endl;
+
+	}
+
 
 	// {
 	// 	using namespace std;
@@ -997,226 +1223,6 @@ int main() {
 	// 		std::cout << *it << std::endl;
 	// 	}
 	// }
-
-{
-	create_header("Easy rotate");	
-	red_black_tree<int> b;
-	b.insert(12);
-	b.insert(8);
-	b.insert(2);
-	
-	b.print_tree(b.get_root());
-}
-
-{
-	create_header("Another easy rotate");	
-	red_black_tree<int> b;
-	b.insert(12);
-	b.insert(8);
-	b.insert(10);
-
-	b.print_tree(b.get_root());
-}
-
-{
-	create_header("More fun");
-	red_black_tree<int> b;
-	b.insert(12);
-	b.insert(234);
-	b.insert(2);
-	b.insert(1);
-	b.insert(3);
-	b.insert(23);
-	b.insert(54);
-	b.insert(13);
-
-	std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
-	b.print_tree(b.get_root());
-}
-
-create_header("Suite");
-{
-	red_black_tree<int> b;
-
-	for (int i=0; i < 100 ; i++) {
-		b.insert(i);
-	}
-	std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
-	b.print_tree(b.get_root());
-}
-
-create_header("Let's go random !!!");
-{
-	red_black_tree<int> b;
-
-	std::srand(std::time(NULL)); // use current time as seed for random generator
-	// int random_variable = std::rand();
-	int nb = 10 + (std::rand() % (50 - 10 + 1));
-	std::cout << "Insert " << nb << " elements with random value on [0 500]: " << std::endl;
-
-	// roll 6-sided dice 20 times
-	for (int n=0; n != nb; ++n) {
-		int x = 0 + (std::rand() % (500 - 0 + 1));
-		// std::cout << "try to insert : " << x << std::endl;
-		b.insert(x);
-	}
-	std::cout << "Mini " << b.tree_minimum(b.get_root())->data << std::endl;
-	b.print_tree(b.get_root());
-}
-
-
-{
-	// TODO tests REMOVE
-	// remove with right && left == NULL
-	{
-		create_header("Remove with left && right == NULL");	
-		red_black_tree<int> b;
-		b.insert(12);
-		b.insert(8);
-		b.insert(2);
-
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 2" << std::endl; 
-		b.rb_delete(b.search(2));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 12" << std::endl; 
-		b.rb_delete(b.search(12));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 8" << std::endl; 
-		b.rb_delete(b.search(8));
-		b.print_tree(b.get_root());
-	}
-	// remove with right || left == NULL
-	{
-		create_header("Remove with left || right == NULL");	
-		red_black_tree<int> b;
-		b.insert(34);
-		b.insert(2);
-		b.insert(12);
-		b.insert(32);
-		b.insert(5);
-		
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 2" << std::endl; 
-		b.rb_delete(b.search(2));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 34" << std::endl; 
-		b.rb_delete(b.search(34));
-		b.print_tree(b.get_root());
-	}
-	// remove with left && right != NULL
-	{
-		create_header("Remove with left && right != NULL and z != root");
-		red_black_tree<int> b;
-		b.insert(34);
-		b.insert(2);
-		b.insert(12);
-		b.insert(32);
-		b.insert(93);
-		b.insert(100);
-		b.insert(43);
-		b.insert(5);
-
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 34" << std::endl; 
-		b.rb_delete(b.search(34));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 43" << std::endl; 
-		b.rb_delete(b.search(43));
-		b.print_tree(b.get_root());
-	}
-	// remove with left && right != NULL and z == root
-	{
-		create_header("Remove with left && right != NULL and z == root");
-		red_black_tree<int> b;
-		b.insert(12);
-		b.insert(8);
-		b.insert(2);
-		b.insert(22);
-		b.insert(32);
-		b.insert(42);
-
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 8" << std::endl; 
-		b.rb_delete(b.search(8));
-		b.print_tree(b.get_root());
-	}
-	// remove with children but !grandChildren
-	{
-		create_header("Remove with children but !grandChildren");
-		red_black_tree<int> b;
-		b.insert(34);
-		b.insert(2);
-		b.insert(12);
-		b.insert(32);
-		b.insert(93);
-		b.insert(100);
-		b.insert(43);
-		b.insert(5);
-
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 93" << std::endl; 
-		b.rb_delete(b.search(93));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 100" << std::endl; 
-		b.rb_delete(b.search(100));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 34" << std::endl; 
-		b.rb_delete(b.search(34));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 12" << std::endl; 
-		b.rb_delete(b.search(12));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 43" << std::endl; 
-		b.rb_delete(b.search(43));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 2" << std::endl; 
-		b.rb_delete(b.search(2));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 32" << std::endl; 
-		b.rb_delete(b.search(32));
-		b.print_tree(b.get_root());
-		std::cout << std::endl << "Delete 5" << std::endl; 
-		b.rb_delete(b.search(5));
-		b.print_tree(b.get_root());
-	}
-}
-
-
-{
-	create_header("0 -> 14");
-	red_black_tree<int> b;
-
-	for (int i = 0; i < 14; i++)
-		b.insert(i);
-	b.print_tree(b.get_root());
-	b.rb_delete(b.search(1));
-	b.print_tree(b.get_root());
-
-	b.rb_delete(b.get_root()->right);
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root()->right);
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root()->right);
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root()->right);
-	b.print_tree(b.get_root());
-
-	b.rb_delete(b.get_root());
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root());
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root());
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root());	// sefgfault
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root());
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root());
-	b.print_tree(b.get_root());
-	b.rb_delete(b.get_root());
-	b.print_tree(b.get_root());
-}
 
 
 
