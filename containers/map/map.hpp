@@ -179,8 +179,6 @@ class	map
 	/****************************/
 		allocator_type	get_allocator() const {return this->_cpyAlloc;}
 
-	
-
 	private:
 		allocator_type								_cpyAlloc;
 		key_compare									_cpyComp;

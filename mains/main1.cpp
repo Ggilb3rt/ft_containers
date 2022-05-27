@@ -1202,13 +1202,51 @@ int main() {
 std::cout << std::endl;
 
 
+	// {
+	// 	TYPE::map<int, int> pouet;
+
+	// 	std::cout << pouet.empty() << std::endl;
+	// 	std::cout << pouet.size() << std::endl;
+	// 	std::cout << pouet.max_size() << std::endl;
+
+	// }
+
+
 	{
-		TYPE::map<int, int> pouet;
+		std::map<char, int> b;
 
-		std::cout << pouet.empty() << std::endl;
-		std::cout << pouet.size() << std::endl;
-		std::cout << pouet.max_size() << std::endl;
+		b.insert( std::pair<char, int>('b', 2));
+		b.insert( std::pair<char, int>('a', 1));
+		b.insert( std::pair<char, int>('w', 20));
+		b.insert( std::pair<char, int>('r', 15));
 
+		std::map<char, int>::iterator debut = b.begin();
+		std::map<char, int>::iterator end = b.end();
+
+		std::cout << debut->first << " ==> " << debut->second << std::endl
+			 << end->first << " ==> " << end->second << std::endl;
+	
+		std::pair<char, int> start = *end;
+		std::cout << "|" << start.first << "|" << std::endl;
+	}
+std::cout << std::endl;
+	{
+		std::map<int, int> b;
+
+		b.insert( std::pair<int, int>(12, 2));
+		b.insert( std::pair<int, int>(7, 1));
+		b.insert( std::pair<int, int>(1, 20));
+		b.insert( std::pair<int, int>(76, 15));
+		b.insert( std::pair<int, int>(6, 15));
+
+		std::map<int, int>::iterator debut = b.begin();
+		std::map<int, int>::iterator end = b.end();
+
+		std::cout << debut->first << " ==> " << debut->second << std::endl
+			 << end->first << " ==> " << end->second << std::endl;
+	
+		std::pair<int, int> start = *end;
+		std::cout << start.first << std::endl;
 	}
 
 
