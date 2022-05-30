@@ -31,7 +31,7 @@ class map_iterator {
 			return *this;
 		}
 
-		// const pointer &base() const {return _root;}
+		const pointer &base() const {return _minimum(this->_root);} //? private
 
 		reference operator*() const {return this->_current->data;}
 		pointer operator->() const {return &(this->operator*());}
@@ -42,10 +42,19 @@ class map_iterator {
 			this->_current = this->_next(this->_current);
 			return tmp;
 		}
-		map_iterator& operator--() {this->_current = this->_prev(this->_current); return *this;}
+		map_iterator& operator--() {
+			if (this->_current == this->_nil)
+				this->_current = this->_maximum(this->_root);
+			else
+				this->_current = this->_prev(this->_current);
+			return *this;
+		}
 		map_iterator operator--(int) {
 			map_iterator tmp = *this;
-			this->_current = this->_prev(this->_current);
+			if (this->_current == this->_nil)
+				this->_current = this->_maximum(this->_root);
+			else
+				this->_current = this->_prev(this->_current);
 			return tmp;
 		}
 		

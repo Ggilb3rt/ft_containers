@@ -1185,7 +1185,13 @@ void	printSize(TYPE::vector<T> const &vct, bool print_content = true)
 }
 
 
-
+template <typename T, typename U>
+void	printMap(TYPE::map<T, U> &x) {
+	for (typename TYPE::map<T, U>::iterator it = x.begin();
+		it != x.end(); it++) {
+			std::cout << it->first << " ==> " << it->second << std::endl;
+		}
+}
 
 
 
@@ -1231,31 +1237,57 @@ std::cout << std::endl;
 	}
 std::cout << std::endl;
 	{
-		std::map<int, int> b;
+		TYPE::map<int, int> b;
 
-		b.insert( std::pair<int, int>(12, 2));
-		b.insert( std::pair<int, int>(7, 1));
-		b.insert( std::pair<int, int>(1, 20));
-		b.insert( std::pair<int, int>(76, 15));
-		b.insert( std::pair<int, int>(6, 15));
+		b.insert( TYPE::pair<int, int>(12, 2));
+		b.insert( TYPE::pair<int, int>(7, 1));
+		b.insert( TYPE::pair<int, int>(1, 20));
+		b.insert( TYPE::pair<int, int>(76, 15));
+		b.insert( TYPE::pair<int, int>(6, 15));
 
-		std::map<int, int>::iterator debut = b.begin();
-		std::map<int, int>::iterator end = b.end();
 
-		std::cout << debut->first << " ==> " << debut->second << std::endl
-			 << end->first << " ==> " << end->second << std::endl;
-	
-		std::pair<int, int> start = *end;
+		printMap(b);
+		std::cout << std::endl;
+
+
+		TYPE::map<int, int>::iterator debut = b.begin();
+		TYPE::map<int, int>::iterator end = b.end();
+		++(++debut);
+		--(--end);
+		// b.erase(debut, end);
+		printMap(b);
+
+		TYPE::pair<int, int> start = *end;
 		std::cout << start.first << std::endl;
 	}
 
-
+std::cout << std::endl;
 	{
 		map<char, int> b;
 
-		b.insert(pair<char, int>('a', 21));
+		b.insert(ft::pair<char, int>('a', 21));
+		b.insert(ft::pair<char, int>('c', 11));
+		b.insert(ft::pair<char, int>('z', 41));
+		b.insert(ft::pair<char, int>('t', 331));
 
-		std::cout << "|" << b['a'] << "|" << std::endl;
+		map<char, int>::iterator debut = b.begin();
+		map<char, int>::iterator end = b.end();
+
+		std::cout << debut->first << " ==> " << debut->second << std::endl
+			 << end->first << " ==> " << end->second << std::endl;
+
+		std::cout << std::endl << "remove first el : " << debut->first << std::endl;
+		b.erase(debut);
+		printMap(b);
+
+		std::cout << "size of b " << b.size() << std::endl;
+		b.clear();
+		std::cout << "size of b " << b.size() << std::endl;
+		printMap(b);
+
+
+
+		// std::cout << "|" << b['a'] << "|" << std::endl;
 	}
 
 	// {

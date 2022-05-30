@@ -31,10 +31,6 @@ class	map
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::pointer			pointer;
 		typedef typename allocator_type::const_pointer		const_pointer;
-		typedef typename std::map<key_type, value_type>::iterator						iterator;
-		typedef typename std::map<key_type, value_type>::iterator						const_iterator;
-		typedef std::reverse_iterator<iterator>				reverse_iterator;
-		typedef std::reverse_iterator<const_iterator>		const_reverse_iterator;
 		typedef typename std::ptrdiff_t						difference_type;
 		typedef size_t										size_type;
 
@@ -55,6 +51,15 @@ class	map
 					return comp(x.first, y.first);
 				}
 		};
+
+	private:
+		typedef red_black_tree<value_type, allocator_type, value_compare>	rb_tree_type;
+
+	public:
+		typedef typename rb_tree_type::iterator						iterator;
+		typedef typename rb_tree_type::iterator						const_iterator;
+		typedef typename rb_tree_type::reverse_iterator				reverse_iterator;
+		typedef typename std::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 
 		// Default
@@ -90,11 +95,36 @@ class	map
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
-		iterator		begin() {return this->_rb_tree->minimum();}
-		const_iterator	begin() const {return this->_rb_tree->minimum();}
-		iterator		end() {return this->_rb_tree->maximum();}
-		const_iterator	end() const {return this->_rb_tree->maximum();}
+		iterator		begin() {
+			return iterator(
+				this->_rb_tree.minimum(this->_rb_tree.get_root()),
+				this->_rb_tree.get_root(),
+				this->_rb_tree.get_nil()
+			);
+		}
+		const_iterator		begin() const {
+			return iterator(
+				this->_rb_tree.minimum(this->_rb_tree.get_root()),
+				this->_rb_tree.get_root(),
+				this->_rb_tree.get_nil()
+			);
+		}
+		iterator		end() {
+			return iterator(
+				this->_rb_tree.get_nil(),
+				this->_rb_tree.get_root(),
+				this->_rb_tree.get_nil()
+			);
+		}
+		const_iterator	end() const {
+			return iterator(
+				this->_rb_tree.get_nil(),
+				this->_rb_tree.get_root(),
+				this->_rb_tree.get_nil()
+			);
+		}
 
+		//TODO tester que le reverse_it ne permette pas l'utilisation de random_access
 		reverse_iterator		rbegin() {return this->end();}
 		const_reverse_iterator	rbegin() const {return this->end();}
 		reverse_iterator		rend() {return this->begin();}
@@ -123,10 +153,11 @@ class	map
 	/****************************/
 		void /*pair<iterator, bool>*/	insert(const value_type& val) {
 			_rb_tree.insert(val);
-			
+			this->_size++;
+			// return make_pair<iterator(rb_tree_type::node_type(val), _rb_tree.get_root(), _rb_tree.get_nil()), true>;
 		}
 		void	erase(iterator position) {
-			(void)position;
+			_rb_tree.delete_el(position);
 			this->_size--;
 		}
 		size_type	erase(const key_type& k) {
@@ -138,16 +169,17 @@ class	map
 		void		erase(iterator first, iterator last) {
 			size_type	diff = std::distance(first, last);
 			
-			while (first < last) {
-				this->_rb_tree->rb_delete(first);
+			this->_size -= diff;
+			while (diff) {
+				this->erase(first);
+				diff--;
 				first++;
 			}
-			this->_size -= diff;
 		}
 
 		void	swap(map& x) {
-			value_type*	tmp_rb_tree = this->_rb_tree;
-			size_type	tmp_size = this->size();
+			rb_tree_type*	tmp_rb_tree = this->_rb_tree;
+			size_type		tmp_size = this->size();
 
 			this->_rb_tree = x._rb_tree;
 			this->_size = x.size();
@@ -156,7 +188,7 @@ class	map
 		}
 
 		void	clear() {
-			this->_rb_tree->clear();
+			this->_rb_tree.clear_all();
 			this->_size = 0;
 		}
 
@@ -182,10 +214,10 @@ class	map
 		allocator_type	get_allocator() const {return this->_cpyAlloc;}
 
 	private:
-		allocator_type								_cpyAlloc;
-		key_compare									_cpyComp;
-		red_black_tree<value_type, allocator_type, value_compare>	_rb_tree;
-		size_type									_size;
+		allocator_type		_cpyAlloc;
+		key_compare			_cpyComp;
+		rb_tree_type		_rb_tree;
+		size_type			_size;
 };
 
 

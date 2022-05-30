@@ -53,8 +53,6 @@ class red_black_tree
 				value_type(), BLACK, this->_nil, this->_nil, this->_nil));
 			_root = _nil;
 			_last_add = _nil;
-			// _compare = compare_type();
-			// std::cout << _root->color << this->_nil->color << std::endl;
 		};
 		~red_black_tree() {
 			if (this->_root != this->_nil)
@@ -63,13 +61,22 @@ class red_black_tree
 		};
 
 		node_type	*get_root() const {return _root;};
+		node_type	*get_nil() const {return _nil;};
 
 		void		insert(value_type val) {
 			rb_insert(newNode(val));
 		};
 
+		void		clear_all() {
+			this->clear(this->_root);
+			this->_root = this->_nil;
+		}
+
 		void		delete_el(node_type* val) {
 			rb_delete(val);
+		}
+		void		delete_el(iterator &val) {
+			rb_delete(val._current);
 		}
 
 		iterator	search(value_type const &val) const {
@@ -78,14 +85,13 @@ class red_black_tree
 
 		}
 
-//! devrait etre private
-		node_type	*minimum(node_type *current) {
+		node_type	*minimum(node_type *current) const {
 			while (current->left != this->_nil)
 				current = current->left;
 			return current;
 		}
 
-		node_type	*maximum(node_type *current) {
+		node_type	*maximum(node_type *current) const {
 			while (current->right != this->_nil)
 				current = current->right;
 			return current;
@@ -142,7 +148,7 @@ class red_black_tree
 
 			while (x != this->_nil) {
 				y = x;
-				if (z->data < x->data)
+				if (_compare(z->data, x->data))//if (z->data < x->data)
 					x = x->left;
 				else
 					x = x->right;
@@ -150,7 +156,7 @@ class red_black_tree
 			z->parent = y;
 			if (y == this->_nil)
 				this->_root = z;
-			else if (z->data < y->data)
+			else if (_compare(z->data, y->data))//else if (z->data < y->data)
 				y->left = z;
 			else
 				y->right = z;
