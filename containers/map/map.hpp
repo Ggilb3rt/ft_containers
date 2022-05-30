@@ -169,12 +169,16 @@ class	map
 		void		erase(iterator first, iterator last) {
 			size_type	diff = std::distance(first, last);
 			
-			this->_size -= diff;
+			// this->_size -= diff;
 			while (diff) {
+				std::cout << first->first << "|";
 				this->erase(first);
+				std::cout << first->first << " --- ";
+
 				diff--;
 				first++;
 			}
+			std::cout << std::endl;
 		}
 
 		void	swap(map& x) {

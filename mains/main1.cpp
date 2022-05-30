@@ -1243,7 +1243,10 @@ std::cout << std::endl;
 		b.insert( TYPE::pair<int, int>(7, 1));
 		b.insert( TYPE::pair<int, int>(1, 20));
 		b.insert( TYPE::pair<int, int>(76, 15));
-		b.insert( TYPE::pair<int, int>(6, 15));
+		b.insert( TYPE::pair<int, int>(867, 234));
+		b.insert( TYPE::pair<int, int>(123, 123));
+		b.insert( TYPE::pair<int, int>(22, 1));
+		b.insert( TYPE::pair<int, int>(56, 5));
 
 
 		printMap(b);
@@ -1254,7 +1257,9 @@ std::cout << std::endl;
 		TYPE::map<int, int>::iterator end = b.end();
 		++(++debut);
 		--(--end);
-		// b.erase(debut, end);
+		std::cout << "Size before big erase " << b.size() << std::endl;
+		b.erase(debut, end);
+		std::cout << "Size after big erase " << b.size() << std::endl;
 		printMap(b);
 
 		TYPE::pair<int, int> start = *end;
@@ -1277,6 +1282,7 @@ std::cout << std::endl;
 			 << end->first << " ==> " << end->second << std::endl;
 
 		std::cout << std::endl << "remove first el : " << debut->first << std::endl;
+		b.erase(debut);
 		b.erase(debut);
 		printMap(b);
 
