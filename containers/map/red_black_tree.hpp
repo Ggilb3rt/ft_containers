@@ -3,12 +3,12 @@
 
 #include <iostream>
 #include <memory>
+#include "map_iterator.hpp"
+#include "../vector/reverse_iterator.hpp"
 
 // Use for print tree
 #include <vector>
 
-
-// map se classe par rapport à data
 
 namespace ft {
 
@@ -36,21 +36,25 @@ struct	node {
 };
 
 
-template <class T, class Alloc /*= std::allocator<node<T> >*/ >
+template <class T, class Alloc, typename Compare = std::less<T> >
 class red_black_tree
 {
 	public:
-		typedef T						value_type;
-		// typedef Alloc					alloc;
+		typedef T										value_type;
+		typedef node<value_type>						node_type;
+		typedef map_iterator<value_type, node_type>		iterator;
+		typedef ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef typename Alloc::template rebind<node<value_type> >::other	alloc;
-		typedef node<value_type>		node_type;
+		typedef Compare									compare_type;
 
-		red_black_tree() {
+		red_black_tree(alloc const &allocator = alloc(), compare_type const &compare = compare_type()) : _CpyAlloc(allocator), _compare(compare) {
 			_nil = _CpyAlloc.allocate(1);
 			_CpyAlloc.construct(_nil, node_type(
 				value_type(), BLACK, this->_nil, this->_nil, this->_nil));
 			_root = _nil;
-			std::cout << _root->color << this->_nil->color << std::endl;
+			_last_add = _nil;
+			// _compare = compare_type();
+			// std::cout << _root->color << this->_nil->color << std::endl;
 		};
 		~red_black_tree() {
 			if (this->_root != this->_nil)
@@ -68,10 +72,13 @@ class red_black_tree
 			rb_delete(val);
 		}
 
-		node_type	*search(value_type val) const {
-			return search_in_tree(this->_root, val);
+		iterator	search(value_type const &val) const {
+			node_type	*find = search_in_tree(this->_root, val);
+			return iterator(find, this->_root, this->_nil);
+
 		}
 
+//! devrait etre private
 		node_type	*minimum(node_type *current) {
 			while (current->left != this->_nil)
 				current = current->left;
@@ -85,10 +92,11 @@ class red_black_tree
 		}
 
 	private:
-		node_type 	*_nil;
-		node_type	*_root;
-		node_type	*_last_add;
-		alloc		_CpyAlloc;
+		node_type 		*_nil;
+		node_type		*_root;
+		node_type		*_last_add;	//? inutile
+		alloc			_CpyAlloc;
+		compare_type	_compare;
 
 		void	delete_node(node_type *el) {
 			this->_CpyAlloc.destroy(el);
@@ -110,12 +118,21 @@ class red_black_tree
 		node_type	*search_in_tree(node_type *current, value_type val) const {
 			if (current == this->_nil)
 				return this->_nil;
-			if (val == current->data)
-				return current;
-			else if (val < current->data)
-				return search_in_tree(current->left, val);
-			else
-				return search_in_tree(current->right, val);
+			while (current != _nil) {
+				if (_compare(val, current->data))
+					current = current->left;
+				else if (_compare(current->data, val))
+					current = current->right;
+				else
+					break;
+			}
+			return current;
+			// if (val == current->data)
+			// 	return current;
+			// else if (val < current->data)
+			// 	return search_in_tree(current->left, val);
+			// else
+			// 	return search_in_tree(current->right, val);
 		};
 
 		// ADD

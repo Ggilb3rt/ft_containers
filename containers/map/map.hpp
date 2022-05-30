@@ -60,8 +60,8 @@ class	map
 		// Default
 		explicit map (const key_compare& comp = key_compare(),
 						const allocator_type& alloc = allocator_type())
-						: _cpyAlloc(alloc), _cpyComp(comp), _size(0)
-					{ (void)comp; };
+						: _cpyAlloc(alloc), _cpyComp(comp), _rb_tree(_cpyAlloc, _cpyComp), _size(0)
+					{  };
 		// Range
 		template <class InputIterator>
 		map (InputIterator first, InputIterator last,
@@ -90,10 +90,10 @@ class	map
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
-		iterator		begin() {return this->_rb_tree->get_first();}
-		const_iterator	begin() const {return this->_rb_tree->get_first();}
-		iterator		end() {return this->_rb_tree->get_last();}
-		const_iterator	end() const {return this->_rb_tree->get_last();}
+		iterator		begin() {return this->_rb_tree->minimum();}
+		const_iterator	begin() const {return this->_rb_tree->minimum();}
+		iterator		end() {return this->_rb_tree->maximum();}
+		const_iterator	end() const {return this->_rb_tree->maximum();}
 
 		reverse_iterator		rbegin() {return this->end();}
 		const_reverse_iterator	rbegin() const {return this->end();}
@@ -112,17 +112,19 @@ class	map
 	/*		Element access		*/
 	/****************************/
 		mapped_type&	operator[] (const key_type& k) {
-			(void)k;
-			// if search(k)
-				// return k.value
-			// else
-				// return (*((this->insert(make_pair(k,mapped_type()))).first)).second;
-			return ;
+			iterator	it = _rb_tree.search(k);
+			// if (it = this.end())
+				// insert new el
+			return it.second;
 		}
 
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
+		void /*pair<iterator, bool>*/	insert(const value_type& val) {
+			_rb_tree.insert(val);
+			
+		}
 		void	erase(iterator position) {
 			(void)position;
 			this->_size--;
@@ -182,7 +184,7 @@ class	map
 	private:
 		allocator_type								_cpyAlloc;
 		key_compare									_cpyComp;
-		red_black_tree<value_type, allocator_type>	_rb_tree;
+		red_black_tree<value_type, allocator_type, value_compare>	_rb_tree;
 		size_type									_size;
 };
 

@@ -1250,6 +1250,14 @@ std::cout << std::endl;
 	}
 
 
+	{
+		map<char, int> b;
+
+		b.insert(pair<char, int>('a', 21));
+
+		std::cout << "|" << b['a'] << "|" << std::endl;
+	}
+
 	// {
 	// 	using namespace std;
 	// 	std::cout << "lol";
