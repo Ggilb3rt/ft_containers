@@ -60,8 +60,7 @@ class	map
 		typedef typename rb_tree_type::iterator						iterator;
 		typedef typename rb_tree_type::const_iterator				const_iterator;
 		typedef typename rb_tree_type::reverse_iterator				reverse_iterator;
-		typedef typename std::reverse_iterator<const_iterator>		const_reverse_iterator;
-
+		typedef typename rb_tree_type::const_reverse_iterator		const_reverse_iterator;
 
 		// Default
 		explicit map (const key_compare& comp = key_compare(),
@@ -76,8 +75,7 @@ class	map
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 				: _cpyAlloc(alloc), _cpyComp(comp)
 				{
-					(void)first;
-					(void)last;
+					this->insert(first, last);
 				};
 		// Copy
 		map (const map& x) : _cpyAlloc(x.alloc) {};
@@ -134,7 +132,7 @@ class	map
 	/****************************/
 	/*			Capacity		*/
 	/****************************/
-		bool		empty() const {return this->_size;}
+		bool		empty() const {return !this->_size;}
 		size_type	size() const {return this->_size;}
 		size_type	max_size() const {return this->_cpyAlloc.max_size();}
 
@@ -143,10 +141,7 @@ class	map
 	/*		Element access		*/
 	/****************************/
 		mapped_type&	operator[] (const key_type& k) {
-			iterator	it = this->find(k);
-			// if (it = this.end())
-				// insert new el
-			return it.second;
+			return (*((this->insert(ft::make_pair(k,mapped_type()))).first)).second;
 		}
 
 	/****************************/
@@ -155,11 +150,10 @@ class	map
 		pair<iterator, bool>	insert(const value_type& val) {
 			iterator	exist = this->_rb_tree.search(val);
 			if (exist != this->_rb_tree.get_nil_it())
-				return make_pair<iterator, bool> (exist, false);
-
+				return ft::make_pair<iterator, bool> (exist, false);
 			this->_size++;
 			exist = _rb_tree.insert(val);
-			return make_pair<iterator, bool> (exist, true);
+			return ft::make_pair<iterator, bool> (exist, true);
 		}
 		iterator	insert(iterator position, const value_type& val) {
 			(void)position;
@@ -167,7 +161,6 @@ class	map
 			iterator	exist = this->_rb_tree.search(val);
 			if (exist != this->_rb_tree.get_nil_it())
 				return exist;
-
 			this->_size++;
 			return _rb_tree.insert(val);
 		}
@@ -176,7 +169,6 @@ class	map
 						InputIterator last,
 						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL) {
 			iterator	tmp;
-			
 			while (first != last) {
 				tmp = first;
 				++first;
@@ -184,20 +176,18 @@ class	map
 			}
 		}
 
-
 		void	erase(iterator position) {
-			_rb_tree.delete_el(position);
-			this->_size--;
+			if (position != this->end()) {
+				_rb_tree.delete_el(position);
+				this->_size--;
+			}
 		}
 		size_type	erase(const key_type& k) {
-			_rb_tree->rb_delete(k);
-			this->_size--;
-			
-			return 1;							//? ", the function returns the number of elements erased.", always 1 ?
+			this->erase(this->find(k));
+			return 1;
 		}
 		void		erase(iterator first, iterator last) {
 			iterator	tmp;
-			
 			while (first != last) {
 				tmp = first;
 				++first;
@@ -205,13 +195,15 @@ class	map
 			}
 		}
 
+
+		//! doesn't works
 		void	swap(map& x) {
-			rb_tree_type*	tmp_rb_tree = this->_rb_tree;
+			rb_tree_type*	tmp_rb_tree = &this->_rb_tree;
 			size_type		tmp_size = this->size();
 
 			this->_rb_tree = x._rb_tree;
 			this->_size = x.size();
-			x._rb_tree = tmp_rb_tree;
+			x._rb_tree = *tmp_rb_tree;
 			x._size = tmp_size;
 		}
 
@@ -223,6 +215,7 @@ class	map
 	/****************************/
 	/*			Observers		*/
 	/****************************/
+	//! need reverse iterator to tests them
 		key_compare		key_comp() const {return _cpyComp;}		//???
 		value_compare	value_comp() const {return value_compare();}	//???
 

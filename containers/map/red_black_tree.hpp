@@ -45,6 +45,7 @@ class red_black_tree
 		typedef map_iterator<value_type, node_type>			iterator;
 		typedef map_iterator<const value_type, node_type>	const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 		typedef typename Alloc::template rebind<node<value_type> >::other	alloc;
 		typedef Compare										compare_type;
 

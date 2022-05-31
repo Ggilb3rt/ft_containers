@@ -1,8 +1,8 @@
-1,449d0
-< size: 31
+2c2
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+5,35d4
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -34,12 +34,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [0] --
-< size: 30
+39c8
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+42,71d10
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -70,12 +69,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [1] --
-< size: 29
+75c14
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+78,106d16
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -105,12 +103,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [2] --
-< size: 28
+110c20
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+113,140d22
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -139,12 +136,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [3] --
-< size: 27
+144c26
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+147,173d28
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -172,12 +168,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [4] --
-< size: 26
+177c32
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+180,205d34
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -204,12 +199,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [5] --
-< size: 25
+209c38
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+212,236d40
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -235,12 +229,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [6] --
-< size: 24
+240c44
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+243,266d46
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -265,12 +258,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [7] --
-< size: 23
+270c50
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+273,295d52
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 20 | value: idea
@@ -294,12 +286,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [8] --
-< size: 22
+299c56
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+302,323d58
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 23 | value: coconut
@@ -322,12 +313,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [9] --
-< size: 21
+327c62
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+330,350d64
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 27 | value: 27
@@ -349,12 +339,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [10] --
-< size: 20
+354c68
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+357,376d70
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 27 | value: 27
@@ -375,12 +364,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [11] --
-< size: 19
+380c74
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+383,401d76
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 27 | value: 27
@@ -400,12 +388,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [12] --
-< size: 18
+405c80
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+408,425d82
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 27 | value: 27
@@ -424,12 +411,11 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################
-< 	-- [13] --
-< size: 17
+429c86
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+432,448d88
 < - key: 12 | value: no
 < - key: 18 | value: bee
 < - key: 27 | value: 27
@@ -447,4 +433,3 @@
 < - key: 60 | value: 7
 < - key: 80 | value: hey
 < - key: 90 | value: 8
-< ###############################################

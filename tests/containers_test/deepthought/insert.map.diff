@@ -1,88 +1,65 @@
-1,119d0
-< 	-- [0] --
-< insert return: key: 42 | value: lol
-< Created new node: 1
-< size: 1
+5c5
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+8d7
 < - key: 42 | value: lol
-< ###############################################
-< 	-- [1] --
-< insert return: key: 42 | value: lol
-< Created new node: 0
-< size: 1
+14c13
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+17d15
 < - key: 42 | value: lol
-< ###############################################
-< 	-- [2] --
-< insert return: key: 50 | value: mdr
-< Created new node: 1
-< size: 2
+23c21
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+26,27d23
 < - key: 42 | value: lol
 < - key: 50 | value: mdr
-< ###############################################
-< 	-- [3] --
-< insert return: key: 35 | value: funny
-< Created new node: 1
-< size: 3
+33c29
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+36,38d31
 < - key: 35 | value: funny
 < - key: 42 | value: lol
 < - key: 50 | value: mdr
-< ###############################################
-< 	-- [4] --
-< insert return: key: 45 | value: bunny
-< Created new node: 1
-< size: 4
+44c37
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+47,50d39
 < - key: 35 | value: funny
 < - key: 42 | value: lol
 < - key: 45 | value: bunny
 < - key: 50 | value: mdr
-< ###############################################
-< 	-- [5] --
-< insert return: key: 21 | value: fizz
-< Created new node: 1
-< size: 5
+56c45
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+59,63d47
 < - key: 21 | value: fizz
 < - key: 35 | value: funny
 < - key: 42 | value: lol
 < - key: 45 | value: bunny
 < - key: 50 | value: mdr
-< ###############################################
-< 	-- [6] --
-< insert return: key: 38 | value: buzz
-< Created new node: 1
-< size: 6
+69c53
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+72,77d55
 < - key: 21 | value: fizz
 < - key: 35 | value: funny
 < - key: 38 | value: buzz
 < - key: 42 | value: lol
 < - key: 45 | value: bunny
 < - key: 50 | value: mdr
-< ###############################################
-< 	-- [7] --
-< insert return: key: 55 | value: fuzzy
-< size: 7
+82c60
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+85,91d62
 < - key: 21 | value: fizz
 < - key: 35 | value: funny
 < - key: 38 | value: buzz
@@ -90,31 +67,24 @@
 < - key: 45 | value: bunny
 < - key: 50 | value: mdr
 < - key: 55 | value: fuzzy
-< ###############################################
-< 	-- [8] --
-< insert return: key: 1337 | value: beauty
-< size: 1
+96c67
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+99d69
 < - key: 1337 | value: beauty
-< ###############################################
-< 	-- [9] --
-< insert return: key: 1000 | value: Hello
-< size: 2
+104c74
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+107,108d76
 < - key: 1000 | value: Hello
 < - key: 1337 | value: beauty
-< ###############################################
-< 	-- [10] --
-< insert return: key: 1500 | value: World
-< size: 3
+113c81
 < max_size: 128102389400760775
-< 
-< Content is:
+---
+> max_size: 230584300921369395
+116,118d83
 < - key: 1000 | value: Hello
 < - key: 1337 | value: beauty
 < - key: 1500 | value: World
-< ###############################################

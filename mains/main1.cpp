@@ -1195,6 +1195,67 @@ void	printMap(TYPE::map<T, U> &x) {
 
 
 void	mapMegaTest() {
+	/****************************/
+	/*			Capacity		*/
+	/****************************/
+	{
+		create_header("Empty");
+		TYPE::map<char,int> mymap;
+
+		mymap['a']=10;
+		mymap['b']=20;
+		mymap['c']=30;
+
+		while (!mymap.empty())
+		{
+			std::cout << mymap.begin()->first << " => " << mymap.begin()->second << '\n';
+			mymap.erase(mymap.begin());
+		}
+	}
+	{
+		create_header("Size");
+		TYPE::map<char,int> mymap;
+		mymap['a']=101;
+		mymap['b']=202;
+		mymap['c']=302;
+
+		std::cout << "mymap.size() is " << mymap.size() << '\n';
+	}
+	{
+		create_header("Max_size");
+		int i;
+		TYPE::map<int,int> mymap;
+
+		if (mymap.max_size()>1000)
+		{
+			for (i=0; i<1000; i++) mymap[i]=0;
+			std::cout << "The map contains 1000 elements.\n";
+		}
+		else std::cout << "The map could not hold 1000 elements.\n";
+	}
+	/****************************/
+	/*		Element access		*/
+	/****************************/
+	{
+		create_header("operator []");
+		TYPE::map<char,std::string> mymap;
+
+		mymap['a']="an element";
+		mymap['b']="another element";
+		mymap['c']=mymap['b'];
+
+		std::cout << "mymap['a'] is " << mymap['a'] << '\n';
+		std::cout << "mymap['b'] is " << mymap['b'] << '\n';
+		std::cout << "mymap['c'] is " << mymap['c'] << '\n';
+		std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+
+		mymap['b']="pouet";
+		std::cout << "change mymap['b'] to \"pouet\" : " << mymap['b'] << std::endl;
+		std::cout << "mymap now contains " << mymap.size() << " elements.\n";
+	}
+	/****************************/
+	/*			Modifiers		*/
+	/****************************/
 	{
 		create_header("Insert");
 		TYPE::map<char,int> mymap;
@@ -1227,8 +1288,159 @@ void	mapMegaTest() {
 		std::cout << "anothermap contains:\n";
 		for (it=anothermap.begin(); it!=anothermap.end(); ++it)
 			std::cout << it->first << " => " << it->second << '\n';
-
 	}
+	{
+		create_header("Erase");
+		TYPE::map<char,int> mymap;
+		TYPE::map<char,int>::iterator it;
+
+		// insert some values:
+		mymap['a']=10;
+		mymap['b']=20;
+		mymap['c']=30;
+		mymap['d']=40;
+		mymap['e']=50;
+		mymap['f']=60;
+
+		it=mymap.find('b');
+		mymap.erase (it);                   // erasing by iterator
+		mymap.erase (mymap.end());                   // erasing by iterator
+
+		mymap.erase ('c');                  // erasing by key
+		mymap.erase ('z');                  // erasing by key
+
+		it=mymap.find ('e');
+		mymap.erase ( it, mymap.end() );    // erasing by range
+
+		// show content:
+		for (it=mymap.begin(); it!=mymap.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+	}
+	// {
+	// 	create_header("Swap");
+	// 	TYPE::map<char,int> foo,bar;
+
+	// 	foo['x']=100;
+	// 	foo['y']=200;
+
+	// 	bar['a']=11;
+	// 	bar['b']=22;
+	// 	bar['c']=33;
+
+	// 	foo.swap(bar);
+
+	// 	std::cout << "foo contains:\n";
+	// 	for (TYPE::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+	// 		std::cout << it->first << " => " << it->second << '\n';
+
+	// 	std::cout << "bar contains:\n";
+	// 	for (TYPE::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+	// 		std::cout << it->first << " => " << it->second << '\n';
+	// }
+	{
+		create_header("Clear");
+		TYPE::map<char,int> mymap;
+
+		mymap['x']=100;
+		mymap['y']=200;
+		mymap['z']=300;
+
+		std::cout << "mymap contains:\n";
+		for (TYPE::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+
+		mymap.clear();
+		mymap['a']=1101;
+		mymap['b']=2202;
+
+		std::cout << "mymap contains:\n";
+		for (TYPE::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+	}
+	/****************************/
+	/*			Observers		*/
+	/****************************/
+	// {
+	// 	create_header("Key_comp");
+	// 	TYPE::map<char,int> mymap;
+
+	// 	TYPE::map<char,int>::key_compare mycomp = mymap.key_comp();
+
+	// 	mymap['a']=100;
+	// 	mymap['b']=200;
+	// 	mymap['c']=300;
+
+	// 	std::cout << "mymap contains:\n";
+
+	// 	char highest = mymap.rbegin()->first;     // key value of last element
+
+	// 	TYPE::map<char,int>::iterator it = mymap.begin();
+	// 	do {
+	// 		std::cout << it->first << " => " << it->second << '\n';
+	// 	} while ( mycomp((*it++).first, highest) );
+
+	// 	std::cout << '\n';
+	// }
+	// {
+	// 	create_header("Value_comp");
+	// 	std::map<char,int> mymap;
+
+	// 	mymap['x']=1001;
+	// 	mymap['y']=2002;
+	// 	mymap['z']=3003;
+
+	// 	std::cout << "mymap contains:\n";
+
+	// 	std::pair<char,int> highest = *mymap.rbegin();          // last element
+
+	// 	std::map<char,int>::iterator it = mymap.begin();
+	// 	do {
+	// 		std::cout << it->first << " => " << it->second << '\n';
+	// 	} while ( mymap.value_comp()(*it++, highest) );
+	// }
+
+	/****************************/
+	/*			Operations		*/
+	/****************************/
+	{
+		create_header("Find");
+		TYPE::map<char,int> mymap;
+		TYPE::map<char,int>::iterator it;
+
+		mymap['a']=50;
+		mymap['b']=100;
+		mymap['c']=150;
+		mymap['d']=200;
+
+		it = mymap.find('b');
+		if (it != mymap.end())
+			mymap.erase (it);
+
+		// print content:
+		std::cout << "elements in mymap:" << '\n';
+		std::cout << "a => " << mymap.find('a')->second << '\n';
+		std::cout << "c => " << mymap.find('c')->second << '\n';
+		std::cout << "d => " << mymap.find('d')->second << '\n';
+	}
+	{
+		create_header("Count");
+		TYPE::map<char,int> mymap;
+		char c;
+
+		mymap ['a']=101;
+		mymap ['c']=202;
+		mymap ['f']=303;
+
+		for (c='a'; c<'h'; c++)
+		{
+			std::cout << c;
+			if (mymap.count(c)>0)
+			std::cout << " is an element of mymap.\n";
+			else 
+			std::cout << " is not an element of mymap.\n";
+		}
+	}
+
 }
 
 
