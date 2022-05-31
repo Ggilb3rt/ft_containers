@@ -64,7 +64,7 @@ void	print_constructor(std::string title, TYPE::vector<T> &el) {
 }
 
 
-void	megaTest() {
+void	vectorMegaTest() {
 	/****************************/
 	/*			Constructors	*/
 	/****************************/
@@ -1194,16 +1194,56 @@ void	printMap(TYPE::map<T, U> &x) {
 }
 
 
+void	mapMegaTest() {
+	{
+		create_header("Insert");
+		TYPE::map<char,int> mymap;
+
+		// first insert function version (single parameter):
+		mymap.insert ( TYPE::pair<char,int>('a',100) );
+		mymap.insert ( TYPE::pair<char,int>('z',200) );
+
+		TYPE::pair<TYPE::map<char,int>::iterator,bool> ret;
+		ret = mymap.insert ( TYPE::pair<char,int>('z',500) );
+		if (ret.second==false) {
+			std::cout << "element 'z' already existed";
+			std::cout << " with a value of " << ret.first->second << '\n';
+		}
+
+		// second insert function version (with hint position):
+		TYPE::map<char,int>::iterator it = mymap.begin();
+		mymap.insert (it, TYPE::pair<char,int>('b',300));  // max efficiency inserting
+		mymap.insert (it, TYPE::pair<char,int>('c',400));  // no max efficiency inserting
+
+		// third insert function version (range insertion):
+		TYPE::map<char,int> anothermap;
+		anothermap.insert(mymap.begin(),mymap.find('c'));
+
+		// showing contents:
+		std::cout << "mymap contains:\n";
+		for (it=mymap.begin(); it!=mymap.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+
+		std::cout << "anothermap contains:\n";
+		for (it=anothermap.begin(); it!=anothermap.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+
+	}
+}
+
 
 using namespace ft;
 
 int main() {
-	// megaTest();
+	// vectorMegaTest();
 	// iterator_tests();
 	// stack_tests();
 	// utils_tests();
 
 	// rb_tree_tests();
+
+	mapMegaTest();
+
 
 std::cout << std::endl;
 
@@ -1219,6 +1259,7 @@ std::cout << std::endl;
 
 
 	{
+		create_header("STD comp");
 		std::map<char, int> b;
 
 		b.insert( std::pair<char, int>('b', 2));
@@ -1236,25 +1277,37 @@ std::cout << std::endl;
 		std::cout << "|" << start.first << "|" << std::endl;
 	}
 std::cout << std::endl;
+
+create_header("Map with <int, int>");
 	{
 		TYPE::map<int, int> b;
 
-		b.insert( TYPE::pair<int, int>(12, 2));
-		b.insert( TYPE::pair<int, int>(7, 1));
-		b.insert( TYPE::pair<int, int>(1, 20));
-		b.insert( TYPE::pair<int, int>(76, 15));
-		b.insert( TYPE::pair<int, int>(867, 234));
-		b.insert( TYPE::pair<int, int>(123, 123));
-		b.insert( TYPE::pair<int, int>(22, 1));
-		b.insert( TYPE::pair<int, int>(56, 5));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(7, 1));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(1, 20));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(1, 22));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(76, 15));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(12, 2));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(867, 234));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(123, 123));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(22, 1));
+		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(56, 5));
 
 
 		printMap(b);
 		std::cout << std::endl;
 
+		std::cout << "count(76) true => " << b.count(76) << std::endl 
+				<< "count(1234) false => " << b.count(1234) << std::endl;
+		std::cout << "find(76) 15 => " << b.find(76)->second << std::endl
+				<< "find(1234)  => " << b.find(1234)->second << std::endl;
 
 		TYPE::map<int, int>::iterator debut = b.begin();
 		TYPE::map<int, int>::iterator end = b.end();
+
+		std::cout << "Print begin() and end()" << std::endl
+			<< debut->first << " ==> " << debut->second << std::endl
+			<< end->first << " ==> " << end->second << std::endl;
+
 		++(++debut);
 		--(--end);
 		std::cout << "Size before big erase " << b.size() << std::endl;
@@ -1267,27 +1320,25 @@ std::cout << std::endl;
 	}
 
 std::cout << std::endl;
+create_header("Map with <char, int>");
 	{
 		map<char, int> b;
 
-		b.insert(ft::pair<char, int>('a', 21));
 		b.insert(ft::pair<char, int>('c', 11));
+		b.insert(ft::pair<char, int>('a', 21));
 		b.insert(ft::pair<char, int>('z', 41));
 		b.insert(ft::pair<char, int>('t', 331));
 
 		map<char, int>::iterator debut = b.begin();
 		map<char, int>::iterator end = b.end();
 
-		std::cout << debut->first << " ==> " << debut->second << std::endl
-			 << end->first << " ==> " << end->second << std::endl;
+		std::cout << "Print begin() and end()" << std::endl
+			<< debut->first << " ==> " << debut->second << std::endl
+			<< end->first << " ==> " << end->second << std::endl;
 
 		std::cout << std::endl << "remove first el : " << debut->first << std::endl;
 		b.erase(debut);
-<<<<<<< HEAD
-		b.erase(++debut);
-=======
-		// b.erase(debut);
->>>>>>> 49f8d6e61d7f0a55cce5a33d131046bdf31d0358
+		b.erase(b.begin());
 		printMap(b);
 
 		std::cout << "size of b " << b.size() << std::endl;

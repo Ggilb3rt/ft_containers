@@ -54,11 +54,11 @@ class	map
 
 	private:
 		typedef red_black_tree<value_type, allocator_type, value_compare>	rb_tree_type;
-		typedef typename rb_tree_type::node_type									node_type;
+		typedef typename rb_tree_type::node_type							node_type;
 
 	public:
 		typedef typename rb_tree_type::iterator						iterator;
-		typedef typename rb_tree_type::iterator						const_iterator;
+		typedef typename rb_tree_type::const_iterator				const_iterator;
 		typedef typename rb_tree_type::reverse_iterator				reverse_iterator;
 		typedef typename std::reverse_iterator<const_iterator>		const_reverse_iterator;
 
@@ -73,7 +73,7 @@ class	map
 		map (InputIterator first, InputIterator last,
 				const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type(),
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = NULL)
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 				: _cpyAlloc(alloc), _cpyComp(comp)
 				{
 					(void)first;
@@ -143,7 +143,7 @@ class	map
 	/*		Element access		*/
 	/****************************/
 		mapped_type&	operator[] (const key_type& k) {
-			iterator	it = _rb_tree.search(k);
+			iterator	it = this->find(k);
 			// if (it = this.end())
 				// insert new el
 			return it.second;
@@ -152,38 +152,55 @@ class	map
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
-		void /*pair<iterator, bool>*/	insert(const value_type& val) {
-			_rb_tree.insert(val);
+		pair<iterator, bool>	insert(const value_type& val) {
+			iterator	exist = this->_rb_tree.search(val);
+			if (exist != this->_rb_tree.get_nil_it())
+				return make_pair<iterator, bool> (exist, false);
+
 			this->_size++;
-			// return make_pair<iterator(rb_tree_type::node_type(val), _rb_tree.get_root(), _rb_tree.get_nil()), true>;
+			exist = _rb_tree.insert(val);
+			return make_pair<iterator, bool> (exist, true);
 		}
+		iterator	insert(iterator position, const value_type& val) {
+			(void)position;
+
+			iterator	exist = this->_rb_tree.search(val);
+			if (exist != this->_rb_tree.get_nil_it())
+				return exist;
+
+			this->_size++;
+			return _rb_tree.insert(val);
+		}
+		template <class InputIterator>
+		void	insert (InputIterator first,
+						InputIterator last,
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL) {
+			iterator	tmp;
+			
+			while (first != last) {
+				tmp = first;
+				++first;
+				this->insert(*tmp);
+			}
+		}
+
+
 		void	erase(iterator position) {
 			_rb_tree.delete_el(position);
 			this->_size--;
 		}
 		size_type	erase(const key_type& k) {
-			this->_rb_tree->rb_delete(k);
+			_rb_tree->rb_delete(k);
 			this->_size--;
 			
 			return 1;							//? ", the function returns the number of elements erased.", always 1 ?
 		}
 		void		erase(iterator first, iterator last) {
-			// size_type	diff = std::distance(first, last);
-			
-			// while (diff) {
-			// 	std::cout << first->first << "|";
-			// 	this->erase(first);
-			// 	std::cout << first->first << " --- ";
-
-			// 	diff--;
-			// 	first++;
-			// }
-			// std::cout << std::endl;
-
 			iterator	tmp;
+			
 			while (first != last) {
 				tmp = first;
-				first++;
+				++first;
 				this->erase(tmp);
 			}
 		}
@@ -199,25 +216,30 @@ class	map
 		}
 
 		void	clear() {
-			this->_rb_tree.clear_all();
+			_rb_tree.clear_all();
 			this->_size = 0;
 		}
 
 	/****************************/
 	/*			Observers		*/
 	/****************************/
-		key_compare		key_comp() const {return key_compare();}		//???
+		key_compare		key_comp() const {return _cpyComp;}		//???
 		value_compare	value_comp() const {return value_compare();}	//???
 
 	/****************************/
 	/*			Operations		*/
 	/****************************/
-		size_type	count(const key_type& k) const {
-			if (this->_rb_tree->search(k) != this->end())
-				return 1;
-			else
-				return 0;
+		iterator	find(const key_type& k) {
+			value_type	p = ft::make_pair(k, mapped_type());
+			return this->_rb_tree.search(p);
+
 		}
+		const_iterator	find(const key_type& k) const {
+			value_type	p = ft::make_pair(k, mapped_type());
+			return this->_rb_tree.search(p);
+		}
+
+		size_type	count(const key_type& k) const {return (this->find(k) != this->_rb_tree.get_nil_it());}
 
 	/****************************/
 	/*			Allocator		*/

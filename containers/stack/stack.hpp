@@ -25,7 +25,7 @@ class stack {
 		void				push(const value_type& val) {this->array.push_back(val);}
 		void				pop() {this->array.pop_back();}
 
-	//?! protected :
+	// protected :	//! must be protected
 		container_type	array;
 };
 

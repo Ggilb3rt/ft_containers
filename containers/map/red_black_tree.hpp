@@ -40,12 +40,13 @@ template <class T, class Alloc, typename Compare = std::less<T> >
 class red_black_tree
 {
 	public:
-		typedef T										value_type;
-		typedef node<value_type>						node_type;
-		typedef map_iterator<value_type, node_type>		iterator;
-		typedef ft::reverse_iterator<iterator>			reverse_iterator;
+		typedef T											value_type;
+		typedef node<value_type>							node_type;
+		typedef map_iterator<value_type, node_type>			iterator;
+		typedef map_iterator<const value_type, node_type>	const_iterator;
+		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef typename Alloc::template rebind<node<value_type> >::other	alloc;
-		typedef Compare									compare_type;
+		typedef Compare										compare_type;
 
 		red_black_tree(alloc const &allocator = alloc(), compare_type const &compare = compare_type())
 						: _CpyAlloc(allocator), _compare(compare) {
@@ -62,10 +63,14 @@ class red_black_tree
 		};
 
 		node_type	*get_root() const {return _root;};
+		iterator	get_root_it() {return iterator(_root, _root, _nil);}
 		node_type	*get_nil() const {return _nil;};
+		iterator	get_nil_it() {return iterator(_nil, _root, _nil);}
+		const_iterator	get_nil_it() const {return const_iterator(_nil, _root, _nil);}
 
-		void		insert(value_type val) {
+		iterator	insert(value_type val) {
 			rb_insert(newNode(val));
+			return iterator(this->_last_add, this->_root, this->_nil);
 		};
 
 		void		clear_all() {
@@ -80,10 +85,13 @@ class red_black_tree
 			rb_delete(val._current);
 		}
 
-		iterator	search(value_type const &val) const {
+		iterator		search(value_type const &val) {
 			node_type	*find = search_in_tree(this->_root, val);
 			return iterator(find, this->_root, this->_nil);
-
+		}
+		const_iterator	search(value_type const &val) const {
+			node_type	*find = search_in_tree(this->_root, val);
+			return const_iterator(find, this->_root, this->_nil);
 		}
 
 		node_type	*minimum(node_type *current) const {
@@ -260,9 +268,9 @@ class red_black_tree
 				y->left = z->left;
 				y->left->parent = y;
 				y->color = z->color;
-			}
+			};
 			if (z != this->_nil)
-				delete z;
+				delete_node(z);
 			if (y_original_color == BLACK)
 				rb_delete_fixup(x);
 		}
