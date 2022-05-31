@@ -54,6 +54,7 @@ class	map
 
 	private:
 		typedef red_black_tree<value_type, allocator_type, value_compare>	rb_tree_type;
+		typedef typename rb_tree_type::node_type									node_type;
 
 	public:
 		typedef typename rb_tree_type::iterator						iterator;
@@ -167,18 +168,24 @@ class	map
 			return 1;							//? ", the function returns the number of elements erased.", always 1 ?
 		}
 		void		erase(iterator first, iterator last) {
-			size_type	diff = std::distance(first, last);
+			// size_type	diff = std::distance(first, last);
 			
-			// this->_size -= diff;
-			while (diff) {
-				std::cout << first->first << "|";
-				this->erase(first);
-				std::cout << first->first << " --- ";
+			// while (diff) {
+			// 	std::cout << first->first << "|";
+			// 	this->erase(first);
+			// 	std::cout << first->first << " --- ";
 
-				diff--;
+			// 	diff--;
+			// 	first++;
+			// }
+			// std::cout << std::endl;
+
+			iterator	tmp;
+			while (first != last) {
+				tmp = first;
 				first++;
+				this->erase(tmp);
 			}
-			std::cout << std::endl;
 		}
 
 		void	swap(map& x) {
@@ -206,7 +213,7 @@ class	map
 	/*			Operations		*/
 	/****************************/
 		size_type	count(const key_type& k) const {
-			if (this->_rb_tree->search(k))
+			if (this->_rb_tree->search(k) != this->end())
 				return 1;
 			else
 				return 0;
