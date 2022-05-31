@@ -1283,7 +1283,11 @@ std::cout << std::endl;
 
 		std::cout << std::endl << "remove first el : " << debut->first << std::endl;
 		b.erase(debut);
+<<<<<<< HEAD
 		b.erase(++debut);
+=======
+		// b.erase(debut);
+>>>>>>> 49f8d6e61d7f0a55cce5a33d131046bdf31d0358
 		printMap(b);
 
 		std::cout << "size of b " << b.size() << std::endl;
