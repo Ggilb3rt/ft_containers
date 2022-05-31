@@ -47,7 +47,8 @@ class red_black_tree
 		typedef typename Alloc::template rebind<node<value_type> >::other	alloc;
 		typedef Compare									compare_type;
 
-		red_black_tree(alloc const &allocator = alloc(), compare_type const &compare = compare_type()) : _CpyAlloc(allocator), _compare(compare) {
+		red_black_tree(alloc const &allocator = alloc(), compare_type const &compare = compare_type())
+						: _CpyAlloc(allocator), _compare(compare) {
 			_nil = _CpyAlloc.allocate(1);
 			_CpyAlloc.construct(_nil, node_type(
 				value_type(), BLACK, this->_nil, this->_nil, this->_nil));

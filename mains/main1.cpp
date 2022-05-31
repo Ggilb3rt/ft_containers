@@ -1283,7 +1283,7 @@ std::cout << std::endl;
 
 		std::cout << std::endl << "remove first el : " << debut->first << std::endl;
 		b.erase(debut);
-		b.erase(debut);
+		b.erase(++debut);
 		printMap(b);
 
 		std::cout << "size of b " << b.size() << std::endl;
