@@ -36,7 +36,10 @@ class map_iterator {
 		reference operator*() const {return this->_current->data;}
 		pointer operator->() const {return &(this->operator*());}
 
-		map_iterator& operator++() {this->_current = this->_next(this->_current); return *this;}
+		map_iterator& operator++() {
+			this->_current = this->_next(this->_current);
+			return *this;
+		}
 		map_iterator operator++(int) {
 			map_iterator tmp = *this;
 			this->_current = this->_next(this->_current);
@@ -59,7 +62,7 @@ class map_iterator {
 		}
 		
 		operator map_iterator<const value_type, Node>() const {
-			return map_iterator<const value_type, Node>(this->_root, this->_nil, this->_current);
+			return map_iterator<const value_type, Node>(this->_current, this->_root, this->_nil);
 		}
 
 		node_ptr _current;

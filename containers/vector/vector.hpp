@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <iterator>
 #include "vector_iterator.hpp"
-#include "reverse_iterator.hpp"
+#include "../utils/reverse_iterator.hpp"
 #include "../utils/is_integral.hpp"
 #include "../utils/enable_if.hpp"
 #include "../utils/lexicographical_compare.hpp"

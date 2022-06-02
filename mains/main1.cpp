@@ -1316,27 +1316,27 @@ void	mapMegaTest() {
 		for (it=mymap.begin(); it!=mymap.end(); ++it)
 			std::cout << it->first << " => " << it->second << '\n';
 	}
-	// {
-	// 	create_header("Swap");
-	// 	TYPE::map<char,int> foo,bar;
+	{
+		create_header("Swap");
+		TYPE::map<char,int> foo,bar;
 
-	// 	foo['x']=100;
-	// 	foo['y']=200;
+		foo['x']=100;
+		foo['y']=200;
 
-	// 	bar['a']=11;
-	// 	bar['b']=22;
-	// 	bar['c']=33;
+		bar['a']=11;
+		bar['b']=22;
+		bar['c']=33;
 
-	// 	foo.swap(bar);
+		foo.swap(bar);
 
-	// 	std::cout << "foo contains:\n";
-	// 	for (TYPE::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
-	// 		std::cout << it->first << " => " << it->second << '\n';
+		std::cout << "foo contains:\n";
+		for (TYPE::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
 
-	// 	std::cout << "bar contains:\n";
-	// 	for (TYPE::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
-	// 		std::cout << it->first << " => " << it->second << '\n';
-	// }
+		std::cout << "bar contains:\n";
+		for (TYPE::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+	}
 	{
 		create_header("Clear");
 		TYPE::map<char,int> mymap;
@@ -1360,44 +1360,44 @@ void	mapMegaTest() {
 	/****************************/
 	/*			Observers		*/
 	/****************************/
-	// {
-	// 	create_header("Key_comp");
-	// 	TYPE::map<char,int> mymap;
+	{
+		create_header("Key_comp");
+		TYPE::map<char,int> mymap;
 
-	// 	TYPE::map<char,int>::key_compare mycomp = mymap.key_comp();
+		TYPE::map<char,int>::key_compare mycomp = mymap.key_comp();
 
-	// 	mymap['a']=100;
-	// 	mymap['b']=200;
-	// 	mymap['c']=300;
+		mymap['a']=100;
+		mymap['b']=200;
+		mymap['c']=300;
 
-	// 	std::cout << "mymap contains:\n";
+		std::cout << "mymap contains:\n";
 
-	// 	char highest = mymap.rbegin()->first;     // key value of last element
+		char highest = mymap.rbegin()->first;     // key value of last element
 
-	// 	TYPE::map<char,int>::iterator it = mymap.begin();
-	// 	do {
-	// 		std::cout << it->first << " => " << it->second << '\n';
-	// 	} while ( mycomp((*it++).first, highest) );
+		TYPE::map<char,int>::iterator it = mymap.begin();
+		do {
+			std::cout << it->first << " => " << it->second << '\n';
+		} while ( mycomp((*it++).first, highest) );
 
-	// 	std::cout << '\n';
-	// }
-	// {
-	// 	create_header("Value_comp");
-	// 	std::map<char,int> mymap;
+		std::cout << '\n';
+	}
+	{
+		create_header("Value_comp");
+		std::map<char,int> mymap;
 
-	// 	mymap['x']=1001;
-	// 	mymap['y']=2002;
-	// 	mymap['z']=3003;
+		mymap['x']=1001;
+		mymap['y']=2002;
+		mymap['z']=3003;
 
-	// 	std::cout << "mymap contains:\n";
+		std::cout << "mymap contains:\n";
 
-	// 	std::pair<char,int> highest = *mymap.rbegin();          // last element
+		std::pair<char,int> highest = *mymap.rbegin();          // last element
 
-	// 	std::map<char,int>::iterator it = mymap.begin();
-	// 	do {
-	// 		std::cout << it->first << " => " << it->second << '\n';
-	// 	} while ( mymap.value_comp()(*it++, highest) );
-	// }
+		std::map<char,int>::iterator it = mymap.begin();
+		do {
+			std::cout << it->first << " => " << it->second << '\n';
+		} while ( mymap.value_comp()(*it++, highest) );
+	}
 
 	/****************************/
 	/*			Operations		*/
@@ -1440,14 +1440,51 @@ void	mapMegaTest() {
 			std::cout << " is not an element of mymap.\n";
 		}
 	}
+	{
+		create_header("Lower and upper bound");
+		TYPE::map<char,int> mymap;
+		TYPE::map<char,int>::iterator itlow,itup;
 
+		mymap['a']=20;
+		mymap['b']=40;
+		mymap['c']=60;
+		mymap['d']=80;
+		mymap['e']=100;
+
+		itlow=mymap.lower_bound ('b');  // itlow points to b
+		itup=mymap.upper_bound ('d');   // itup points to e (not d!)
+
+		mymap.erase(itlow,itup);        // erases [itlow,itup)
+
+		// print content:
+		for (TYPE::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+	}
+	{
+		create_header("Equal range");
+		TYPE::map<char,int> mymap;
+
+		mymap['a']=10;
+		mymap['b']=20;
+		mymap['c']=30;
+
+		TYPE::pair<TYPE::map<char,int>::iterator,TYPE::map<char,int>::iterator> ret;
+		ret = mymap.equal_range('b');
+
+		std::cout << "lower bound points to: ";
+		std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+		std::cout << "upper bound points to: ";
+		std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+	}
 }
 
 
 using namespace ft;
 
 int main() {
-	// vectorMegaTest();
+	vectorMegaTest();
 	// iterator_tests();
 	// stack_tests();
 	// utils_tests();
@@ -1458,17 +1495,6 @@ int main() {
 
 
 std::cout << std::endl;
-
-
-	// {
-	// 	TYPE::map<int, int> pouet;
-
-	// 	std::cout << pouet.empty() << std::endl;
-	// 	std::cout << pouet.size() << std::endl;
-	// 	std::cout << pouet.max_size() << std::endl;
-
-	// }
-
 
 	{
 		create_header("STD comp");
@@ -1557,10 +1583,47 @@ create_header("Map with <char, int>");
 		b.clear();
 		std::cout << "size of b " << b.size() << std::endl;
 		printMap(b);
+	}
+	{
+		create_header("Iterator operartor=");
+		TYPE::map<int, int> b;
 
+		b[34] = 234;
+		b[98] = 4;
+		b[12] = 2;
+		printMap(b);
 
+		TYPE::map<int, int>::iterator	it, it2;
 
-		// std::cout << "|" << b['a'] << "|" << std::endl;
+		it = b.begin();
+		it2 = ++it;
+		--it;
+
+		std::cout << std::endl;
+		std::cout << it->first << " ==> " << it->second << std::endl;
+		std::cout << it2->first << " ==> " << it2->second << std::endl;
+		
+	}
+	{
+		create_header("Constructors");
+
+		TYPE::map<int,int> first;
+
+		first[12] = 23;
+		first[34] = 243;
+		first[1] = 5523;
+		first[2] = 123;
+
+		TYPE::map<int, int> second(first.begin(), first.end());
+		TYPE::map<int, int> third(second);
+
+		std::cout << "\tFirst" << std::endl;
+		printMap(first);
+		std::cout << "\tSecond" << std::endl;
+		printMap(second);
+		std::cout << "\tThird" << std::endl;
+		printMap(third);
+
 	}
 
 	// {

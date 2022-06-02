@@ -4,10 +4,10 @@
 #include <iostream>
 #include <memory>
 #include "map_iterator.hpp"
-#include "../vector/reverse_iterator.hpp"
+#include "../utils/reverse_iterator.hpp"
 
 // Use for print tree
-#include <vector>
+// #include <vector>
 
 
 namespace ft {
@@ -48,6 +48,7 @@ class red_black_tree
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 		typedef typename Alloc::template rebind<node<value_type> >::other	alloc;
 		typedef Compare										compare_type;
+		typedef size_t										size_type;
 
 		red_black_tree(alloc const &allocator = alloc(), compare_type const &compare = compare_type())
 						: _CpyAlloc(allocator), _compare(compare) {
@@ -63,11 +64,19 @@ class red_black_tree
 			this->delete_node(this->_nil);
 		};
 
-		node_type	*get_root() const {return _root;};
-		iterator	get_root_it() {return iterator(_root, _root, _nil);}
-		node_type	*get_nil() const {return _nil;};
-		iterator	get_nil_it() {return iterator(_nil, _root, _nil);}
+		iterator		begin() {return iterator(this->minimum(_root), _root, _nil);}
+		const_iterator	begin() const {return const_iterator(this->minimum(_root), _root, _nil);}
+		iterator		end() {return iterator(_nil, _root, _nil);}
+		const_iterator	end() const {return const_iterator(_nil, _root, _nil);}
+
+
+		node_type		*get_root() const {return _root;};
+		iterator		get_root_it() {return iterator(_root, _root, _nil);}
+		node_type		*get_nil() const {return _nil;};
+		iterator		get_nil_it() {return iterator(_nil, _root, _nil);}
 		const_iterator	get_nil_it() const {return const_iterator(_nil, _root, _nil);}
+
+		size_type		max_size() const {return this->_CpyAlloc.max_size();}
 
 		iterator	insert(value_type val) {
 			rb_insert(newNode(val));
@@ -107,10 +116,70 @@ class red_black_tree
 			return current;
 		}
 
+		void	swap(red_black_tree &x) {
+			node_type		*tmp_root = _root;
+			node_type		*tmp_nil = _nil;
+			node_type		*tmp_last = _last_add;
+		
+			_root = x._root;
+			_nil = x._nil;
+			_last_add = x._last_add;
+			x._root = tmp_root;
+			x._nil = tmp_nil;
+			x._last_add = tmp_last;
+		}
+
+		iterator	lower_bound(value_type key) {
+			iterator	it	= this->begin();
+			iterator	itend = this->end();
+
+			while (it != itend) {
+				if (_compare(*it, key) == false)
+					break;
+				++it;
+			}
+			return it;
+		}
+		const_iterator	lower_bound(value_type key) const {
+			const_iterator	it	= this->begin();
+			const_iterator	itend = this->end();
+
+			while (it != itend) {
+				if (_compare(*it, key) == false)
+					break;
+				++it;
+			}
+			return it;
+		}
+
+		iterator	upper_bound(value_type key) {
+			iterator	it	= this->begin();
+			iterator	itend = this->end();
+
+			while (it != itend) {
+				if (_compare(key, *it) == true)
+					break;
+				++it;
+			}
+			return it;
+		}
+		const_iterator	upper_bound(value_type key) const {
+			const_iterator	it	= this->begin();
+			const_iterator	itend = this->end();
+
+			while (it != itend) {
+				if (_compare(key, *it) == true)
+					break;
+				++it;
+			}
+			return it;
+		}
+
+
 	private:
 		node_type 		*_nil;
 		node_type		*_root;
-		node_type		*_last_add;	//? inutile
+		node_type		*_last_add;
 		alloc			_CpyAlloc;
 		compare_type	_compare;
 
@@ -143,12 +212,6 @@ class red_black_tree
 					break;
 			}
 			return current;
-			// if (val == current->data)
-			// 	return current;
-			// else if (val < current->data)
-			// 	return search_in_tree(current->left, val);
-			// else
-			// 	return search_in_tree(current->right, val);
 		};
 
 		// ADD
@@ -158,7 +221,7 @@ class red_black_tree
 
 			while (x != this->_nil) {
 				y = x;
-				if (_compare(z->data, x->data))//if (z->data < x->data)
+				if (_compare(z->data, x->data))
 					x = x->left;
 				else
 					x = x->right;
@@ -166,7 +229,7 @@ class red_black_tree
 			z->parent = y;
 			if (y == this->_nil)
 				this->_root = z;
-			else if (_compare(z->data, y->data))//else if (z->data < y->data)
+			else if (_compare(z->data, y->data))
 				y->left = z;
 			else
 				y->right = z;
@@ -308,7 +371,7 @@ class red_black_tree
 				}
 				else {
 					w = x->parent->left;
-					if (w->color == RED) {// w && w->color == RED
+					if (w->color == RED) {
 						w->color = BLACK;
 						x->parent->color = RED;
 						rotate_right(x->parent);
@@ -389,13 +452,9 @@ class red_black_tree
 			x->parent = y;
 		}
 
-
 		// Display Tree
-		#include "./map_display.hpp"
-
+		// #include "./map_display.hpp"
 };
 
-
 }
-
 #endif
