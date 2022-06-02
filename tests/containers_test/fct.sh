@@ -10,7 +10,7 @@ PURPLE="\e[95m"
 CYAN="\e[96m"
 DGREY="\e[1;90m"
 
-incl_path="../../containers/stack"
+incl_path="../../containers/bad"
 srcs="srcs"
 
 CC="clang++"
