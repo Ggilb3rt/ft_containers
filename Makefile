@@ -7,15 +7,16 @@ FLAGS = -Wall -Wextra -Werror -I. -g -ferror-limit=5
 DEFINE_FT = -DUSING_STD=0
 DEFINE_STD = -DUSING_STD=1
 STD = -std=c++98
+STD11 = -std=c++11
 COMPIL = c++
 
-DEPS = $(shell find './$(INC_DIR)' -name '*.hpp') #$(INC_DIR)/vector.hpp
-SRC = $(shell find './mains' -name '*.cpp')
+DEPS = $(shell find './$(INC_DIR)' -name '*.hpp')
+SRC = $(shell find './mains' -name 'main_time.cpp')
 OBJ = $(SRC:.cpp=.o)
 
 
 %.o: %.cpp $(DEPS)
-	$(COMPIL) $(FLAGS) $(DEFINE_FT) $(STD) -o $@ -c $<
+	$(COMPIL) $(FLAGS) $(DEFINE_FT) $(STD11) -o $@ -c $<
 
 all: $(NAME)
 

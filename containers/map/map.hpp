@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <memory>
 #include <cstddef>
-#include <iterator>
 
 #include "./red_black_tree.hpp"
 #include "../utils/enable_if.hpp"
@@ -14,8 +13,6 @@
 #include "../utils/pair.hpp"
 #include "../utils/equal.hpp"
 #include "../utils/lexicographical_compare.hpp"
-
-#include <map>
 
 namespace ft {
 
@@ -43,7 +40,6 @@ class	map
 			protected:
 				Compare comp;
 				value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
-
 			public:
 				typedef bool result_type;
 				typedef value_type first_argument_type;
@@ -75,16 +71,14 @@ class	map
 		// Default
 		explicit map (const key_compare& comp = key_compare(),
 						const allocator_type& alloc = allocator_type())
-						: _cpyAlloc(alloc), _cpyComp(comp), _cpyValueComp(comp), _rb_tree(_cpyAlloc, _cpyComp), _size(0)
-					{};
+						: _cpyAlloc(alloc), _cpyComp(comp), _cpyValueComp(comp), _rb_tree(_cpyAlloc, _cpyComp), _size(0) {};
 		// Range
 		template <class InputIterator>
 		map (InputIterator first, InputIterator last,
 				const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
-				: _cpyAlloc(alloc), _cpyComp(comp), _cpyValueComp(comp), _rb_tree(_cpyAlloc, _cpyComp), _size(0)
-				{
+				: _cpyAlloc(alloc), _cpyComp(comp), _cpyValueComp(comp), _rb_tree(_cpyAlloc, _cpyComp), _size(0) {
 					this->insert(first, last);
 				};
 		// Copy
@@ -105,6 +99,7 @@ class	map
 			return *this;
 		};
 
+
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
@@ -118,6 +113,7 @@ class	map
 		const_reverse_iterator	rbegin() const {return reverse_iterator(this->end());}
 		reverse_iterator		rend() {return reverse_iterator(this->begin());}
 		const_reverse_iterator	rend() const {return reverse_iterator(this->begin());}
+
 
 	/****************************/
 	/*			Capacity		*/
@@ -133,6 +129,7 @@ class	map
 		mapped_type&	operator[] (const key_type& k) {
 			return (*((this->insert(ft::make_pair(k,mapped_type()))).first)).second;
 		}
+
 
 	/****************************/
 	/*			Modifiers		*/
@@ -162,7 +159,6 @@ class	map
 				++first;
 			}
 		}
-
 		void	erase(iterator position) {
 			if (position != this->end()) {
 				_rb_tree.delete_el(position);
@@ -184,26 +180,24 @@ class	map
 				this->erase(tmp);
 			}
 		}
-
-
-		//! need to test leaks on linux
 		void	swap(map& x) {
 			size_type		tmp_size = this->size();
 			this->_rb_tree.swap(x._rb_tree);
 			this->_size = x.size();
 			x._size = tmp_size;
 		}
-
 		void	clear() {
 			_rb_tree.clear_all();
 			this->_size = 0;
 		}
+
 
 	/****************************/
 	/*			Observers		*/
 	/****************************/
 		key_compare		key_comp() const {return _cpyComp;}
 		value_compare	value_comp() const {return _cpyValueComp;}
+
 
 	/****************************/
 	/*			Operations		*/
@@ -216,24 +210,19 @@ class	map
 			value_type	p = ft::make_pair(k, mapped_type());
 			return this->_rb_tree.search(p);
 		}
-
 		size_type	count(const key_type& k) const {return (this->find(k) != this->_rb_tree.get_nil_it());}
-
-		//! Need valgrind check on linux
 		iterator	lower_bound(const key_type& k) {
 			return _rb_tree.lower_bound(ft::make_pair(k, mapped_type()));
 		}
 		const_iterator	lower_bound(const key_type& k) const {
 			return _rb_tree.lower_bound(ft::make_pair(k, mapped_type()));
 		}
-
 		iterator	upper_bound(const key_type& k) {
 			return _rb_tree.upper_bound(ft::make_pair(k, mapped_type()));
 		}
 		const_iterator	upper_bound(const key_type& k) const {
 			return _rb_tree.upper_bound(ft::make_pair(k, mapped_type()));
 		}
-
 		ft::pair<iterator, iterator>	equal_range(const key_type& k) {
 			return	ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
@@ -241,11 +230,14 @@ class	map
 			return	ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
 		}
 
+
 	/****************************/
 	/*			Allocator		*/
 	/****************************/
 		allocator_type	get_allocator() const {return this->_cpyAlloc;}
+
 };
+
 
 	/****************************/
 	/*			Non-member		*/
@@ -292,5 +284,5 @@ void	swap(map<Key, T, Compare, Alloc>&x, map<Key, T, Compare, Alloc>& y) {
 	x.swap(y);
 }
 
-}
+} // end namespace ft
 #endif

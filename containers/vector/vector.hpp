@@ -134,15 +134,11 @@ class	vector {
 	/****************************/
 	/*			Iterators		*/
 	/****************************/
-		// iterator			begin() {return this->empty() ? iterator() : iterator(&_array[0]);}
-		// const_iterator	begin() const {return this->empty() ? const_iterator() : const_iterator(&_array[0]);}
-		// iterator			end() {return this->empty() ? iterator() : iterator(&_array[this->_size]);}
-		// const_iterator	end() const {return this->empty() ? const_iterator() : const_iterator(&_array[this->_size]);}
 		iterator			begin() {return _array;}
 		const_iterator		begin() const {return _array;}
 		iterator			end() {return this->empty() ? this->begin() : &_array[this->_size];}
 		const_iterator		end() const {return this->empty() ? this->begin() : &_array[this->_size];}
-		
+
 		reverse_iterator	rbegin() {return reverse_iterator(this->end());}
 		reverse_iterator	rend() {return reverse_iterator(this->begin());}
 		const_reverse_iterator	rbegin() const {return const_reverse_iterator(this->end());}
@@ -195,7 +191,6 @@ class	vector {
 		}
 
 
-
 	/****************************/
 	/*			El access		*/
 	/****************************/
@@ -227,7 +222,6 @@ class	vector {
 		const_reference	back() const{ return (this->_array[this->_size - 1]);}
 
 
-
 	/****************************/
 	/*			Modifiers		*/
 	/****************************/
@@ -235,7 +229,6 @@ class	vector {
 		void	assign(InputIterator first, InputIterator last, 
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = NULL) {
 			difference_type newSize = std::distance(first, last);
-
 			this->clear();
 			if (this->capacity() < (size_type)newSize)
 				this->reserve(newSize);
@@ -267,23 +260,19 @@ class	vector {
 		}
 		iterator insert(iterator position, const value_type& val) {
 			size_type		start_pos = std::distance(this->begin(), position);
-
 			this->insert(position, 1, val);
 			return this->begin() + start_pos;
 		}
-
 		void insert(iterator position, size_type n, const value_type& val) {
 			if (n == 0)
 				return ;
 			ft::vector<value_type>	tmp(*this);
 			size_type				start_pos = std::distance(this->begin(), position);
 			iterator				tmp_position = tmp.begin() + start_pos;
-
 			if (_size + n >= _reserve * 2)
 				this->reserve(_size + n);
 			else if (_size + n >= _reserve)
 				this->reserve(_size * 2);
-
 			this->assign(tmp.begin(), tmp_position);
 			while (n-- > 0) {
 				this->push_back(val);
@@ -291,7 +280,6 @@ class	vector {
 			for (iterator it = tmp_position; it < tmp.end(); it++)
 				this->push_back(*it);
 		}
-
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
 		insert(iterator position, InputIterator first, InputIterator last) {
@@ -301,12 +289,10 @@ class	vector {
 			ft::vector<value_type>	tmp(*this);
 			size_type				start_pos = std::distance(this->begin(), position);
 			iterator				tmp_position = tmp.begin() + start_pos;
-			
 			if (_size + n >= _reserve * 2)
 				this->reserve(_size + n);
 			else if (_size + n >= _reserve)
 				this->reserve(_size * 2);
-
 			this->assign(tmp.begin(), tmp_position);
 			while (&(*first) < &(*last)) {
 				this->push_back(*first);
@@ -322,7 +308,6 @@ class	vector {
 		iterator	erase(iterator first, iterator last) {
 			iterator		firstBase = first;
 			size_type		n = std::distance(first, last);
-
 			if (n == 0)
 				return firstBase;
 			while (last < this->end()) {
@@ -361,6 +346,7 @@ class	vector {
 	/****************************/
 		allocator_type	get_allocator() const {return this->_CpyAlloc;}
 };
+
 
 	/****************************/
 	/*			Non-member		*/

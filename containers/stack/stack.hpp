@@ -64,8 +64,6 @@ bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
 	return (rhs < lhs || lhs == rhs);
 };
 
-
-
 }
 
 #endif

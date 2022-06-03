@@ -37,8 +37,6 @@ class random_access_iterator {
 		bool operator<(random_access_iterator & rhs) { return this->_arr_ptr < rhs._arr_ptr;}
 		bool operator>=(random_access_iterator const & rhs) const { return this->_arr_ptr >= rhs._arr_ptr;}
 		bool operator<=(random_access_iterator const & rhs) const { return this->_arr_ptr <= rhs._arr_ptr;}
-		// friend bool operator>(random_access_iterator const & lhs, random_access_iterator const & rhs) { return lhs._arr_ptr > rhs._arr_ptr;}
-		// friend bool operator<(random_access_iterator const & lhs, random_access_iterator const & rhs) { return lhs._arr_ptr < rhs._arr_ptr;}
 
 		random_access_iterator& operator++() {_arr_ptr++; return *this;}
 		random_access_iterator operator++(int) {random_access_iterator tmp = *this; ++(*this); return tmp;}

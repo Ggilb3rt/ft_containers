@@ -26,8 +26,8 @@ class map_iterator {
 			if (this == &rhs)
 				return *this;
 			this->_current = rhs._current;
-            this->_root = rhs._root;
-            this->_nil = rhs._nil;
+			this->_root = rhs._root;
+			this->_nil = rhs._nil;
 			return *this;
 		}
 
@@ -76,13 +76,11 @@ class map_iterator {
 				current = current->left;
 			return current;
 		}
-
 		node_ptr	_maximum(node_ptr current) {
 			while (current->right != this->_nil)
 				current = current->right;
 			return current;
 		}
-
 		node_ptr	_next(node_ptr current) {
 			if (current->right != this->_nil)
 				return _minimum(current->right);
@@ -93,7 +91,6 @@ class map_iterator {
 			}
 			return parent;
 		}
-
 		node_ptr	_prev(node_ptr current) {
 			if (current->left != this->_nil)
 				return _maximum(current->left);

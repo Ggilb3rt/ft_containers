@@ -1195,6 +1195,27 @@ void	printMap(TYPE::map<T, U> &x) {
 
 
 void	mapMegaTest() {
+	{
+		create_header("Constructors");
+
+		TYPE::map<int,int> first;
+
+		first[12] = 23;
+		first[34] = 243;
+		first[1] = 5523;
+		first[2] = 123;
+
+		TYPE::map<int, int> second(first.begin(), first.end());
+		TYPE::map<int, int> third(second);
+
+		std::cout << "\tFirst" << std::endl;
+		printMap(first);
+		std::cout << "\tSecond" << std::endl;
+		printMap(second);
+		std::cout << "\tThird" << std::endl;
+		printMap(third);
+
+	}
 	/****************************/
 	/*			Capacity		*/
 	/****************************/
@@ -1476,48 +1497,10 @@ void	mapMegaTest() {
 
 		std::cout << "upper bound points to: ";
 		std::cout << ret.second->first << " => " << ret.second->second << '\n';
-
 	}
-}
-
-
-using namespace ft;
-
-int main() {
-	vectorMegaTest();
-	// iterator_tests();
-	// stack_tests();
-	// utils_tests();
-
-	// rb_tree_tests();
-
-	mapMegaTest();
-
-
-std::cout << std::endl;
-
+	create_header("Diff <int,int> and <char,int>");
 	{
-		create_header("STD comp");
-		std::map<char, int> b;
-
-		b.insert( std::pair<char, int>('b', 2));
-		b.insert( std::pair<char, int>('a', 1));
-		b.insert( std::pair<char, int>('w', 20));
-		b.insert( std::pair<char, int>('r', 15));
-
-		std::map<char, int>::iterator debut = b.begin();
-		std::map<char, int>::iterator end = b.end();
-
-		std::cout << debut->first << " ==> " << debut->second << std::endl
-			 << end->first << " ==> " << end->second << std::endl;
-	
-		std::pair<char, int> start = *end;
-		std::cout << "|" << start.first << "|" << std::endl;
-	}
-std::cout << std::endl;
-
-create_header("Map with <int, int>");
-	{
+		create_header("Map with <int, int>");
 		TYPE::map<int, int> b;
 
 		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(7, 1));
@@ -1529,7 +1512,6 @@ create_header("Map with <int, int>");
 		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(123, 123));
 		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(22, 1));
 		b.insert(TYPE::map<int, int>::iterator (), TYPE::pair<int, int>(56, 5));
-
 
 		printMap(b);
 		std::cout << std::endl;
@@ -1556,19 +1538,17 @@ create_header("Map with <int, int>");
 		TYPE::pair<int, int> start = *end;
 		std::cout << start.first << std::endl;
 	}
-
-std::cout << std::endl;
-create_header("Map with <char, int>");
 	{
-		map<char, int> b;
+		create_header("Map with <char, int>");
+		TYPE::map<char, int> b;
 
 		b.insert(ft::pair<char, int>('c', 11));
 		b.insert(ft::pair<char, int>('a', 21));
 		b.insert(ft::pair<char, int>('z', 41));
 		b.insert(ft::pair<char, int>('t', 331));
 
-		map<char, int>::iterator debut = b.begin();
-		map<char, int>::iterator end = b.end();
+		TYPE::map<char, int>::iterator debut = b.begin();
+		TYPE::map<char, int>::iterator end = b.end();
 
 		std::cout << "Print begin() and end()" << std::endl
 			<< debut->first << " ==> " << debut->second << std::endl
@@ -1584,47 +1564,25 @@ create_header("Map with <char, int>");
 		std::cout << "size of b " << b.size() << std::endl;
 		printMap(b);
 	}
-	{
-		create_header("Iterator operartor=");
-		TYPE::map<int, int> b;
+}
 
-		b[34] = 234;
-		b[98] = 4;
-		b[12] = 2;
-		printMap(b);
 
-		TYPE::map<int, int>::iterator	it, it2;
+using namespace ft;
 
-		it = b.begin();
-		it2 = ++it;
-		--it;
+int main() {
+	// vectorMegaTest();
+	// iterator_tests();
+	// stack_tests();
+	// utils_tests();
 
-		std::cout << std::endl;
-		std::cout << it->first << " ==> " << it->second << std::endl;
-		std::cout << it2->first << " ==> " << it2->second << std::endl;
-		
-	}
-	{
-		create_header("Constructors");
+	// rb_tree_tests();
 
-		TYPE::map<int,int> first;
+	mapMegaTest();
 
-		first[12] = 23;
-		first[34] = 243;
-		first[1] = 5523;
-		first[2] = 123;
 
-		TYPE::map<int, int> second(first.begin(), first.end());
-		TYPE::map<int, int> third(second);
+std::cout << std::endl;
 
-		std::cout << "\tFirst" << std::endl;
-		printMap(first);
-		std::cout << "\tSecond" << std::endl;
-		printMap(second);
-		std::cout << "\tThird" << std::endl;
-		printMap(third);
 
-	}
 
 	// {
 	// 	using namespace std;
