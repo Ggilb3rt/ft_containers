@@ -5,19 +5,18 @@ NAME = Container
 INC_DIR = containers
 FLAGS = -Wall -Wextra -Werror -I. -g -ferror-limit=5
 DEFINE_FT = -DUSING_STD=0
-DEFINE_STD = -DUSING_STD=1
 STD = -std=c++98
-STD11 = -std=c++11
+# STD11 = -std=c++11
 COMPIL = c++
 
 DEPS = $(shell find './$(INC_DIR)' -name '*.hpp')
-SRC = $(shell find './mains' -name 'main_time.cpp')
+SRC ?= $(shell find './mains' -name 'main_stack.cpp')
 OBJ = $(SRC:.cpp=.o)
 
-
 %.o: %.cpp $(DEPS)
-	$(COMPIL) $(FLAGS) $(DEFINE_FT) $(STD11) -o $@ -c $<
+	$(COMPIL) $(FLAGS) $(DEFINE_FT) $(STD) -o $@ -c $<
 
+.SILENT:
 all: $(NAME)
 
 $(NAME): $(OBJ)
@@ -31,7 +30,8 @@ fclean: clean
 
 re: fclean all
 
-re_test: re test
+gostd : 
+	$(MAKE) DEFINE_FT=-DUSING_STD=1 all
 
 test : all
 	./$(NAME)
@@ -44,4 +44,5 @@ test_massif : all
 	ms_print massif.out.*
 	rm massif.out.*
 
-.PHONY : all re fclean clean test test_leaks
+
+.PHONY : all re fclean clean test test_leaks test_massif gostd

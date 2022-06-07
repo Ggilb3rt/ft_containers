@@ -33,3 +33,5 @@
 
 Container
 .vscode
+.DS_Store
+*.dSYM

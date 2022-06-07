@@ -3,17 +3,18 @@
 #include <cstdlib>
 
 
-#include "../containers/utils/enable_if.hpp"
-#include "../containers/utils/equal.hpp"
-#include "../containers/utils/is_integral.hpp"
-#include "../containers/utils/iterators_traits.hpp"
-#include "../containers/utils/lexicographical_compare.hpp"
-#include "../containers/utils/pair.hpp"
-#include "../containers/vector/vector.hpp"
 
 #if USING_STD == 1
 	using namespace std;
+	#include <type_traits>
 #else
+	#include "../containers/utils/enable_if.hpp"
+	#include "../containers/utils/equal.hpp"
+	#include "../containers/utils/is_integral.hpp"
+	#include "../containers/utils/iterators_traits.hpp"
+	#include "../containers/utils/lexicographical_compare.hpp"
+	#include "../containers/utils/pair.hpp"
+	#include "../containers/vector/vector.hpp"
 	using namespace ft;
 #endif
 
@@ -49,7 +50,7 @@ void	utils_tests() {
 	create_header("equal");
 {
 	int myints[] = {20,40,60,80,100};               //   myints: 20 40 60 80 100
-	vector<int>myvector (myints,myints+5);     // myvector: 20 40 60 80 100
+	vector<int> myvector(myints,myints+5);     	// myvector: 20 40 60 80 100
 
 	if ( equal (myvector.begin(), myvector.end(), myints) )
 		std::cout << "The contents of both sequences are equal.\n";

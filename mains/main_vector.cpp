@@ -1,11 +1,11 @@
 #include <iostream>
-#include <vector>
 
-#include "../containers/vector/vector.hpp"
 
 #if USING_STD == 1
 	using namespace std;
+	#include <vector>
 #else
+	#include "../containers/vector/vector.hpp"
 	using namespace ft;
 #endif
 
@@ -333,18 +333,15 @@ void	vectorMegaTest() {
 	}
 
 		/* Use swap() */
-		int adder = 4; // put to 0 to remove Invalid read size of x in valgrind
 		std::cout << std::endl << std::endl << "\tUse .swap()" << std::endl;
 	{
 		vector<int> foo (3,100);   // three ints with a value of 100
 		vector<int> bar (5,200);   // five ints with a value of 200
 		vector<int>::iterator it = foo.begin();
-		vector<int>::iterator it4 = foo.begin() + adder;
 
 		std::cout << "it addr before swap : " << *it << " | " << std::endl;
-		std::cout << "it4 addr before swap : " << *it4 << " | " << std::endl;
-		std::cout << "foo " << &foo << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
-		std::cout << "bar " << &bar << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
+		std::cout << "foo " << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
+		std::cout << "bar " << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
 		foo.swap(bar);
 
 		std::cout << "foo contains:";
@@ -358,9 +355,8 @@ void	vectorMegaTest() {
 		std::cout << '\n';
 
 		std::cout << "it after swap : " << *it << " | " << std::endl;
-		std::cout << "it4 after swap must be garbage : " << *it4 << " | " << std::endl;
-		std::cout << "foo " << &foo << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
-		std::cout << "bar " << &bar << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
+		std::cout << "foo " << " size | reserve : " << foo.size() << " | " << foo.capacity() << std::endl;
+		std::cout << "bar " << " size | reserve : " << bar.size() << " | " << bar.capacity() << std::endl;
 	}
 		/* Use clear() */
 		std::cout << std::endl << std::endl << "\tUse .clear()" << std::endl;
@@ -483,12 +479,10 @@ void	vectorMegaTest() {
 		}
 		std::cout << std::endl;
 		vector<int>::iterator defIt;
-		vector<int>::iterator assignIt = pouet.begin();
 		defIt = pouet.begin(); // segfault without this (normal)
 		vector<int>::iterator copyIt(defIt);
 		defIt--;
 		std::cout << "mine "
-			<< assignIt[15]
 			<< " |" << *defIt << "|"
 			<< " |" << *copyIt << "|"
 			<< std::endl;
@@ -502,9 +496,6 @@ void	vectorMegaTest() {
 		// vector<int>::iterator it = minusINT + pouet.end();
 		vector<int>::iterator it = pouet.end() + minusINT;
 		std::cout << minusINT << " " << *it << std::endl;
-		vector<int>::iterator minus = pouet.end() - minusINT;
-		std::cout << "begin - end :"
-			<< *copyIt << " | " << *minus << std::endl;
 
 		it = pouet.begin();
 		it += 6;
@@ -514,19 +505,6 @@ void	vectorMegaTest() {
 	}
 
 	create_header("Itearator");
-	std::cout << std::endl;
-	{
-		vector<std::string> strs;
-		vector<std::string>::iterator it = strs.begin();
-		vector<std::string>::iterator itEnd = strs.end();
-		std::cout << "lol " << std::endl;
-		strs.push_back("pouet");
-		std::cout << &*it << "\t\t" << &*itEnd << std::endl
-			<< &*(strs.begin()) << "\t" << &*(strs.end());
-	}
-
-	std::cout << std::endl;
-
 	{
 		vector<int> vct(7);
 
@@ -610,7 +588,7 @@ void	iterator_tests() {
 	std::cout << *(5 + ptrI) << std::endl;			// 8
 	// std::cout << (ptrI + assignI) << std::endl;	// error
 	std::cout << *(ptrI - 2) << std::endl;			// 1
-	std::cout << (ptrI - assignI) << std::endl;		// ? garbage
+	// std::cout << (ptrI - assignI) << std::endl;		// garbage
 	std::cout << (base.end() - base.begin() - 2) << std::endl;	// 10
 	std::cout << *(ptrI + 5 - 2) << std::endl;		// 6
 	// std::cout << *(2 - copyI) << std::endl;		// error
