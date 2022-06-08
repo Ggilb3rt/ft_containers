@@ -1564,6 +1564,25 @@ void	mapMegaTest() {
 		std::cout << "size of b " << b.size() << std::endl;
 		printMap(b);
 	}
+
+	{
+		create_header("Insert with hint");
+		TYPE::map<int, int> b;
+
+		b.insert(ft::pair<int, int>(4, 12));
+		b.insert(ft::pair<int, int>(12, 442));
+		b.insert(ft::pair<int, int>(1, 1122));
+		b.insert(ft::pair<int, int>(10, 1122));
+		b.insert(ft::pair<int, int>(14, 1122));
+		b.insert(ft::pair<int, int>(34, 1122));
+
+		b.insert(b.find(12), ft::pair<int, int>(13, 98));
+		b.insert(b.find(12), ft::pair<int, int>(99, 298));
+		b.insert(b.end(), ft::pair<int, int>(9, 298));
+		b.insert(b.begin(), ft::pair<int, int>(19, 298));
+
+		printMap(b);
+	}
 }
 
 

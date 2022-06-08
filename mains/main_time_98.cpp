@@ -12,6 +12,9 @@
 #include <stack>
 #include <map>
 
+#define VECTOR_SIZE 1000000000
+#define VECTOR_ASSIGN 100000
+#define MAP_SIZE 100000000
 
 template<typename F>
 double funcTime(F func){
@@ -23,30 +26,29 @@ double funcTime(F func){
 }
 
 
-
 // Vector
 void	ft_vector() {
 	using namespace ft;
 
-	vector<int>	b(1000000000, 12);
+	vector<int>	b(VECTOR_SIZE, 12);
 	vector<int> c = b;
 
-	c.assign(100000, 34);
+	c.assign(VECTOR_ASSIGN, 34);
 }
 void	std_vector() {
 	using namespace std;
 
-	vector<int>	b(1000000000, 12);
+	vector<int>	b(VECTOR_SIZE, 12);
 	vector<int> c = b;
 
-	c.assign(100000, 34);
+	c.assign(VECTOR_ASSIGN, 34);
 }
 
 // Map
 void	ft_map() {
 	using namespace ft;
 
-	size_t	nb = 100000000;
+	size_t	nb = MAP_SIZE;
 
 	map<int, int> b;
 	for (size_t i = 0; i < nb; i++)
@@ -58,7 +60,7 @@ void	ft_map() {
 void	std_map() {
 	using namespace std;
 
-	size_t	nb = 100000000;
+	size_t	nb = MAP_SIZE;
 
 	map<int, int> b;
 	for (size_t i = 0; i < nb; i++)
