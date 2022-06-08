@@ -14,7 +14,7 @@ class random_access_iterator {
 		typedef Distance							difference_type;
 		typedef Pointer								pointer;
 		typedef Reference							reference;
-		typedef std::random_access_iterator_tag		iterator_category;	// use std to be compatible with real containers
+		typedef std::random_access_iterator_tag		iterator_category;
 
 		random_access_iterator() : _arr_ptr() {}
 		random_access_iterator(pointer ptr) : _arr_ptr(ptr) {}

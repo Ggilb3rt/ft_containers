@@ -14,7 +14,7 @@ class map_iterator {
 		typedef Distance							difference_type;
 		typedef Pointer								pointer;
 		typedef Reference							reference;
-		typedef std::bidirectional_iterator_tag		iterator_category;	// use std to be compatible with real containers
+		typedef std::bidirectional_iterator_tag		iterator_category;
 		typedef Node *								node_ptr;
 
 		map_iterator() : _current(NULL), _root(NULL), _nil(NULL) {}

@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <memory>
 #include <cstddef>
-#include <iterator>
 #include "vector_iterator.hpp"
 #include "../utils/reverse_iterator.hpp"
 #include "../utils/is_integral.hpp"
@@ -122,7 +121,6 @@ class	vector {
 	/****************************/
 		vector& operator=(const vector& x)
 		{
-
 			this->clear();
 			this->insert(this->begin(), x.begin(), x.end());
 			return *this;
@@ -149,7 +147,7 @@ class	vector {
 	/*			Capacity		*/
 	/****************************/
 		size_type	size() const {return this->_size;}
-		size_type	max_size() const {return this->_CpyAlloc.max_size();} //? throw() dans la definition, pourquoi ? 
+		size_type	max_size() const {return this->_CpyAlloc.max_size();} 
 		void		resize(size_type n, value_type val = value_type()) {
 			if (n < _size) {
 				for (size_type i = n; i < _size; i++) {
