@@ -10,7 +10,7 @@ STD = -std=c++98
 COMPIL = c++
 
 DEPS = $(shell find './$(INC_DIR)' -name '*.hpp')
-SRC ?= $(shell find './mains' -name 'main_time_98.cpp')
+SRC ?= $(shell find './mains' -name 'main-time-98.cpp')
 OBJ = $(SRC:.cpp=.o)
 
 %.o: %.cpp $(DEPS)

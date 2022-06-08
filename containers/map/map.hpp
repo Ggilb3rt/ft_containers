@@ -13,6 +13,7 @@
 #include "../utils/pair.hpp"
 #include "../utils/equal.hpp"
 #include "../utils/lexicographical_compare.hpp"
+#include "../utils/reverse_iterator.hpp"
 
 namespace ft {
 
@@ -108,11 +109,10 @@ class	map
 		iterator				end() {return _rb_tree.end();}
 		const_iterator			end() const {return _rb_tree.end();}
 
-		//TODO tester que le reverse_it ne permette pas l'utilisation de random_access
 		reverse_iterator		rbegin() {return reverse_iterator(this->end());}
-		const_reverse_iterator	rbegin() const {return reverse_iterator(this->end());}
+		const_reverse_iterator	rbegin() const {return const_reverse_iterator(this->end());}
 		reverse_iterator		rend() {return reverse_iterator(this->begin());}
-		const_reverse_iterator	rend() const {return reverse_iterator(this->begin());}
+		const_reverse_iterator	rend() const {return const_reverse_iterator(this->begin());}
 
 
 	/****************************/
