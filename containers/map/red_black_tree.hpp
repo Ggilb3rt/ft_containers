@@ -86,8 +86,8 @@ class red_black_tree
 			return current;
 		}
 		// MODIFIER
-		iterator	insert(value_type val) {
-			rb_insert(newNode(val));
+		iterator	insert(value_type val, iterator hint) {
+			rb_insert(newNode(val), hint);
 			return iterator(this->_last_add, this->_root, this->_nil);
 		};
 		void		clear_all() {
@@ -190,10 +190,18 @@ class red_black_tree
 			return current;
 		};
 		// ADD
-		void	rb_insert(node_type *z) {
+		void	rb_insert(node_type *z, iterator hint) {
 			node_type	*y = this->_nil;
-			node_type	*x = this->_root;
+			node_type	*x;
 
+			if (hint._current == _nil
+				&& _compare(z->data, hint._current->right->data)
+				&& _compare(hint._current->left->data, z->data)
+				&& !(_compare(z->data, hint._current->data) == false
+					&& _compare(hint._current->data, z->data) == false))
+				x = hint._current;
+			else
+				x = this->_root;
 			while (x != this->_nil) {
 				y = x;
 				if (_compare(z->data, x->data))

@@ -139,18 +139,15 @@ class	map
 			if (exist != this->_rb_tree.get_nil_it())
 				return ft::make_pair<iterator, bool> (exist, false);
 			this->_size++;
-			exist = _rb_tree.insert(val);
+			exist = _rb_tree.insert(val, _rb_tree.get_root_it());
 			return ft::make_pair<iterator, bool> (exist, true);
 		}
-		//! need to use position
 		iterator	insert(iterator position, const value_type& val) {
-			(void)position;
-
 			iterator	exist = this->_rb_tree.search(val);
 			if (exist != this->_rb_tree.get_nil_it())
 				return exist;
 			this->_size++;
-			return _rb_tree.insert(val);
+			return _rb_tree.insert(val, position);
 		}
 		template <class InputIterator>
 		void	insert (InputIterator first, InputIterator last){
